@@ -90,7 +90,7 @@ public class VeterinarioMascotaController {
     @PostMapping("/registrar-cliente")
     public String guardarCliente(@ModelAttribute Dueno dueno) {
         duenoService.guardar(dueno);
-        return "redirect:/veterinario/mascotas/registrar-mascota";
+        return "redirect:/veterinario/mascotas/registrar-mascota?duenoId=" + dueno.getId();
     }
 
     /**
@@ -102,8 +102,9 @@ public class VeterinarioMascotaController {
      * Vista: src/main/resources/templates/veterinario/registrar-mascotas.html
      */
     @GetMapping("/registrar-mascota")
-    public String registrarMascota(Model model) {
+    public String registrarMascota(@RequestParam(name = "duenoId", required = false) Integer duenoId, Model model) {
         model.addAttribute("mascota", new Mascota());
+        model.addAttribute("duenoId", duenoId);
         return "veterinario/registrar-mascotas";
     }
 
@@ -116,9 +117,20 @@ public class VeterinarioMascotaController {
      * por defecto: el último dueño registrado y el estado "Activo".
      */
     @PostMapping("/registrar-mascota")
-    public String guardarMascota(@ModelAttribute Mascota mascota) {
+    public String guardarMascota(
+            @ModelAttribute Mascota mascota,
+            @RequestParam(value = "action", defaultValue = "finish") String action,
+            @RequestParam(value = "duenoId", required = false) Integer duenoId,
+            Model model) {
         mascota.setEstado("Activo");
+        mascota.setDuenoId(duenoId);
         mascotaService.guardar(mascota);
+
+        if ("newPet".equals(action)) {
+            model.addAttribute("mascota", new Mascota());
+            model.addAttribute("duenoId", duenoId);
+            return "veterinario/registrar-mascotas";
+        }
         return "redirect:/veterinario/mascotas";
     }
 
@@ -146,15 +158,25 @@ public class VeterinarioMascotaController {
      * de la aplicación (medicamento, unidades descontadas y stock).
      */
     @PostMapping("/asignar-tratamiento")
-    public String aplicarTratamiento(@ModelAttribute Tratamiento tratamiento, Model model, HttpSession session) {
-        Integer veterinarioId = (Integer) session.getAttribute("usuarioId");
-        tratamiento.setVeterinarioId(veterinarioId != null ? veterinarioId : 1);
-        tratamientoService.guardar(tratamiento);
+    public String aplicarTratamiento(@ModelAttribute Tratamiento tratamiento, Model model) {
+        tratamiento.setVeterinarioId(1);
 
         drogaService.descontarStock(tratamiento.getDrogaId(), 1);
 
         Droga droga = drogaService.obtenerDrogaPorId(tratamiento.getDrogaId());
-        int stockRestante = droga.getUnidadesDisponibles();
+        if (droga == null) {
+            model.addAttribute("mascotas", mascotaService.listarMascotas());
+            model.addAttribute("drogas", drogaService.listarDrogas());
+            model.addAttribute("tratamiento", new Tratamiento());
+            model.addAttribute("mensajeError", "No encontramos el medicamento seleccionado para el tratamiento.");
+            return "veterinario/asignar-tratamiento";
+        }
+
+        tratamientoService.guardar(tratamiento);
+
+        int unidadesDescontadas = 1;
+        int stockRestante = (droga.getUnidadesDisponibles() == null ? 0 : droga.getUnidadesDisponibles())
+                - unidadesDescontadas;
 
         model.addAttribute("unidadesDescontadas", 1);
         model.addAttribute("medicamentoNombre", droga.getNombre());
