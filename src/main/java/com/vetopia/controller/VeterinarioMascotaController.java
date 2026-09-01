@@ -1,5 +1,7 @@
 package com.vetopia.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -116,6 +118,13 @@ public class VeterinarioMascotaController {
     @PostMapping("/registrar-mascota")
     public String guardarMascota(@ModelAttribute Mascota mascota) {
         mascota.setEstado("Activo");
+        List<Dueno> duenos = duenoService.listarDuenos();
+        Dueno ultimoDueno = duenos.stream()
+                .max(java.util.Comparator.comparing(Dueno::getId))
+                .orElse(null);
+        if (ultimoDueno != null) {
+            mascota.setDuenoId(ultimoDueno.getId());
+        }
         mascotaService.guardar(mascota);
         return "redirect:/veterinario/mascotas";
     }
@@ -177,6 +186,7 @@ public class VeterinarioMascotaController {
                                 + (id == null ? "" : id) + "\".");
             } else {
                 model.addAttribute("mascota", mascota);
+                model.addAttribute("propietario", duenoService.obtenerDuenoPorId(mascota.getDuenoId()));
             }
         } catch (IllegalArgumentException excepcion) {
             // Id nulo o fuera de rango: se muestra el panel informativo.
