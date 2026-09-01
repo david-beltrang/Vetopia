@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragmentos-portal :: head"></div>
+    <title>Vetopia - Gestión de Veterinarios</title>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+
+<!-- TopNavBar Admin -->
+<nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
+    <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+        <a class="hidden md:inline-flex px-6 py-3 rounded-full border border-gray-600 text-white hover:bg-white/10 transition-colors font-button text-button uppercase tracking-wider items-center gap-2" th:href="@{/}">
+            <img alt="Vetopia Logo" class="h-8 w-auto" th:src="@{/images/logo_Vetopia.png}"/>
+        </a>
+        <div class="hidden md:flex gap-8">
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors" th:href="@{/admin/dashboard}">Dashboard</a>
+            <a class="text-white font-bold border-b-2 border-white pb-1" th:href="@{/admin/veterinarios}" style="color: rgb(127, 255, 212); border-color: rgb(127, 255, 212);">Gestión Veterinarios</a>
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors" th:href="@{/admin/drogas}">Drogas</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="hidden md:inline-flex px-6 py-3 rounded-full border border-gray-600 text-white hover:bg-white/10 transition-colors font-button text-button uppercase tracking-wider items-center gap-2" th:href="@{/logout}">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+    <!-- Encabezado -->
+    <div class="flex flex-wrap items-center justify-between gap-stack-md mb-stack-lg">
+        <div>
+            <h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">Gestión de Veterinarios</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant">Administrar el personal médico del sistema</p>
+        </div>
+        <a th:href="@{/admin/veterinarios/registrar}"
+           class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-button text-button uppercase text-on-primary transition-colors hover:bg-primary/90">
+            Registrar Nuevo Veterinario
+            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">add</span>
+        </a>
+    </div>
+
+    <!-- Tabla de veterinarios -->
+    <div class="bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[800px] text-left">
+                <thead>
+                <tr class="bg-surface-container-low uppercase">
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Foto</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Nombre</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Cédula</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Especialidad</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Atenciones</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Estado</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(veterinarios)}">
+                    <td class="px-6 py-16 text-center" colspan="7">
+                        <p class="font-body-lg text-body-lg text-on-surface-variant">No hay veterinarios registrados.</p>
+                    </td>
+                </tr>
+                <tr class="border-b border-surface-container-high transition-colors last:border-0 hover:bg-surface-container-low"
+                    th:each="vet : ${veterinarios}">
+                    <td class="px-6 py-4">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container text-on-primary-container font-bold text-sm"
+                             th:text="${vet.nombre.substring(0,1)}"></div>
+                    </td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold" th:text="${vet.nombre}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${vet.cedula}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${vet.especialidad}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${vet.numeroAtenciones}"></td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 font-label-md text-label-md uppercase tracking-widest"
+                              th:classappend="${vet.estado == 'Activo'} ? 'bg-primary-container/20 text-primary' : 'bg-error-container/20 text-error'">
+                            <span class="inline-block h-2 w-2 rounded-full"
+                                  th:classappend="${vet.estado == 'Activo'} ? 'bg-primary' : 'bg-error'"></span>
+                            <span th:text="${vet.estado}"></span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <a class="inline-flex items-center gap-1 rounded-full bg-secondary-container px-4 py-2 font-button text-button text-xs uppercase text-on-secondary-container transition-colors hover:bg-secondary hover:text-on-secondary"
+                               th:href="@{/admin/veterinarios/editar?id=${vet.id}}">
+                                <span class="material-symbols-outlined text-[14px]">edit</span>
+                                Editar
+                            </a>
+                            <form th:action="@{/admin/veterinarios/estado}" method="post" class="inline">
+                                <input type="hidden" name="id" th:value="${vet.id}"/>
+                                <input type="hidden" name="estado"
+                                       th:value="${vet.estado == 'Activo'} ? 'Inactivo' : 'Activo'"/>
+                                <button type="submit"
+                                        class="inline-flex items-center gap-1 rounded-full px-4 py-2 font-button text-button text-xs uppercase transition-colors"
+                                        th:classappend="${vet.estado == 'Activo'} ? 'bg-error-container text-on-error-container hover:bg-error hover:text-on-error' : 'bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary'">
+                                    <span class="material-symbols-outlined text-[14px]" th:text="${vet.estado == 'Activo'} ? 'block' : 'check_circle'"></span>
+                                    <span th:text="${vet.estado == 'Activo'} ? 'Desactivar' : 'Activar'"></span>
+                                </button>
+                            </form>
+                            <form th:action="@{/admin/veterinarios/eliminar}" method="post" class="inline"
+                                  onsubmit="return confirm('¿Estás seguro de eliminar este veterinario?')">
+                                <input type="hidden" name="id" th:value="${vet.id}"/>
+                                <button type="submit"
+                                        class="inline-flex items-center gap-1 rounded-full bg-error-container px-4 py-2 font-button text-button text-xs uppercase text-on-error-container transition-colors hover:bg-error hover:text-on-error">
+                                    <span class="material-symbols-outlined text-[14px]">delete</span>
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="fragmentos-portal :: footer"></footer>
+</body>
+</html>

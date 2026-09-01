@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.vetopia.entities.Mascota;
+import com.vetopia.service.DuenoService;
 import com.vetopia.service.MascotaService;
+
+import jakarta.servlet.http.HttpSession;
 
 /**
  * CONTROLLER (Portal del Cliente)
@@ -31,6 +34,9 @@ public class ClienteMascotaController {
     @Autowired
     private MascotaService mascotaService;
 
+    @Autowired
+    private DuenoService duenoService;
+
     /**
      * Atiende GET /cliente/mascotas: listado de mascotas del cliente
      * ordenadas alfabéticamente por nombre.
@@ -39,8 +45,13 @@ public class ClienteMascotaController {
      * Vista: src/main/resources/templates/principal-cliente.html
      */
     @GetMapping
-    public String listarMascotas(Model model) {
-        model.addAttribute("mascotas", mascotaService.listarMascotas());
+    public String listarMascotas(Model model, HttpSession session) {
+        Integer duenoId = (Integer) session.getAttribute("usuarioId");
+        if (duenoId != null) {
+            model.addAttribute("mascotas", mascotaService.listarMascotasPorDuenoId(duenoId));
+        } else {
+            model.addAttribute("mascotas", mascotaService.listarMascotas());
+        }
         return "principal-cliente";
     }
 

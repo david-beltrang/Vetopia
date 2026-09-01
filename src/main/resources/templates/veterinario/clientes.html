@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragmentos-portal :: head"></div>
+    <title>Vetopia - Clientes</title>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+
+<!-- TopNavBar Veterinario -->
+<nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
+    <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+        <a class="hidden md:inline-flex px-6 py-3 rounded-full border border-gray-600 text-white hover:bg-white/10 transition-colors font-button text-button uppercase tracking-wider items-center gap-2" th:href="@{/}">
+            <img alt="Vetopia Logo" class="h-8 w-auto" th:src="@{/images/logo_Vetopia.png}"/>
+        </a>
+        <div class="hidden md:flex gap-8">
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors" th:href="@{/veterinario/mascotas}">Pacientes</a>
+            <a class="text-white font-bold border-b-2 border-white pb-1" th:href="@{/veterinario/mascotas/clientes}" style="color: rgb(127, 255, 212); border-color: rgb(127, 255, 212);">Clientes</a>
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors" href="#">Citas</a>
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors" th:href="@{/veterinario/mascotas/tratamientos}">Tratamientos</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="hidden md:inline-flex px-6 py-3 rounded-full border border-gray-600 text-white hover:bg-white/10 transition-colors font-button text-button uppercase tracking-wider items-center gap-2" th:href="@{/logout}">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+    <div class="flex flex-wrap items-center justify-between gap-stack-md mb-stack-lg">
+        <div>
+            <h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">Clientes Registrados</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant">Gestión de clientes del sistema</p>
+        </div>
+        <a th:href="@{/veterinario/mascotas/registrar-cliente}"
+           class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-button text-button uppercase text-on-primary transition-colors hover:bg-primary/90">
+            Registrar Cliente
+            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">add</span>
+        </a>
+    </div>
+
+    <div class="bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[700px] text-left">
+                <thead>
+                <tr class="bg-surface-container-low uppercase">
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Nombre</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Cédula</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Correo</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Celular</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Estado</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(duenos)}">
+                    <td class="px-6 py-16 text-center" colspan="6">
+                        <p class="font-body-lg text-body-lg text-on-surface-variant">No hay clientes registrados.</p>
+                    </td>
+                </tr>
+                <tr class="border-b border-surface-container-high transition-colors last:border-0 hover:bg-surface-container-low"
+                    th:each="dueno : ${duenos}">
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold" th:text="${dueno.nombre}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${dueno.cedula}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${dueno.correo}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${dueno.celular}"></td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 font-label-md text-label-md uppercase tracking-widest"
+                              th:classappend="${dueno.estado == 'Activo'} ? 'bg-primary-container/20 text-primary' : 'bg-error-container/20 text-error'">
+                            <span class="inline-block h-2 w-2 rounded-full"
+                                  th:classappend="${dueno.estado == 'Activo'} ? 'bg-primary' : 'bg-error'"></span>
+                            <span th:text="${dueno.estado}"></span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <a th:href="@{/veterinario/mascotas/clientes/editar(id=${dueno.id})}"
+                               class="inline-flex items-center gap-1 rounded-full bg-secondary-container px-4 py-2 font-button text-button text-xs uppercase text-on-secondary-container transition-colors hover:bg-secondary hover:text-on-secondary">
+                                <span class="material-symbols-outlined text-[14px]">edit</span>
+                                Editar
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="fragmentos-portal :: footer"></footer>
+</body>
+</html>

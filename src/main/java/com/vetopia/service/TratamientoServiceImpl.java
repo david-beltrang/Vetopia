@@ -44,4 +44,22 @@ public class TratamientoServiceImpl implements TratamientoService {
     public void guardar(Tratamiento tratamiento) {
         tratamientoRepository.save(tratamiento);
     }
+
+    @Override
+    public List<Tratamiento> listarTratamientosPorMascotaId(Integer mascotaId) {
+        return List.copyOf(tratamientoRepository.searchByMascotaId(mascotaId));
+    }
+
+    @Override
+    public void actualizar(Tratamiento tratamiento) {
+        if (tratamiento == null || tratamiento.getId() == null) {
+            throw new IllegalArgumentException("El tratamiento no tiene un identificador válido.");
+        }
+        tratamientoRepository.update(tratamiento);
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        tratamientoRepository.delete(id);
+    }
 }

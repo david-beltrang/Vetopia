@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.vetopia.service.LoginService;
 import com.vetopia.service.LoginService.ResultadoLogin;
 
+import jakarta.servlet.http.HttpSession;
+
 /**
  * CONTROLLER (Página principal)
  * Gestiona la ruta raíz del sitio y retorna la vista index.
@@ -48,21 +50,31 @@ public class HomeController {
     @PostMapping("/login")
     public String iniciarSesion(@RequestParam("username") String username,
                                 @RequestParam("password") String password,
-                                Model model) {
+                                Model model,
+                                HttpSession session) {
         ResultadoLogin resultado = loginService.autenticar(username, password);
         if (resultado == null) {
             model.addAttribute("mensajeError", "Correo o contraseña incorrectos. Verifica tus credenciales.");
             return "login/login";
         }
 
+        session.setAttribute("usuarioId", resultado.id());
+        session.setAttribute("usuarioRol", resultado.rol());
+
         switch (resultado.rol()) {
             case "VETERINARIO":
                 return "redirect:/veterinario/mascotas";
             case "ADMINISTRADOR":
-                return "redirect:/";
+                return "redirect:/admin/dashboard";
             case "CLIENTE":
             default:
                 return "redirect:/cliente/mascotas";
         }
+    }
+
+    @GetMapping("/logout")
+    public String cerrarSesion(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 }

@@ -20,4 +20,13 @@ public interface TratamientoService {
 
     /** Guarda (registra) un tratamiento nuevo. El id lo asigna el repositorio. */
     void guardar(Tratamiento tratamiento);
+
+    /** Lista los tratamientos de una mascota específica. */
+    List<Tratamiento> listarTratamientosPorMascotaId(Integer mascotaId);
+
+    /** Actualiza un tratamiento existente. */
+    void actualizar(Tratamiento tratamiento);
+
+    /** Elimina un tratamiento por su id. */
+    void eliminar(Integer id);
 }

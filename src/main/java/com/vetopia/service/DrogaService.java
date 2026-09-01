@@ -20,4 +20,13 @@ public interface DrogaService {
 
     /** Guarda (registra) una droga nueva. El id lo asigna el repositorio. */
     void guardar(Droga droga);
+
+    /** Actualiza los datos de una droga existente. */
+    void actualizar(Droga droga);
+
+    /** Elimina una droga por su id. */
+    void eliminar(Integer id);
+
+    /** Descuenta unidades del stock de una droga. */
+    void descontarStock(Integer id, Integer unidades);
 }

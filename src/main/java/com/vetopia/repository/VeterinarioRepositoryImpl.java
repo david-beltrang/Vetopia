@@ -59,4 +59,16 @@ public class VeterinarioRepositoryImpl implements VeterinarioRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public void update(Veterinario veterinario) {
+        if (veterinario != null && tablaVeterinarios.containsKey(veterinario.getId())) {
+            tablaVeterinarios.put(veterinario.getId(), veterinario);
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        tablaVeterinarios.remove(id);
+    }
 }

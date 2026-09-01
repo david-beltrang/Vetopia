@@ -35,4 +35,19 @@ public interface MascotaService {
      * Usado por el veterinario para dar de alta o de baja una mascota.
      */
     void cambiarEstado(Integer id, String estado);
+
+    /**
+     * Lista las mascotas de un dueño específico.
+     */
+    List<Mascota> listarMascotasPorDuenoId(Integer duenoId);
+
+    /**
+     * Actualiza los datos de una mascota existente.
+     */
+    void actualizar(Mascota mascota);
+
+    /**
+     * Elimina una mascota por su id.
+     */
+    void eliminar(Integer id);
 }

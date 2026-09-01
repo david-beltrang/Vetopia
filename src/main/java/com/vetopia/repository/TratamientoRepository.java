@@ -24,4 +24,19 @@ public interface TratamientoRepository {
      * automáticamente el siguiente id disponible.
      */
     void save(Tratamiento tratamiento);
+
+    /**
+     * Devuelve todos los tratamientos asociados a una mascota específica.
+     */
+    Collection<Tratamiento> searchByMascotaId(Integer mascotaId);
+
+    /**
+     * Actualiza un tratamiento existente en el HashMap.
+     */
+    void update(Tratamiento tratamiento);
+
+    /**
+     * Elimina un tratamiento del HashMap por su id.
+     */
+    void delete(Integer id);
 }
