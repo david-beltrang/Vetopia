@@ -69,4 +69,19 @@ public class MascotaServiceImpl implements MascotaService {
         }
         mascotaRepository.cambiarEstado(id, estado);
     }
+
+    @Override
+    public List<Mascota> listarMascotasPorDuenoId(Integer duenoId) {
+        return List.copyOf(mascotaRepository.searchByDuenoId(duenoId));
+    }
+
+    @Override
+    public void actualizar(Mascota mascota) {
+        mascotaRepository.update(mascota);
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        mascotaRepository.delete(id);
+    }
 }

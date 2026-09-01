@@ -20,6 +20,8 @@ import com.vetopia.service.DuenoService;
 import com.vetopia.service.MascotaService;
 import com.vetopia.service.TratamientoService;
 
+import jakarta.servlet.http.HttpSession;
+
 /**
  * CONTROLLER (Portal del Veterinario)
  * Responsabilidad única: gestiona las peticiones del portal del veterinario.
@@ -159,6 +161,8 @@ public class VeterinarioMascotaController {
     public String aplicarTratamiento(@ModelAttribute Tratamiento tratamiento, Model model) {
         tratamiento.setVeterinarioId(1);
 
+        drogaService.descontarStock(tratamiento.getDrogaId(), 1);
+
         Droga droga = drogaService.obtenerDrogaPorId(tratamiento.getDrogaId());
         if (droga == null) {
             model.addAttribute("mascotas", mascotaService.listarMascotas());
@@ -174,7 +178,7 @@ public class VeterinarioMascotaController {
         int stockRestante = (droga.getUnidadesDisponibles() == null ? 0 : droga.getUnidadesDisponibles())
                 - unidadesDescontadas;
 
-        model.addAttribute("unidadesDescontadas", unidadesDescontadas);
+        model.addAttribute("unidadesDescontadas", 1);
         model.addAttribute("medicamentoNombre", droga.getNombre());
         model.addAttribute("stockRestante", stockRestante);
         model.addAttribute("mascotaId", tratamiento.getMascotaId());
@@ -198,9 +202,13 @@ public class VeterinarioMascotaController {
                                 + (id == null ? "" : id) + "\".");
             } else {
                 model.addAttribute("mascota", mascota);
+                if (mascota.getDuenoId() != null) {
+                    Dueno dueno = duenoService.obtenerDuenoPorId(mascota.getDuenoId());
+                    model.addAttribute("dueno", dueno);
+                }
+                model.addAttribute("tratamientos", tratamientoService.listarTratamientosPorMascotaId(id));
             }
         } catch (IllegalArgumentException excepcion) {
-            // Id nulo o fuera de rango: se muestra el panel informativo.
             model.addAttribute("mensajeError", excepcion.getMessage());
         }
         return "veterinario/ficha-clinica";
@@ -227,5 +235,72 @@ public class VeterinarioMascotaController {
     public String idNoNumerico(Model modelo) {
         modelo.addAttribute("mensajeError", "El identificador suministrado no es válido.");
         return "veterinario/ficha-clinica";
+    }
+
+    @GetMapping("/editar")
+    public String editarMascota(@RequestParam("id") Integer id, Model model) {
+        Mascota mascota = mascotaService.obtenerMascotaPorId(id);
+        model.addAttribute("mascota", mascota);
+        return "veterinario/editar-mascota";
+    }
+
+    @PostMapping("/editar")
+    public String guardarEdicionMascota(@ModelAttribute Mascota mascota) {
+        mascotaService.actualizar(mascota);
+        return "redirect:/veterinario/mascotas";
+    }
+
+    @PostMapping("/eliminar")
+    public String eliminarMascota(@RequestParam("id") Integer id) {
+        mascotaService.cambiarEstado(id, "Inactivo");
+        return "redirect:/veterinario/mascotas";
+    }
+
+    @GetMapping("/clientes")
+    public String listarClientes(Model model) {
+        model.addAttribute("duenos", duenoService.listarDuenos());
+        return "veterinario/clientes";
+    }
+
+    @GetMapping("/clientes/editar")
+    public String editarCliente(@RequestParam("id") Integer id, Model model) {
+        Dueno dueno = duenoService.obtenerDuenoPorId(id);
+        model.addAttribute("dueno", dueno);
+        return "veterinario/editar-cliente";
+    }
+
+    @PostMapping("/clientes/editar")
+    public String guardarEdicionCliente(@ModelAttribute Dueno dueno) {
+        duenoService.actualizar(dueno);
+        return "redirect:/veterinario/mascotas/clientes";
+    }
+
+    @GetMapping("/tratamientos")
+    public String listarTratamientos(Model model) {
+        model.addAttribute("tratamientos", tratamientoService.listarTratamientos());
+        model.addAttribute("mascotas", mascotaService.listarMascotas());
+        model.addAttribute("drogas", drogaService.listarDrogas());
+        return "veterinario/lista-tratamientos";
+    }
+
+    @GetMapping("/tratamientos/editar")
+    public String editarTratamiento(@RequestParam("id") Integer id, Model model) {
+        Tratamiento tratamiento = tratamientoService.obtenerTratamientoPorId(id);
+        model.addAttribute("tratamiento", tratamiento);
+        model.addAttribute("mascotas", mascotaService.listarMascotas());
+        model.addAttribute("drogas", drogaService.listarDrogas());
+        return "veterinario/editar-tratamiento";
+    }
+
+    @PostMapping("/tratamientos/editar")
+    public String guardarEdicionTratamiento(@ModelAttribute Tratamiento tratamiento) {
+        tratamientoService.actualizar(tratamiento);
+        return "redirect:/veterinario/mascotas/tratamientos";
+    }
+
+    @PostMapping("/tratamientos/eliminar")
+    public String eliminarTratamiento(@RequestParam("id") Integer id) {
+        tratamientoService.eliminar(id);
+        return "redirect:/veterinario/mascotas/tratamientos";
     }
 }

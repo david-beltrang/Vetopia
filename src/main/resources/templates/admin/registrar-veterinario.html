@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragmentos-portal :: head"></div>
+    <title>Vetopia - Registrar Veterinario</title>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+
+<!-- TopNavBar Admin -->
+<nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
+    <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+        <a class="hidden md:inline-flex px-6 py-3 rounded-full border border-gray-600 text-white hover:bg-white/10 transition-colors font-button text-button uppercase tracking-wider items-center gap-2" th:href="@{/}">
+            <img alt="Vetopia Logo" class="h-8 w-auto" th:src="@{/images/logo_Vetopia.png}"/>
+        </a>
+        <div class="hidden md:flex gap-8">
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors" th:href="@{/admin/dashboard}">Dashboard</a>
+            <a class="text-white font-bold border-b-2 border-white pb-1" th:href="@{/admin/veterinarios}" style="color: rgb(127, 255, 212); border-color: rgb(127, 255, 212);">Gestión Veterinarios</a>
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors" th:href="@{/admin/drogas}">Drogas</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="hidden md:inline-flex px-6 py-3 rounded-full border border-gray-600 text-white hover:bg-white/10 transition-colors font-button text-button uppercase tracking-wider items-center gap-2" th:href="@{/logout}">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+    <!-- Navegación de regreso -->
+    <section class="mb-stack-md">
+        <a class="inline-flex items-center gap-2 font-button text-button uppercase tracking-widest text-secondary hover:text-primary transition-colors"
+           th:href="@{/admin/veterinarios}">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+            Volver a Gestión de Veterinarios
+        </a>
+    </section>
+
+    <div class="max-w-2xl mx-auto">
+        <h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">Registrar Nuevo Veterinario</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg">Complete los datos del nuevo veterinario</p>
+
+        <form th:action="@{/admin/veterinarios/registrar}" method="post"
+              class="bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] p-stack-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-2" for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" name="nombre" required
+                           class="w-full px-4 py-3 rounded-lg border border-surface-container-highest bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary"/>
+                </div>
+                <div>
+                    <label class="block font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-2" for="cedula">Cédula</label>
+                    <input type="text" id="cedula" name="cedula" required
+                           class="w-full px-4 py-3 rounded-lg border border-surface-container-highest bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary"/>
+                </div>
+                <div>
+                    <label class="block font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-2" for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" name="correo" required
+                           class="w-full px-4 py-3 rounded-lg border border-surface-container-highest bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary"/>
+                </div>
+                <div>
+                    <label class="block font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-2" for="contrasena">Contraseña</label>
+                    <input type="password" id="contrasena" name="contrasena" required
+                           class="w-full px-4 py-3 rounded-lg border border-surface-container-highest bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary"/>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-2" for="especialidad">Especialidad</label>
+                    <input type="text" id="especialidad" name="especialidad" required
+                           class="w-full px-4 py-3 rounded-lg border border-surface-container-highest bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary"/>
+                </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-stack-lg">
+                <a th:href="@{/admin/veterinarios}"
+                   class="px-6 py-3 rounded-full border border-outline font-button text-button uppercase tracking-widest text-on-surface transition-colors hover:bg-surface-container-low">
+                    Cancelar
+                </a>
+                <button type="submit"
+                        class="px-6 py-3 rounded-full bg-primary font-button text-button uppercase tracking-widest text-on-primary transition-colors hover:bg-primary/90">
+                    Registrar Veterinario
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer th:replace="fragmentos-portal :: footer"></footer>
+</body>
+</html>

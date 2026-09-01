@@ -49,4 +49,14 @@ public class VeterinarioServiceImpl implements VeterinarioService {
     public Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena) {
         return veterinarioRepository.searchByCorreoYContrasena(correo, contrasena);
     }
+
+    @Override
+    public void actualizar(Veterinario veterinario) {
+        veterinarioRepository.update(veterinario);
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        veterinarioRepository.delete(id);
+    }
 }

@@ -23,4 +23,10 @@ public interface DuenoService {
 
     /** Busca un dueño por correo y contraseña (para login). */
     Dueno obtenerPorCorreoYContrasena(String correo, String contrasena);
+
+    /** Actualiza los datos de un dueño existente. */
+    void actualizar(Dueno dueno);
+
+    /** Elimina un dueño por su id. */
+    void eliminar(Integer id);
 }

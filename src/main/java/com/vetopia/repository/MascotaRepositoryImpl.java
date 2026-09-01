@@ -81,4 +81,23 @@ public class MascotaRepositoryImpl implements MascotaRepository {
             mascota.setEstado(estado);
         }
     }
+
+    @Override
+    public Collection<Mascota> searchByDuenoId(Integer duenoId) {
+        return tablaMascotas.values().stream()
+                .filter(m -> m.getDuenoId() != null && m.getDuenoId().equals(duenoId))
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    }
+
+    @Override
+    public void update(Mascota mascota) {
+        if (mascota != null && tablaMascotas.containsKey(mascota.getId())) {
+            tablaMascotas.put(mascota.getId(), mascota);
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        tablaMascotas.remove(id);
+    }
 }

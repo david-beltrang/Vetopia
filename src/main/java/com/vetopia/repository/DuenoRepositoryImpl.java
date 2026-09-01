@@ -65,4 +65,16 @@ public class DuenoRepositoryImpl implements DuenoRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public void update(Dueno dueno) {
+        if (dueno != null && tablaDuenos.containsKey(dueno.getId())) {
+            tablaDuenos.put(dueno.getId(), dueno);
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        tablaDuenos.remove(id);
+    }
 }

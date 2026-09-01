@@ -44,4 +44,24 @@ public class DrogaServiceImpl implements DrogaService {
     public void guardar(Droga droga) {
         drogaRepository.save(droga);
     }
+
+    @Override
+    public void actualizar(Droga droga) {
+        drogaRepository.update(droga);
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        drogaRepository.delete(id);
+    }
+
+    @Override
+    public void descontarStock(Integer id, Integer unidades) {
+        Droga droga = drogaRepository.searchById(id);
+        if (droga != null && droga.getUnidadesDisponibles() >= unidades) {
+            droga.setUnidadesDisponibles(droga.getUnidadesDisponibles() - unidades);
+            droga.setUnidadesVendidas(droga.getUnidadesVendidas() + unidades);
+            drogaRepository.update(droga);
+        }
+    }
 }
