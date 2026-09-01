@@ -64,6 +64,9 @@ public class MascotaServiceImpl implements MascotaService {
      */
     @Override
     public void cambiarEstado(Integer id, String estado) {
+        if (estado == null || !(estado.equals("Activo") || estado.equals("Inactivo"))) {
+            throw new IllegalArgumentException("El estado \"" + estado + "\" no es válido. Debe ser Activo o Inactivo.");
+        }
         mascotaRepository.cambiarEstado(id, estado);
     }
 }
