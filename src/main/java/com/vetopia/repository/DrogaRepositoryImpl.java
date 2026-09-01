@@ -50,16 +50,4 @@ public class DrogaRepositoryImpl implements DrogaRepository {
         droga.setId(lastId + 1);
         tablaDrogas.put(droga.getId(), droga);
     }
-
-    @Override
-    public void update(Droga droga) {
-        if (droga != null && tablaDrogas.containsKey(droga.getId())) {
-            tablaDrogas.put(droga.getId(), droga);
-        }
-    }
-
-    @Override
-    public void delete(Integer id) {
-        tablaDrogas.remove(id);
-    }
 }

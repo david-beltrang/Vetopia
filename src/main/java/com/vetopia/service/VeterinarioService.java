@@ -23,10 +23,4 @@ public interface VeterinarioService {
 
     /** Busca un veterinario por correo y contraseña (para login). */
     Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena);
-
-    /** Actualiza los datos de un veterinario existente. */
-    void actualizar(Veterinario veterinario);
-
-    /** Elimina un veterinario por su id. */
-    void eliminar(Integer id);
 }

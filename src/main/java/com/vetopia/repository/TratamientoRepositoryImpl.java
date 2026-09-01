@@ -59,21 +59,4 @@ public class TratamientoRepositoryImpl implements TratamientoRepository {
         tratamiento.setId(lastId + 1);
         tablaTratamientos.put(tratamiento.getId(), tratamiento);
     }
-
-    @Override
-    public Collection<Tratamiento> searchByMascotaId(Integer mascotaId) {
-        return tablaTratamientos.values().stream()
-                .filter(t -> t.getMascotaId() != null && t.getMascotaId().equals(mascotaId))
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-    }
-
-    @Override
-    public void update(Tratamiento tratamiento) {
-        tablaTratamientos.put(tratamiento.getId(), tratamiento);
-    }
-
-    @Override
-    public void delete(Integer id) {
-        tablaTratamientos.remove(id);
-    }
 }

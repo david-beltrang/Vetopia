@@ -49,14 +49,4 @@ public class DuenoServiceImpl implements DuenoService {
     public Dueno obtenerPorCorreoYContrasena(String correo, String contrasena) {
         return duenoRepository.searchByCorreoYContrasena(correo, contrasena);
     }
-
-    @Override
-    public void actualizar(Dueno dueno) {
-        duenoRepository.update(dueno);
-    }
-
-    @Override
-    public void eliminar(Integer id) {
-        duenoRepository.delete(id);
-    }
 }

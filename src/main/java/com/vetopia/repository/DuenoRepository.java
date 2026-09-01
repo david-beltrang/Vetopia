@@ -30,14 +30,4 @@ public interface DuenoRepository {
      * inicio de sesión). Devuelve null si no existe coincidencia.
      */
     Dueno searchByCorreoYContrasena(String correo, String contrasena);
-
-    /**
-     * Actualiza un dueño existente en el HashMap.
-     */
-    void update(Dueno dueno);
-
-    /**
-     * Elimina un dueño del HashMap por su id.
-     */
-    void delete(Integer id);
 }

@@ -30,14 +30,4 @@ public interface VeterinarioRepository {
      * inicio de sesión). Devuelve null si no existe coincidencia.
      */
     Veterinario searchByCorreoYContrasena(String correo, String contrasena);
-
-    /**
-     * Actualiza un veterinario existente en el HashMap.
-     */
-    void update(Veterinario veterinario);
-
-    /**
-     * Elimina un veterinario del HashMap por su id.
-     */
-    void delete(Integer id);
 }

@@ -24,14 +24,4 @@ public interface DrogaRepository {
      * automáticamente el siguiente id disponible.
      */
     void save(Droga droga);
-
-    /**
-     * Actualiza una droga existente en el HashMap.
-     */
-    void update(Droga droga);
-
-    /**
-     * Elimina una droga del HashMap por su id.
-     */
-    void delete(Integer id);
 }

@@ -35,19 +35,4 @@ public interface MascotaRepository {
      * @param estado nuevo estado ("Activo" o "Inactivo")
      */
     void cambiarEstado(Integer id, String estado);
-
-    /**
-     * Devuelve todas las mascotas asociadas a un dueño específico.
-     */
-    Collection<Mascota> searchByDuenoId(Integer duenoId);
-
-    /**
-     * Actualiza una mascota existente en el HashMap.
-     */
-    void update(Mascota mascota);
-
-    /**
-     * Elimina una mascota del HashMap por su id.
-     */
-    void delete(Integer id);
 }
