@@ -2,8 +2,8 @@
 
 <!--
     Vista Thymeleaf (NO funciona con Go Live: se renderiza en el servidor).
-    URL: http://localhost:8080/mascotas
-    Controlador: MascotaController.listarMascotas()  [GET /mascotas]
+    URL: http://localhost:8080/cliente/mascotas
+    Controlador: ClienteMascotaController.listarMascotas()  [GET /cliente/mascotas]
 -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -39,7 +39,7 @@
         </p>
     </section>
 
-    <!-- Tarjeta contenedora del listado. El controlador MascotaController pidió
+    <!-- Tarjeta contenedora del listado. El controlador ClienteMascotaController pidió
          los datos al Service y este al Repository; aquí solo se renderizan. -->
     <section class="bg-surface-container-lowest rounded-DEFAULT border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
         <div class="flex items-center justify-between gap-4 p-stack-lg border-b border-surface-container-high">
@@ -96,7 +96,7 @@
                     <td class="px-6 py-4">
                         <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2.5 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
                            th:aria-label="'Consultar detalles de ' + ${mascota.nombre}"
-                           th:href="@{/mascotas/detalle(id=${mascota.id})}">
+                           th:href="@{/cliente/mascotas/detalle(id=${mascota.id})}">
                             Ver detalles
                             <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">visibility</span>
                         </a>

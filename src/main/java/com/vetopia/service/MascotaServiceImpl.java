@@ -48,4 +48,25 @@ public class MascotaServiceImpl implements MascotaService {
         }
         return mascotaRepository.searchById(id);
     }
+
+    /**
+     * {@inheritDoc}
+     * Delega en el repositorio, que asigna el siguiente id disponible.
+     */
+    @Override
+    public void guardar(Mascota mascota) {
+        mascotaRepository.save(mascota);
+    }
+
+    /**
+     * {@inheritDoc}
+     * Delega en el repositorio, que actualiza el estado de la mascota.
+     */
+    @Override
+    public void cambiarEstado(Integer id, String estado) {
+        if (estado == null || !(estado.equals("Activo") || estado.equals("Inactivo"))) {
+            throw new IllegalArgumentException("El estado \"" + estado + "\" no es válido. Debe ser Activo o Inactivo.");
+        }
+        mascotaRepository.cambiarEstado(id, estado);
+    }
 }
