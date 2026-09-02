@@ -12,31 +12,17 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.vetopia.entities.Mascota;
 import com.vetopia.service.MascotaService;
 
-/**
- * CONTROLLER (Portal del Cliente)
- * Responsabilidad única: gestiona las peticiones del portal del cliente.
- * Todas las rutas viven bajo el contexto /cliente/mascotas. El listado
- * usa la plantilla principal (src/main/resources/templates/principal-cliente.html)
- * y el detalle usa src/main/resources/templates/cliente/detalle-mascota.html.
- *
- * El controller delega la lógica de negocio en el Service (MascotaService)
- * y solo retorna los nombres de las vistas que Thymeleaf renderiza.
- * Flujo estricto: Controller -> Service -> Repository.
- */
-@Controller
+//controlador del portal del cliente
 @RequestMapping("/cliente/mascotas")
 public class ClienteMascotaController {
 
-    /** Servicio de mascotas (flujo obligatorio: Controller -> Service). */
+    //Inyeccion de dependencias
     @Autowired
     private MascotaService mascotaService;
 
-    /**
-     * Atiende GET /cliente/mascotas: listado de mascotas del cliente
-     * ordenadas alfabéticamente por nombre.
-     *
-     * URL para visualizar: http://localhost:8080/cliente/mascotas
-     * Vista: src/main/resources/templates/principal-cliente.html
+    /*
+     GET /cliente/mascotas: listado de mascotas del cliente ordenadas alfabéticamente por nombre.
+    http://localhost:8080/cliente/mascotas
      */
     @GetMapping
     public String listarMascotas(Model model) {

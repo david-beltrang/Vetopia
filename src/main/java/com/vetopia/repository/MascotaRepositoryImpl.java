@@ -10,27 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import com.vetopia.entities.Mascota;
 
-/**
- * Simula la persistencia de datos usando un HashMap (llave = id,
- * valor = Mascota), a modo de tabla de base de datos. La anotación
- * Cuando se conecte una base de datos real, solo esta implementación
- * cambia; Service y Controller no requieren modificaciones.
- */
+// Esta clase implementa la interfaz MascotaRepository y proporciona métodos para acceder y manipular los datos de mascotas almacenados en memoria.
 @Repository
 public class MascotaRepositoryImpl implements MascotaRepository {
 
-    /** "Tabla" mascotas simulada en memoria (llave = id, valor = Mascota). */
+    // Se utiliza un HashMap para almacenar las mascotas, donde la clave es el identificador de la mascota y el valor es el objeto Mascota correspondiente.
     private final Map<Integer, Mascota> tablaMascotas = new HashMap<>();
 
-    /**
-     * Precarga registros de ejemplo, equivalentes a los datos mock
-     * del proyecto JavaScript original (js/data/mascotas.data.js).
-     * El campo imagen permanece en null: las vistas muestran un
-     * placeholder hasta que se asignen URLs manualmente.
-     *
-     * Cada mascota queda conectada por llave foránea (duenoId) al dueño
-     * correspondiente de DuenoRepositoryImpl.
-     */
+    //precarga de registros
     public MascotaRepositoryImpl() {
         tablaMascotas.put(1, new Mascota(1, "Max", "Perro", "Doberman",
                 5.0, "Macho", "https://imgs.search.brave.com/8AIQQXIiiwAhhRKhD87lE0EUhLc7Irg8eiwpgIx1x7U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGl4YWJheS5jb20v/cGhvdG8vMjAxNi8w/My8yNy8xOC8xMi9s/dW5hLTEyODMzNTZf/NjQwLmpwZw", 32.0, "Negro", LocalDate.parse("2026-01-12"), 1, "Activo"));
@@ -40,11 +27,7 @@ public class MascotaRepositoryImpl implements MascotaRepository {
                 0.6, "Macho", "https://imgs.search.brave.com/SpvOGsBrp_Lq8prflOD7fsZ5TRntmOqrUHvFvtSrWzg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9zZW50/YWRhLWdyaXMtZGVs/LXBlcnJpdG8tZG9n/by1mcmFuYyVDMyVB/OXMtYWlzbGFkYS0x/MDE3NTU1MzAuanBn", 7.5, "Gris atigrado", LocalDate.parse("2025-11-20"), 3, "Activo"));
     }
 
-    /**
-     * Se devuelve una copia de los valores del HashMap (Collection) para
-     * que las capas superiores no manipulen directamente los datos
-     * almacenados.
-     */
+    
     @Override
     public Collection<Mascota> searchAll() {
         return new ArrayList<>(tablaMascotas.values());
@@ -55,25 +38,27 @@ public class MascotaRepositoryImpl implements MascotaRepository {
         return tablaMascotas.get(id);
     }
 
-    /**
-     * Guarda la mascota asignándole el siguiente id disponible.
-     * Se calcula el id máximo existente + 1 para evitar colisiones
-     * cuando los registros no están contiguos, y se asigna al objeto
-     * antes de insertarlo en el mapa.
-     */
+    // Guarda la mascota asignándole el siguiente id disponible.
     @Override
     public void save(Mascota mascota) {
-        int lastId = tablaMascotas.keySet().stream()
-                .max(Integer::compareTo)
-                .orElse(0);
-        mascota.setId(lastId + 1);
-        tablaMascotas.put(mascota.getId(), mascota);
+        if (mascota.getId() == null){
+            int lastId = 0;
+            // Recorremos todas las llaves (IDs) existentes en la tabla
+            for (int id : tablaMascotas.keySet()) {
+                if (id > lastId) {
+                    lastId = id; // Guardamos el ID más alto que encontremos
+                }
+            }
+            // Asignamos el siguiente ID y guardamos
+            mascota.setId(lastId + 1);
+            tablaMascotas.put(mascota.getId(), mascota);
+            } else {
+                //Si ya tiene ID, entonces se actualiza el registro
+                tablaMascotas.put(mascota.getId(), mascota);
+            }
     }
 
-    /**
-     * Actualiza el estado de la mascota identificada por id. Si el id
-     * no existe, no se realiza ningún cambio.
-     */
+    // Cambia el estado de la mascota con el id especificado.
     @Override
     public void cambiarEstado(Integer id, String estado) {
         Mascota mascota = tablaMascotas.get(id);

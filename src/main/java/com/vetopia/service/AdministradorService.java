@@ -4,23 +4,18 @@ import java.util.List;
 
 import com.vetopia.entities.Administrador;
 
-/**
- * SERVICIO - AdministradorService
- * Define la lógica de negocio relacionada con administradores. Es el único
- * punto al que los controladores acceden para obtener datos; a su vez,
- * delega el acceso a datos en la capa repository.
- */
+// Esta interfaz define los métodos que deben implementarse para acceder y manipular los datos de administradores en la aplicación.
 public interface AdministradorService {
 
-    /** Lista todos los administradores registrados. */
+    // Devuelve todos los administradores registrados.
     List<Administrador> listarAdministradores();
 
-    /** Obtiene un administrador validando previamente el identificador. */
+    // Busca un administrador por su identificador.
     Administrador obtenerAdministradorPorId(Integer id);
 
-    /** Guarda (registra) un administrador nuevo. El id lo asigna el repositorio. */
+    // Guarda un administrador en la base de datos.
     void guardar(Administrador administrador);
 
-    /** Busca un administrador por correo y contraseña (para login). */
+    // Busca un administrador por su correo y contraseña.
     Administrador obtenerPorCorreoYContrasena(String correo, String contrasena);
 }

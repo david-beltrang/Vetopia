@@ -4,30 +4,15 @@ import java.util.Collection;
 
 import com.vetopia.entities.Dueno;
 
-/**
- * Único punto de acceso a los datos de dueños. Define las operaciones de
- * persistencia que la capa Service puede utilizar sin exponer detalles de
- * la fuente de datos (por ahora HashMap en memoria).
- */
+// Esta interfaz define los métodos que deben implementarse para acceder y manipular los datos de dueños en la aplicación.
 public interface DuenoRepository {
 
-    /** Devuelve todos los dueños registrados. */
+
     Collection<Dueno> searchAll();
 
-    /**
-     * Busca un dueño por su identificador dentro del HashMap.
-     */
     Dueno searchById(Integer id);
 
-    /**
-     * Guarda (persiste) un dueño en el HashMap asignándole
-     * automáticamente el siguiente id disponible.
-     */
     void save(Dueno dueno);
 
-    /**
-     * Busca un dueño por su correo y contraseña (credenciales de
-     * inicio de sesión). Devuelve null si no existe coincidencia.
-     */
     Dueno searchByCorreoYContrasena(String correo, String contrasena);
 }

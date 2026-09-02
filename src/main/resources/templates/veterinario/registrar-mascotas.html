@@ -16,10 +16,10 @@
             </div>
             <!-- Enlaces de navegación -->
             <div class="hidden md:flex items-center gap-8">
-                <a href="/veterinario/mascotas" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Pacientes</a>
-                <a href="/veterinario/mascotas/registrar-mascota" class="text-primary font-body-md text-body-md font-bold border-b-2 border-primary pb-1 shadow-[0px_2px_4px_rgba(0,0,0,0.30)]">Clientes</a>
+                <a th:href="@{/veterinario/mascotas(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Pacientes</a>
+                <a th:href="@{/veterinario/mascotas/registrar-cliente(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Clientes</a>
                 <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Citas</a>
-                <a href="/veterinario/mascotas/asignar-tratamiento" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Tratamientos</a>
+                <a th:href="@{/veterinario/mascotas/asignar-tratamiento(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Tratamientos</a>
             </div>
             <!-- Trailing: notificaciones, usuario, logout -->
             <div class="flex items-center gap-4">
@@ -49,8 +49,9 @@
             </div>
 
             <!-- Formulario -->
-            <form class="flex flex-col items-center gap-stack-lg" th:action="@{/veterinario/mascotas/registrar-mascota}" method="post">
-                <!-- Dueño al que se asocia la mascota (se propaga desde registrar-cliente) -->
+            <form class="flex flex-col items-center gap-stack-lg" th:action="@{/veterinario/mascotas/registrar-mascota}" method="post" enctype="multipart/form-data">
+                <!-- Veterinario logueado y dueño al que se asocia la mascota (provenientes de URL) -->
+                <input type="hidden" name="veterinarioId" th:if="${veterinarioId != null}" th:value="${veterinarioId}"/>
                 <input type="hidden" name="duenoId" th:if="${duenoId != null}" th:value="${duenoId}"/>
                 <!-- Tarjeta del formulario -->
                 <div class="w-full bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant max-w-[604px]">
@@ -65,13 +66,14 @@
                     <!-- Campos del formulario -->
                     <div class="flex flex-col gap-6">
                         <!-- Subida de foto -->
-                        <label class="flex flex-col items-center gap-2 p-6 bg-background rounded-xl border-2 border-outline-variant border-dashed cursor-pointer">
-                            <div class="w-20 h-20 rounded-full bg-secondary-container flex items-center justify-center">
+                        <label id="fotoLabel" class="flex flex-col items-center gap-2 p-6 bg-background rounded-xl border-2 border-outline-variant border-dashed cursor-pointer transition hover:border-primary">
+                            <img id="previewFoto" class="hidden w-24 h-24 rounded-full object-cover border border-outline"/>
+                            <div id="iconoFoto" class="w-20 h-20 rounded-full bg-secondary-container flex items-center justify-center">
                                 <span class="material-symbols-outlined text-4xl text-on-secondary-container">pets</span>
                             </div>
                             <span class="text-primary font-label-md text-label-md uppercase tracking-widest cursor-pointer hover:underline">Click para subir foto</span>
                             <span class="text-on-surface-variant text-sm">JPG or PNG (Max 5MB)</span>
-                            <input type="file" name="foto" accept="image/png,image/jpeg,image/gif" class="hidden"/>
+                            <input id="inputFoto" type="file" name="foto" accept="image/png,image/jpeg,image/gif" class="hidden"/>
                         </label>
 
                         <!-- Nombre y Raza - Grid 2 columnas -->
@@ -148,5 +150,38 @@
 
     <!-- FOOTER -->
     <footer th:replace="fragmentos-portal :: footer"></footer>
+
+    <!-- Vista previa de la foto seleccionada antes de subirla -->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('inputFoto');
+            const preview = document.getElementById('previewFoto');
+            const icono = document.getElementById('iconoFoto');
+            const texto = document.querySelector('#fotoLabel .text-primary');
+
+            input.addEventListener('change', function () {
+                const archivo = input.files && input.files[0];
+                if (archivo && archivo.type.startsWith('image/')) {
+                    const lector = new FileReader();
+                    lector.onload = function (e) {
+                        preview.src = e.target.result;
+                        preview.classList.remove('hidden');
+                        icono.classList.add('hidden');
+                        if (texto) {
+                            texto.textContent = archivo.name;
+                        }
+                    };
+                    lector.readAsDataURL(archivo);
+                } else {
+                    preview.classList.add('hidden');
+                    preview.removeAttribute('src');
+                    icono.classList.remove('hidden');
+                    if (texto) {
+                        texto.textContent = 'Click para subir foto';
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

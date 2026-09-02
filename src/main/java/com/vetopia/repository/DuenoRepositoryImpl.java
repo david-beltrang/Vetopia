@@ -9,23 +9,14 @@ import org.springframework.stereotype.Repository;
 
 import com.vetopia.entities.Dueno;
 
-/**
- * Simula la persistencia de dueños usando un HashMap
- * (llave = id, valor = Dueno), a modo de tabla de base de datos.
- * La anotación @Repository la registra en el contexto de Spring.
- *
- * Cuando se conecte una base de datos real, solo esta implementación
- * cambia; Service y Controller no requieren modificaciones.
- */
+// Esta clase implementa la interfaz DuenoRepository y proporciona métodos para acceder y manipular los datos de dueños almacenados en memoria.
 @Repository
 public class DuenoRepositoryImpl implements DuenoRepository {
 
-    /** "Tabla" dueños simulada en memoria. */
+    // Se utiliza un HashMap para almacenar los dueños, donde la clave es el identificador del dueño y el valor es el objeto Dueno correspondiente.
     private final Map<Integer, Dueno> tablaDuenos = new HashMap<>();
 
-    /**
-     * Precarga registros de ejemplo de dueños.
-     */
+    // Precarga de registros de ejemplo de dueños, con sus respectivos datos.
     public DuenoRepositoryImpl() {
         tablaDuenos.put(1, new Dueno(1, "1020304050", "Ana Rodríguez", "ana@correo.com", "dueño123", "3001234567", "Activo"));
         tablaDuenos.put(2, new Dueno(2, "1020304051", "Pedro Gómez", "pedro@correo.com", "dueño123", "3007654321", "Activo"));
@@ -42,19 +33,24 @@ public class DuenoRepositoryImpl implements DuenoRepository {
         return tablaDuenos.get(id);
     }
 
-    /**
-     * Guarda el dueño asignándole el siguiente id disponible.
-     * Se calcula el id máximo existente + 1 para evitar colisiones
-     * cuando los registros no están contiguos, y se asigna al objeto
-     * antes de insertarlo en el mapa.
-     */
+    // Guarda el dueño asignándole el siguiente id disponible.
     @Override
     public void save(Dueno dueno) {
-        int lastId = tablaDuenos.keySet().stream()
-                .max(Integer::compareTo)
-                .orElse(0);
-        dueno.setId(lastId + 1);
-        tablaDuenos.put(dueno.getId(), dueno);
+        if (dueno.getId() == null){
+            int lastId = 0;
+            // Recorremos todas las llaves (IDs) existentes en la tabla
+            for (int id : tablaDuenos.keySet()) {
+                if (id > lastId) {
+                    lastId = id; // Guardamos el ID más alto que encontremos
+                }
+            }
+            // Asignamos el siguiente ID y guardamos
+            dueno.setId(lastId + 1);
+            tablaDuenos.put(dueno.getId(), dueno);
+            } else {
+                //Si ya tiene ID, entonces se actualiza el registro
+                tablaDuenos.put(dueno.getId(), dueno);
+            }
     }
 
     @Override

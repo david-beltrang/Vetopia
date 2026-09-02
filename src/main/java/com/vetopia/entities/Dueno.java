@@ -14,25 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Dueno {
-
-    /** Identificador único del dueño. */
+    
     private Integer id;
-
-    /** Número de documento de identidad del dueño. */
     private String cedula;
-
-    /** Nombre completo del dueño. */
     private String nombre;
-
-    /** Correo electrónico del dueño. */
     private String correo;
-
-    /** Contraseña de acceso del dueño. */
     private String contrasena;
-
-    /** Número de celular del dueño. */
     private String celular;
-
-    /** Estado del dueño (Activo / Inactivo). */
     private String estado;
 }

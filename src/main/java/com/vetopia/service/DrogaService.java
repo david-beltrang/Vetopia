@@ -4,20 +4,18 @@ import java.util.List;
 
 import com.vetopia.entities.Droga;
 
-/**
- * SERVICIO - DrogaService
- * Define la lógica de negocio relacionada con drogas/medicamentos. Es el
- * único punto al que los controladores acceden para obtener datos; a su
- * vez, delega el acceso a datos en la capa repository.
- */
+// Esta interfaz define los métodos que deben implementarse para acceder y manipular los datos de drogas en la aplicación.
 public interface DrogaService {
 
-    /** Lista todas las drogas registradas. */
+    // Lista todas las drogas registradas.
     List<Droga> listarDrogas();
 
-    /** Obtiene una droga validando previamente el identificador. */
+    // Obtiene una droga validando previamente el identificador.
     Droga obtenerDrogaPorId(Integer id);
 
-    /** Guarda (registra) una droga nueva. El id lo asigna el repositorio. */
+    // Guarda (registra) una droga nueva. El id lo asigna el repositorio.
     void guardar(Droga droga);
+
+    // Descuenta unidades del inventario de la droga (al asignar un tratamiento).
+    void descontarUnidades(Integer drogaId, Integer cantidad);
 }

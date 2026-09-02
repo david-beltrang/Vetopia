@@ -44,11 +44,21 @@ public class VeterinarioRepositoryImpl implements VeterinarioRepository {
 
     @Override
     public void save(Veterinario veterinario) {
-        int lastId = tablaVeterinarios.keySet().stream()
-                .max(Integer::compareTo)
-                .orElse(0);
-        veterinario.setId(lastId + 1);
-        tablaVeterinarios.put(veterinario.getId(), veterinario);
+        if (veterinario.getId() == null){
+            int lastId = 0;
+            // Recorremos todas las llaves (IDs) existentes en la tabla
+            for (int id : tablaVeterinarios.keySet()) {
+                if (id > lastId) {
+                    lastId = id; // Guardamos el ID más alto que encontremos
+                }
+            }
+            // Asignamos el siguiente ID y guardamos
+            veterinario.setId(lastId + 1);
+            tablaVeterinarios.put(veterinario.getId(), veterinario);
+            } else {
+                //Si ya tiene ID, entonces se actualiza el registro
+                tablaVeterinarios.put(veterinario.getId(), veterinario);
+            }
     }
 
     @Override

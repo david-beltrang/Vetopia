@@ -4,35 +4,22 @@ import java.util.List;
 
 import com.vetopia.entities.Mascota;
 
-/**
- * SERVICIO - MascotaService
- * Define la lógica de negocio relacionada con mascotas. Es el único
- * punto al que los controladores acceden para obtener datos; a su vez,
- * delega el acceso a datos en la capa repository.
- */
+// Esta interfaz define los métodos que deben implementarse para acceder y manipular los datos de mascotas en la aplicación.
 public interface MascotaService {
 
-    /**
-     * Lista las mascotas ordenadas alfabéticamente por nombre
-     * (regla de negocio para el listado del portal del cliente).
-     */
+    // Devuelve todas las mascotas registradas.
     List<Mascota> listarMascotas();
 
-    /**
-     * Obtiene una mascota específica validando previamente el
-     * identificador recibido.
-     */
+    // Obtiene una mascota validando previamente el identificador.
     Mascota obtenerMascotaPorId(Integer id);
 
-    /**
-     * Guarda (registra) una nueva mascota. El identificador lo asigna
-     * la capa repository automáticamente.
-     */
+    // Guarda una mascota nueva. El id lo asigna el repositorio.
     void guardar(Mascota mascota);
 
-    /**
-     * Cambia el estado (Activo/Inactivo) de una mascota por su id.
-     * Usado por el veterinario para dar de alta o de baja una mascota.
-     */
+    // Cambia el estado de una mascota de "activo" a "inactivo".
     void cambiarEstado(Integer id, String estado);
+
+    // Devuelve las mascotas asociadas a un veterinario: busca sus
+    // tratamientos y de ahí obtiene las mascotas atendidas.
+    List<Mascota> listarMascotasDeVeterinario(Integer veterinarioId);
 }

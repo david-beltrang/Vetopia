@@ -1,28 +1,24 @@
 <!DOCTYPE html>
 
-<!--
-    Vista Thymeleaf (NO funciona con Go Live: se renderiza en el servidor).
-    URL: http://localhost:8080/veterinario/mascotas
-    Controlador: VeterinarioMascotaController.listarMascotas()  [GET /veterinario/mascotas]
--->
+
+
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
         <div th:replace="fragmentos-portal :: head"></div>
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
-<!-- TopNavBar (Transactional/Onboarding - Suppressed Navigation Shell) -->
 <nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
     <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
-        <!-- Brand / Logo -->
+        <!-- Logo -->
         <a class="hidden md:inline-flex px-6 py-3 rounded-full border border-gray-600 text-white hover:bg-white/10 transition-colors font-button text-button uppercase tracking-wider items-center gap-2" href="#">
             <img alt="Veto Precision Logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGmAr_Hjp4ZCy8ezWVGciiNxUFa1a57lruSDgy0Xgk93QhrPSm4d8_uHrpj5GeNa8Gg7ipmkurP9qB75txOTGtJUl2O3Lps_uTsgVNoa-a34c6FNLAzDjLCSH5ZfIOMfLPBF4t-Twzkz4dvRsbGPzjr3wffVSkXbSjl5eiMJcgXm8I4yRlfxpuqeBtiFVV-UglKNkgxmK5yYEIB3TPFhPQC9TIA74zwryNrRCa5D_BeiKeTUJ9KI9bSUIY0pSF4GegTUA"/>
         </a>
-        <!-- Navigation Links (Desktop) -->
+        <!-- Navegacion (Desktop) -->
         <div class="hidden md:flex gap-8">
-            <a aria-current="page" class="text-white font-bold border-b-2 border-white pb-1 hover:text-primary transition-colors duration-200" href="/veterinario/mascotas" style="color: rgb(127, 255, 212); text-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px; border-color: rgb(127, 255, 212);">Pacientes</a>
-            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" href="#">Clientes</a>
+            <a aria-current="page" class="text-white font-bold border-b-2 border-white pb-1 hover:text-primary transition-colors duration-200" th:href="@{/veterinario/mascotas(veterinarioId=${veterinarioId})}" style="color: rgb(127, 255, 212); text-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px; border-color: rgb(127, 255, 212);">Pacientes</a>
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" th:href="@{/veterinario/mascotas/registrar-cliente(veterinarioId=${veterinarioId})}">Clientes</a>
             <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" href="#">Citas</a>
-            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" href="/veterinario/mascotas/asignar-tratamiento">Tratamientos</a>
+            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" th:href="@{/veterinario/mascotas/asignar-tratamiento(veterinarioId=${veterinarioId})}">Tratamientos</a>
         </div>
         <!-- Trailing Actions -->
         <div class="flex items-center gap-4">
@@ -31,9 +27,11 @@
             </button>
             <div class="flex items-center gap-3">
                 <div class="flex flex-col items-end hidden sm:flex">
-                    <span class="font-label-md text-label-md text-white">Carlos Gómez</span>
+                    <span class="font-label-md text-label-md text-white"
+                          th:text="${veterinario.nombre}">Carlos Gómez</span>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
+                <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold"
+                     th:text="${#strings.toUpperCase(#strings.substring(veterinario.nombre, 0, 2))}">
                     CG
                 </div>
             </div>
@@ -114,7 +112,7 @@
                     <td class="px-6 py-4">
                         <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2.5 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
                            th:aria-label="'Consultar ficha clínica de ' + ${mascota.nombre}"
-                           th:href="@{/veterinario/mascotas/ficha(id=${mascota.id})}">
+                           th:href="@{/veterinario/mascotas/ficha(veterinarioId=${veterinarioId}, id=${mascota.id})}">
                             Ver ficha
                             <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">visibility</span>
                         </a>

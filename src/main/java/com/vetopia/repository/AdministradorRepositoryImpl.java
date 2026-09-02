@@ -44,11 +44,21 @@ public class AdministradorRepositoryImpl implements AdministradorRepository {
 
     @Override
     public void save(Administrador administrador) {
-        int lastId = tablaAdministradores.keySet().stream()
-                .max(Integer::compareTo)
-                .orElse(0);
-        administrador.setId(lastId + 1);
-        tablaAdministradores.put(administrador.getId(), administrador);
+        if (administrador.getId() == null){
+            int lastId = 0;
+            // Recorremos todas las llaves (IDs) existentes en la tabla
+            for (int id : tablaAdministradores.keySet()) {
+                if (id > lastId) {
+                    lastId = id; // Guardamos el ID más alto que encontremos
+                }
+            }
+            // Asignamos el siguiente ID y guardamos
+            administrador.setId(lastId + 1);
+            tablaAdministradores.put(administrador.getId(), administrador);
+            } else {
+                //Si ya tiene ID, entonces se actualiza el registro
+                tablaAdministradores.put(administrador.getId(), administrador);
+            }
     }
 
     @Override
