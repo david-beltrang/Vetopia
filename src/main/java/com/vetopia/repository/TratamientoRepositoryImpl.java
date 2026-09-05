@@ -32,11 +32,13 @@ public class TratamientoRepositoryImpl implements TratamientoRepository {
                 "Consulta general", "Evaluación de rutina sin hallazgos.", true));
     }
 
+    // Metodo que devuelve todos los tratamientos registrados en el repositorio, convirtiendo los valores del HashMap en una lista
     @Override
     public Collection<Tratamiento> searchAll() {
         return new ArrayList<>(tablaTratamientos.values());
     }
 
+    // Metodo que busca un tratamiento por su identificador en el HashMap y devuelve el objeto Tratamiento correspondiente
     @Override
     public Tratamiento searchById(Integer id) {
         return tablaTratamientos.get(id);
@@ -78,6 +80,7 @@ public class TratamientoRepositoryImpl implements TratamientoRepository {
     @Override
     public Collection<Tratamiento> searchByMascotaId(Integer mascotaId) {
         Collection<Tratamiento> resultado = new ArrayList<>();
+        // Recorremos todas los tratamientos en el HashMap y agregamos a la lista resultado aquellos que tengan el mismo mascotaId que el recibido
         for (Tratamiento tratamiento : tablaTratamientos.values()) {
             if (Objects.equals(tratamiento.getMascotaId(), mascotaId)) {
                 resultado.add(tratamiento);
