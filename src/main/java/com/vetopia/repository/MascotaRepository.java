@@ -17,4 +17,9 @@ public interface MascotaRepository {
     void save(Mascota mascota);
 
     void cambiarEstado(Integer id, String estado);
+
+    boolean eliminar(Integer id);
+
+    // Devuelve las mascotas (pacientes) de un dueño concreto.
+    Collection<Mascota> searchByDuenoId(Integer duenoId);
 }
