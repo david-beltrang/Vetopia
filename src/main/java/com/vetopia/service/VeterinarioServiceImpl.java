@@ -1,5 +1,6 @@
 package com.vetopia.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +17,42 @@ public class VeterinarioServiceImpl implements VeterinarioService {
     @Autowired
     private VeterinarioRepository veterinarioRepository;
 
+    // Devuelve todos los veterinarios registrados
     @Override
     public List<Veterinario> listarVeterinarios() {
-        return List.copyOf(veterinarioRepository.searchAll());
+        Collection<Veterinario> veterinarios = veterinarioRepository.searchAll();
+        return veterinarios == null ? List.of() : List.copyOf(veterinarios);
     }
 
+    // Obtiene un veterinario validando previamente el identificador
     @Override
     public Veterinario obtenerVeterinarioPorId(Integer id) {
+        // Validamos que el id no sea nulo antes de buscar el veterinario en el repositorio
         if (id == null) {
             throw new IllegalArgumentException("No se especificó el identificador del veterinario.");
         }
-        return veterinarioRepository.searchById(id);
+        Veterinario veterinario = veterinarioRepository.searchById(id);
+        if (veterinario == null) {
+            throw new IllegalArgumentException("No se encontró ningún veterinario con el identificador " + id + ".");
+        }
+        return veterinario;
     }
 
+    // Guarda (registra) un veterinario nuevo. El id lo asigna el repositorio
     @Override
     public void guardar(Veterinario veterinario) {
+        if (veterinario == null) {
+            throw new IllegalArgumentException("No se especificó el veterinario a guardar.");
+        }
         veterinarioRepository.save(veterinario);
     }
 
+    // Busca un veterinario por correo y contraseña (para login)
     @Override
     public Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena) {
+        if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
+            throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
+        }
         return veterinarioRepository.searchByCorreoYContrasena(correo, contrasena);
     }
 }
