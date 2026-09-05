@@ -18,16 +18,18 @@ public class DuenoRepositoryImpl implements DuenoRepository {
 
     // Precarga de registros de ejemplo de dueños, con sus respectivos datos.
     public DuenoRepositoryImpl() {
-        tablaDuenos.put(1, new Dueno(1, "1020304050", "Ana Rodríguez", "ana@correo.com", "dueño123", "3001234567", "Activo"));
-        tablaDuenos.put(2, new Dueno(2, "1020304051", "Pedro Gómez", "pedro@correo.com", "dueño123", "3007654321", "Activo"));
-        tablaDuenos.put(3, new Dueno(3, "1020304052", "María López", "maria@correo.com", "dueño123", "3010001111", "Inactivo"));
+        tablaDuenos.put(1, new Dueno(1, "1020304050", "Ana Rodríguez", "ana@correo.com", "dueno123", "3001234567", "Activo"));
+        tablaDuenos.put(2, new Dueno(2, "1020304051", "Pedro Gómez", "pedro@correo.com", "dueno123", "3007654321", "Activo"));
+        tablaDuenos.put(3, new Dueno(3, "1020304052", "María López", "maria@correo.com", "dueno123", "3010001111", "Inactivo"));
     }
 
+    // Metodo que devuelve todos los dueños registrados en el repositorio, convirtiendo los valores del HashMap en una lista
     @Override
     public Collection<Dueno> searchAll() {
         return new ArrayList<>(tablaDuenos.values());
     }
 
+    // Metodo que busca un dueño por su identificador en el HashMap y devuelve el objeto Dueno correspondiente
     @Override
     public Dueno searchById(Integer id) {
         return tablaDuenos.get(id);
@@ -53,11 +55,25 @@ public class DuenoRepositoryImpl implements DuenoRepository {
             }
     }
 
+    // Elimina el dueño con el id especificado.
+    @Override
+    public boolean eliminar(Integer id) {
+        if (id == null || tablaDuenos.remove(id)==null) {
+            return false;
+        }
+        tablaDuenos.remove(id);
+        return true;
+    }
+
+    // Metodo que busca un dueño por su correo electrónico y contraseña, devolviendo el objeto Dueno correspondiente si se encuentra una coincidencia
     @Override
     public Dueno searchByCorreoYContrasena(String correo, String contrasena) {
+        // Se utiliza un stream para filtrar los dueños en la tabla, buscando aquellos cuyo correo y contraseña coincidan con los proporcionados
         return tablaDuenos.values().stream()
+                // Se filtra la colección de dueños para encontrar uno que tenga el correo y la contraseña coincidentes, ignorando mayúsculas y minúsculas en el correo
                 .filter(d -> d.getCorreo() != null && d.getCorreo().equalsIgnoreCase(correo)
                         && d.getContrasena() != null && d.getContrasena().equals(contrasena))
+                // Se obtiene el primer dueño que cumpla con los criterios de búsqueda, o null si no se encuentra ninguno
                 .findFirst()
                 .orElse(null);
     }

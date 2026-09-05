@@ -23,18 +23,22 @@ public class DrogaRepositoryImpl implements DrogaRepository {
         tablaDrogas.put(3, new Droga(3, "Metronidazol", 6000.0, 11000.0, 75, 0));
     }
 
+    // Metodo que devuelve todas las drogas registradas en el repositorio, convirtiendo los valores del HashMap en una lista.
     @Override
     public Collection<Droga> searchAll() {
         return new ArrayList<>(tablaDrogas.values());
     }
 
+    // Metodo que busca una droga por su identificador en el HashMap y devuelve el objeto Droga correspondiente.
     @Override
     public Droga searchById(Integer id) {
         return tablaDrogas.get(id);
     }
 
+    // Metodo que guarda una droga en el HashMap, asignándole automáticamente el siguiente id disponible si no tiene uno
     @Override
     public void save(Droga droga) {
+        // Si la droga no tiene un ID asignado, se busca el último ID utilizado en la tabla y se le asigna el siguiente disponible
        if (droga.getId() == null){
             int lastId = 0;
             // Recorremos todas las llaves (IDs) existentes en la tabla
@@ -52,15 +56,19 @@ public class DrogaRepositoryImpl implements DrogaRepository {
             }
     }
 
+    // Metodo que descuenta unidades del inventario de la droga y las suma a las aplicadas, asegurando que no se descuente más de lo disponible
     @Override
     public void descontarUnidades(Integer drogaId, Integer cantidad) {
         Droga droga = tablaDrogas.get(drogaId);
+        // Si la droga no existe o la cantidad a descontar es nula o menor o igual a cero, no se realiza ninguna acción
         if (droga == null || cantidad == null || cantidad <= 0) {
             return;
         }
+        // Se descuenta la cantidad de unidades disponibles, asegurando que no se descuente más de lo que hay disponible
         if (droga.getUnidadesDisponibles() != null) {
             droga.setUnidadesDisponibles(Math.max(0, droga.getUnidadesDisponibles() - cantidad));
         }
+        // Se suma la cantidad de unidades vendidas, asegurando que no se sume más de lo que hay disponible
         if (droga.getUnidadesVendidas() != null) {
             droga.setUnidadesVendidas(droga.getUnidadesVendidas() + cantidad);
         }
