@@ -5,55 +5,57 @@
     <title>Vetopia - Registrar Mascota</title>
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
-    <!-- HEADER del portal -->
+
+    <!-- HEADER: barra de navegación del panel veterinario -->
     <nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
         <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
-            <!-- Logo -->
+            <!-- Logo: enlace al inicio del sistema -->
             <div class="flex items-center">
                 <a href="/" class="flex items-center">
                     <img th:src="@{/images/logo_Vetopia.png}" alt="Vetopia Logo" class="h-8 w-auto object-contain"/>
                 </a>
             </div>
-            <!-- Enlaces de navegación -->
+            <!-- Navegación del veterinario: enlaces a secciones principales -->
             <div class="hidden md:flex items-center gap-8">
                 <a th:href="@{/veterinario/mascotas(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Pacientes</a>
-                <a th:href="@{/veterinario/mascotas/registrar-cliente(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Clientes</a>
+                <a th:href="@{/veterinario/clientes(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Clientes</a>
                 <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Citas</a>
-                <a th:href="@{/veterinario/mascotas/asignar-tratamiento(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Tratamientos</a>
+                <a th:href="@{/veterinario/mascotas/tratamientos(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Tratamientos</a>
             </div>
-            <!-- Trailing: notificaciones, usuario, logout -->
+            <!-- Barra de herramientas: notificaciones, perfil del veterinario y logout -->
             <div class="flex items-center gap-4">
                 <button class="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors">
                     <span class="material-symbols-outlined text-2xl">notifications</span>
                 </button>
                 <div class="flex items-center gap-3">
-                    <span class="text-white font-label-md text-label-md uppercase tracking-widest hidden sm:inline">Carlos Gómez</span>
+                    <span class="text-white font-label-md text-label-md tracking-widest hidden sm:inline" th:text="${veterinario != null ? veterinario.nombre : 'Veterinario'}">Veterinario</span>
                     <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
-                        <span class="text-on-primary-container font-bold text-body-md">CG</span>
+                        <span class="text-on-primary-container font-bold text-body-md" th:text="${veterinario != null ? #strings.substring(veterinario.nombre,0,2) : 'VT'}">VT</span>
                     </div>
                 </div>
-                <button class="px-6 py-3 rounded-full border border-gray-600 text-white font-button text-button uppercase hover:bg-white/5 transition-colors">
+                <a class="px-6 py-3 rounded-full border border-gray-600 text-white font-button text-button uppercase hover:bg-white/5 transition-colors" th:href="@{/login}">
                     Logout
-                </button>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- CONTENIDO PRINCIPAL: formulario de registro de mascota -->
     <main class="flex-1">
         <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
-            <!-- Título y subtítulo -->
+            <!-- Encabezado de la sección -->
             <div class="mb-stack-lg">
                 <h1 class="text-headline-xl font-headline-xl text-on-surface mb-1">Registrar Nueva Mascota</h1>
                 <p class="text-body-lg font-body-lg text-on-surface-variant">Completar los detalles de la mascota para el cliente</p>
             </div>
 
-            <!-- Formulario -->
+            <!-- Formulario de registro de mascota (enctype multipart para subida de foto) -->
             <form class="flex flex-col items-center gap-stack-lg" th:action="@{/veterinario/mascotas/registrar-mascota}" method="post" enctype="multipart/form-data">
-                <!-- Veterinario logueado y dueño al que se asocia la mascota (provenientes de URL) -->
+                <!-- Campos ocultos: veterinario y dueño provenientes de la URL -->
                 <input type="hidden" name="veterinarioId" th:if="${veterinarioId != null}" th:value="${veterinarioId}"/>
                 <input type="hidden" name="duenoId" th:if="${duenoId != null}" th:value="${duenoId}"/>
-                <!-- Tarjeta del formulario -->
+
+                <!-- Tarjeta del formulario: campos de información de la mascota -->
                 <div class="w-full bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant max-w-[604px]">
                     <!-- Encabezado de sección -->
                     <div class="border-b border-surface-container-highest pb-4 mb-6">
@@ -65,7 +67,7 @@
 
                     <!-- Campos del formulario -->
                     <div class="flex flex-col gap-6">
-                        <!-- Subida de foto -->
+                        <!-- Campo: Subida de foto de la mascota -->
                         <label id="fotoLabel" class="flex flex-col items-center gap-2 p-6 bg-background rounded-xl border-2 border-outline-variant border-dashed cursor-pointer transition hover:border-primary">
                             <img id="previewFoto" class="hidden w-24 h-24 rounded-full object-cover border border-outline"/>
                             <div id="iconoFoto" class="w-20 h-20 rounded-full bg-secondary-container flex items-center justify-center">
@@ -76,7 +78,7 @@
                             <input id="inputFoto" type="file" name="foto" accept="image/png,image/jpeg,image/gif" class="hidden"/>
                         </label>
 
-                        <!-- Nombre y Raza - Grid 2 columnas -->
+                        <!-- Campos: Nombre y Raza -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="flex flex-col gap-2">
                                 <label for="nombre" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Nombre mascota</label>
@@ -92,7 +94,7 @@
                             </div>
                         </div>
 
-                        <!-- Edad y Peso - Grid 2 columnas -->
+                        <!-- Campos: Edad y Peso -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="flex flex-col gap-2">
                                 <label for="edad" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Edad (Años)</label>
@@ -108,7 +110,7 @@
                             </div>
                         </div>
 
-                        <!-- Especie y Sexo - Grid 2 columnas -->
+                        <!-- Campos: Especie y Sexo (selectores) -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="flex flex-col gap-2">
                                 <label for="especie" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Especie</label>
@@ -133,7 +135,7 @@
                     </div>
                 </div>
 
-                <!-- Botones de acción -->
+                <!-- Botones de acción: agregar otra mascota o terminar registro -->
                 <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-outline-variant">
                     <button type="submit" name="action" value="newPet" class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-3 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary">
                         <span class="material-symbols-outlined text-lg">add</span>
@@ -148,10 +150,10 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+    <!-- FOOTER: fragmento reutilizable del portal -->
     <footer th:replace="fragmentos-portal :: footer"></footer>
 
-    <!-- Vista previa de la foto seleccionada antes de subirla -->
+    <!-- Script: vista previa de la foto antes de subirla -->
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function () {
             const input = document.getElementById('inputFoto');

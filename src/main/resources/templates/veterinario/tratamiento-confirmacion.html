@@ -5,23 +5,24 @@
     <title>Vetopia - Tratamiento Aplicado</title>
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
-    <!-- HEADER del portal -->
+
+    <!-- HEADER: barra de navegación del panel veterinario -->
     <nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
         <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
-            <!-- Logo -->
+            <!-- Logo: enlace al inicio del sistema -->
             <div class="flex items-center">
                 <a href="/" class="flex items-center">
                     <img th:src="@{/images/logo_Vetopia.png}" alt="Vetopia Logo" class="h-8 w-auto object-contain"/>
                 </a>
             </div>
-            <!-- Enlaces de navegación -->
+            <!-- Navegación del veterinario: enlaces a secciones principales -->
             <div class="hidden md:flex items-center gap-8">
                 <a th:href="@{/veterinario/mascotas(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Pacientes</a>
-                <a th:href="@{/veterinario/mascotas/registrar-cliente(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Clientes</a>
+                <a th:href="@{/veterinario/clientes(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Clientes</a>
                 <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Citas</a>
-                <a th:href="@{/veterinario/mascotas/asignar-tratamiento(veterinarioId=${veterinarioId})}" class="text-primary font-body-md text-body-md font-bold border-b-2 border-primary pb-1 shadow-[0px_2px_4px_rgba(0,0,0,0.30)]">Tratamientos</a>
+                <a th:href="@{/veterinario/mascotas/tratamientos(veterinarioId=${veterinarioId})}" class="text-primary font-body-md text-body-md font-bold border-b-2 border-primary pb-1 shadow-[0px_2px_4px_rgba(0,0,0,0.30)]">Tratamientos</a>
             </div>
-            <!-- Trailing: notificaciones, usuario, logout -->
+            <!-- Barra de herramientas: notificaciones, perfil del veterinario y logout -->
             <div class="flex items-center gap-4">
                 <button class="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors">
                     <span class="material-symbols-outlined text-2xl">notifications</span>
@@ -32,19 +33,19 @@
                         <span class="text-on-primary-container font-bold text-body-md" th:text="${veterinario != null ? #strings.toUpperCase(#strings.substring(veterinario.nombre,0,2)) : 'VT'}">VT</span>
                     </div>
                 </div>
-                <button class="px-6 py-3 rounded-full border border-gray-600 text-white font-button text-button uppercase hover:bg-white/5 transition-colors">
+                <a class="px-6 py-3 rounded-full border border-gray-600 text-white font-button text-button uppercase hover:bg-white/5 transition-colors" th:href="@{/login}">
                     Logout
-                </button>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- CONTENIDO PRINCIPAL (oscurecido) -->
+    <!-- CONTENIDO PRINCIPAL: modal de confirmación de tratamiento -->
     <main class="flex-1 flex items-center justify-center p-4 bg-background/40 backdrop-blur-sm">
-        <!-- Modal -->
+        <!-- Modal: tarjeta de confirmación -->
         <div class="w-full max-w-md bg-surface-container-lowest rounded-xl shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] border border-outline-variant/20 overflow-hidden">
             <div class="p-8 flex flex-col items-center">
-                <!-- Foto de la mascota -->
+                <!-- Foto de la mascota con indicador de completado -->
                 <div class="relative mb-8">
                     <img th:if="${mascota != null and mascota.imagen != null}" th:src="@{${mascota.imagen}}" th:alt="'Foto de ' + ${mascota.nombre}"
                          class="w-24 h-24 rounded-full object-cover border border-surface-container-highest shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"/>
@@ -52,18 +53,19 @@
                          class="w-24 h-24 rounded-full bg-surface-container-high flex items-center justify-center border border-surface-container-highest">
                         <span class="material-symbols-outlined text-4xl text-on-surface-variant">pets</span>
                     </div>
+                    <!-- Badge de completado superpuesto -->
                     <div th:if="${mascota != null}" class="absolute -bottom-1 -right-1 w-10 h-10 rounded-full bg-primary-container flex items-center justify-center border-4 border-surface-container-lowest" title="Completado">
                         <span class="material-symbols-outlined text-xl text-primary">check</span>
                     </div>
                 </div>
 
-                <!-- Título -->
+                <!-- Título y nombre de la mascota -->
                 <h2 class="text-headline-xl-mobile font-headline-xl-mobile text-on-surface text-center mb-4">
                     Tratamiento Aplicado
                 </h2>
                 <p th:if="${mascota != null}" class="text-body-lg font-body-lg text-on-surface font-semibold text-center mb-4" th:text="${mascota.nombre}">Mascota</p>
 
-                <!-- Mensaje -->
+                <!-- Mensaje de confirmación: unidades descontadas y stock restante -->
                 <div class="text-center mb-8">
                     <p class="text-body-lg font-body-lg text-on-surface-variant">
                         Se han descontado <span class="font-semibold text-on-surface" th:text="${unidadesDescontadas}">2</span> unidades de <span class="font-semibold text-on-surface" th:text="${medicamentoNombre}">Amoxicilina</span>.
@@ -73,9 +75,9 @@
                     </p>
                 </div>
 
-                <!-- Botones de acción -->
+                <!-- Botones de acción: volver a ficha o cerrar ventana -->
                 <div class="w-full max-w-sm flex flex-col gap-2">
-<a th:href="@{/veterinario/mascotas/ficha(veterinarioId=${veterinarioId}, id=${mascotaId})}"
+                    <a th:href="@{/veterinario/mascotas/ficha(veterinarioId=${veterinarioId}, id=${mascotaId})}"
                        class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-container px-6 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary">
                         Volver a la Ficha
                         <span class="material-symbols-outlined text-lg">arrow_forward</span>
@@ -89,7 +91,7 @@
         </div>
     </main>
 
-    <!-- FOOTER (oculto en modal) -->
+    <!-- FOOTER: oculto en vista de modal -->
     <footer th:replace="fragmentos-portal :: footer" class="hidden"></footer>
 </body>
 </html>
