@@ -16,6 +16,13 @@ public interface DuenoService {
     // Guarda (registra) un dueño nuevo. El id lo asigna el repositorio.
     void guardar(Dueno dueno);
 
+    // Registra un dueño nuevo con estado "Activo" y devuelve el objeto
+    // resultante para poder obtener su id tras el guardado.
+    Dueno registrarClienteActivo(Dueno dueno);
+
+    // Elimina un dueño por su identificador.
+    void eliminarCliente(Integer id);
+
     // Busca un dueño por correo y contraseña (para login).
     Dueno obtenerPorCorreoYContrasena(String correo, String contrasena);
 }

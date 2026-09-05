@@ -1,5 +1,6 @@
 package com.vetopia.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Override
     public List<Administrador> listarAdministradores() {
-        return List.copyOf(administradorRepository.searchAll());
+        Collection<Administrador> administradores = administradorRepository.searchAll();
+        return administradores == null ? List.of() : List.copyOf(administradores);
     }
 
     @Override
@@ -26,16 +28,26 @@ public class AdministradorServiceImpl implements AdministradorService {
         if (id == null) {
             throw new IllegalArgumentException("No se especificó el identificador del administrador.");
         }
-        return administradorRepository.searchById(id);
+        Administrador administrador = administradorRepository.searchById(id);
+        if (administrador == null) {
+            throw new IllegalArgumentException("No se encontró ningún administrador con el identificador " + id + ".");
+        }
+        return administrador;
     }
 
     @Override
     public void guardar(Administrador administrador) {
+        if (administrador == null) {
+            throw new IllegalArgumentException("No se especificó el administrador a guardar.");
+        }
         administradorRepository.save(administrador);
     }
 
     @Override
     public Administrador obtenerPorCorreoYContrasena(String correo, String contrasena) {
+        if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
+            throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
+        }
         return administradorRepository.searchByCorreoYContrasena(correo, contrasena);
     }
 }

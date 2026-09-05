@@ -1,5 +1,6 @@
 package com.vetopia.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +17,61 @@ public class DuenoServiceImpl implements DuenoService {
     @Autowired
     private DuenoRepository duenoRepository;
 
+    // Devuelve todos los dueños registrados
     @Override
     public List<Dueno> listarDuenos() {
-        return List.copyOf(duenoRepository.searchAll());
+        Collection<Dueno> duenos = duenoRepository.searchAll();
+        return duenos == null ? List.of() : List.copyOf(duenos);
     }
 
+    // Obtiene un dueño validando previamente el identificador
     @Override
     public Dueno obtenerDuenoPorId(Integer id) {
+        // Validamos que el id no sea nulo antes de buscar el dueño en el repositorio
         if (id == null) {
             throw new IllegalArgumentException("No se especificó el identificador del dueño.");
         }
-        return duenoRepository.searchById(id);
+        Dueno dueno = duenoRepository.searchById(id);
+        if (dueno == null) {
+            throw new IllegalArgumentException("No se encontró ningún dueño con el identificador " + id + ".");
+        }
+        return dueno;
     }
 
+    // Guarda (registra) un dueño nuevo. El id lo asigna el repositorio
     @Override
     public void guardar(Dueno dueno) {
+        if (dueno == null) {
+            throw new IllegalArgumentException("No se especificó el dueño a guardar.");
+        }
         duenoRepository.save(dueno);
     }
 
     @Override
+    public Dueno registrarClienteActivo(Dueno dueno) {
+        if (dueno == null) {
+            throw new IllegalArgumentException("No se especificó el cliente a registrar.");
+        }
+        dueno.setEstado("Activo");
+        duenoRepository.save(dueno);
+        return dueno;
+    }
+
+    // Elimina un dueño
+    @Override
+    public void eliminarCliente(Integer id) {
+        boolean eliminar = duenoRepository.eliminar(id);
+        if (!eliminar) {
+            throw new IllegalArgumentException("No se pudo eliminar el dueño con id " + id + ". Puede que no exista.");
+        }
+    }
+
+    // Busca un dueño por correo y contraseña (para login)
+    @Override
     public Dueno obtenerPorCorreoYContrasena(String correo, String contrasena) {
+        if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
+            throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
+        }
         return duenoRepository.searchByCorreoYContrasena(correo, contrasena);
     }
 }

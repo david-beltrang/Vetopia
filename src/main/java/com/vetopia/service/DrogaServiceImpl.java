@@ -1,5 +1,6 @@
 package com.vetopia.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +19,39 @@ public class DrogaServiceImpl implements DrogaService {
 
     @Override
     public List<Droga> listarDrogas() {
-        return List.copyOf(drogaRepository.searchAll());
+        Collection<Droga> drogas = drogaRepository.searchAll();
+        return drogas == null ? List.of() : List.copyOf(drogas);
     }
 
+    // Obtiene una droga validando previamente el identificador
     @Override
     public Droga obtenerDrogaPorId(Integer id) {
+        // Validamos que el id no sea nulo antes de buscar la droga en el repositorio
         if (id == null) {
             throw new IllegalArgumentException("No se especificó el identificador de la droga.");
         }
-        return drogaRepository.searchById(id);
+        Droga droga = drogaRepository.searchById(id);
+        if (droga == null) {
+            throw new IllegalArgumentException("No se encontró ninguna droga con el identificador " + id + ".");
+        }
+        return droga;
     }
 
+    // Guarda (registra) una droga nueva. El id lo asigna el repositorio
     @Override
     public void guardar(Droga droga) {
+        if (droga == null) {
+            throw new IllegalArgumentException("No se especificó la droga a guardar.");
+        }
         drogaRepository.save(droga);
     }
 
+    // Descuenta unidades del inventario de la droga (al asignar un tratamiento)
     @Override
     public void descontarUnidades(Integer drogaId, Integer cantidad) {
+        if (drogaId == null || cantidad == null) {
+            throw new IllegalArgumentException("Debe indicar la droga y la cantidad a descontar.");
+        }
         drogaRepository.descontarUnidades(drogaId, cantidad);
     }
 }
