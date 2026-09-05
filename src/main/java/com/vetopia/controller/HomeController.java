@@ -38,7 +38,13 @@ public class HomeController {
     public String iniciarSesion(@RequestParam("username") String username,
                                 @RequestParam("password") String password,
                                 Model model) {
-        ResultadoLogin resultado = loginService.autenticar(username, password);
+        ResultadoLogin resultado;
+        try {
+            resultado = loginService.autenticar(username, password);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("mensajeError", "Correo o contraseña incorrectos. Verifica tus credenciales.");
+            return "login/login";
+        }
         if (resultado == null) {
             model.addAttribute("mensajeError", "Correo o contraseña incorrectos. Verifica tus credenciales.");
             return "login/login";
