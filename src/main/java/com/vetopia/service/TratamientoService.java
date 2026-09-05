@@ -33,4 +33,7 @@ public interface TratamientoService {
     // existan, que haya stock disponible, guarda el tratamiento y descuenta
     // una unidad del inventario. Devuelve un DTO de confirmación.
     ResultadoTratamiento asignarTratamiento(Tratamiento tratamiento, Integer veterinarioId);
+
+    // Elimina los tratamientos de una mascota (borrado en cascada).
+    void eliminarTratamientosDeMascota(Integer mascotaId);
 }

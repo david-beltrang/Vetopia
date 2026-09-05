@@ -21,4 +21,7 @@ public interface TratamientoRepository {
 
     // Devuelve los tratamientos (historial médico) de una mascota.
     Collection<Tratamiento> searchByMascotaId(Integer mascotaId);
+
+    // Elimina los tratamientos de una mascota (borrado en cascada).
+    void eliminarPorMascota(Integer mascotaId);
 }

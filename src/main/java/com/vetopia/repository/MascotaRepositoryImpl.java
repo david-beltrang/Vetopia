@@ -71,13 +71,7 @@ public class MascotaRepositoryImpl implements MascotaRepository {
     // Elimina la mascota con el id especificado.
     @Override
     public boolean eliminar(Integer id) {
-        if (tablaMascotas.remove(id)== null){
-            return false;
-        }
-        else{
-        tablaMascotas.remove(id);
-        return true;
-        }
+        return tablaMascotas.remove(id) != null;
     }
 
     // Devuelve solo las mascotas cuyo dueño sea el recibido.

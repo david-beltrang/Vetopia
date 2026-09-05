@@ -58,11 +58,7 @@ public class DuenoRepositoryImpl implements DuenoRepository {
     // Elimina el dueño con el id especificado.
     @Override
     public boolean eliminar(Integer id) {
-        if (id == null || tablaDuenos.remove(id)==null) {
-            return false;
-        }
-        tablaDuenos.remove(id);
-        return true;
+        return id != null && tablaDuenos.remove(id) != null;
     }
 
     // Metodo que busca un dueño por su correo electrónico y contraseña, devolviendo el objeto Dueno correspondiente si se encuentra una coincidencia

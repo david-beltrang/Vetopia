@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -87,5 +88,21 @@ public class TratamientoRepositoryImpl implements TratamientoRepository {
             }
         }
         return resultado;
+    }
+
+    // Elimina los tratamientos de una mascota concreta (borrado en cascada).
+    @Override
+    public void eliminarPorMascota(Integer mascotaId) {
+        // Se juntan primero los ids a eliminar y luego se eliminan, para no
+        // modificar el HashMap mientras se itera sobre él.
+        List<Integer> idsAEliminar = new ArrayList<>();
+        for (Tratamiento tratamiento : tablaTratamientos.values()) {
+            if (Objects.equals(tratamiento.getMascotaId(), mascotaId)) {
+                idsAEliminar.add(tratamiento.getId());
+            }
+        }
+        for (Integer id : idsAEliminar) {
+            tablaTratamientos.remove(id);
+        }
     }
 }

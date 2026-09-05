@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vetopia.entities.Dueno;
+import com.vetopia.entities.Mascota;
 import com.vetopia.repository.DuenoRepository;
 
 // Esta clase implementa la interfaz DuenoService y define la lógica de negocio relacionada con dueños. Es el único punto al que los controladores acceden para obtener datos; a su vez, delega el acceso a datos en la capa repository.
@@ -16,6 +17,9 @@ public class DuenoServiceImpl implements DuenoService {
     //Inyección de dependencias
     @Autowired
     private DuenoRepository duenoRepository;
+
+    @Autowired
+    private MascotaService mascotaService;
 
     // Devuelve todos los dueños registrados
     @Override
@@ -57,13 +61,14 @@ public class DuenoServiceImpl implements DuenoService {
         return dueno;
     }
 
-    // Elimina un dueño
+    // Elmina un dueño y en cascada sus mascotas y los tratamientos de estas.
     @Override
     public void eliminarCliente(Integer id) {
-        boolean eliminar = duenoRepository.eliminar(id);
-        if (!eliminar) {
-            throw new IllegalArgumentException("No se pudo eliminar el dueño con id " + id + ". Puede que no exista.");
+        obtenerDuenoPorId(id);
+        for (Mascota mascota : mascotaService.listarMascotasDeCliente(id)) {
+            mascotaService.eliminarMascota(mascota.getId());
         }
+        duenoRepository.eliminar(id);
     }
 
     // Busca un dueño por correo y contraseña (para login)

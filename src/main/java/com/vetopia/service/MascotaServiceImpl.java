@@ -109,10 +109,9 @@ public class MascotaServiceImpl implements MascotaService {
 
     @Override
     public void eliminarMascota(Integer id) {
-        boolean eliminado = mascotaRepository.eliminar(id);
-        if (!eliminado) {
-            throw new IllegalArgumentException("No se especificó el identificador de la mascota a eliminar.");
-        }
+        obtenerMascotaPorId(id);
+        tratamientoService.eliminarTratamientosDeMascota(id);
+        mascotaRepository.eliminar(id);
     }
 
     @Override

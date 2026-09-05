@@ -129,4 +129,12 @@ public class TratamientoServiceImpl implements TratamientoService {
         }
         return new ResultadoTratamiento(tratamiento, mascota, droga, 1);
     }
+
+    @Override
+    public void eliminarTratamientosDeMascota(Integer mascotaId) {
+        if (mascotaId == null) {
+            throw new IllegalArgumentException("No se especificó el identificador de la mascota.");
+        }
+        tratamientoRepository.eliminarPorMascota(mascotaId);
+    }
 }
