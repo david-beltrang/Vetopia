@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vetopia.entities.Dueno;
-import com.vetopia.entities.Mascota;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.Veterinario;
-import com.vetopia.service.DrogaService;
-import com.vetopia.service.DuenoService;
-import com.vetopia.service.MascotaService;
-import com.vetopia.service.ResultadoTratamiento;
-import com.vetopia.service.TratamientoService;
-import com.vetopia.service.VeterinarioService;
+import com.vetopia.entities.mascota.Mascota;
+import com.vetopia.service.droga.DrogaService;
+import com.vetopia.service.dueno.DuenoService;
+import com.vetopia.service.mascota.MascotaService;
+import com.vetopia.service.tratamiento.ResultadoTratamiento;
+import com.vetopia.service.tratamiento.TratamientoService;
+import com.vetopia.service.veterinario.VeterinarioService;
 
 @Controller
 @RequestMapping("/veterinario/mascotas")
@@ -40,7 +40,7 @@ public class VeterinarioMascotaController {
     @Autowired
     private VeterinarioService veterinarioService;
 
-    private Veterinario obtenerVeterinario(Integer veterinarioId) {
+    private Veterinario obtenerVeterinario(Long veterinarioId) {
         if (veterinarioId == null) {
             return null;
         }
@@ -48,7 +48,7 @@ public class VeterinarioMascotaController {
     }
 
     @GetMapping
-    public String listarMascotas(@RequestParam Integer veterinarioId, Model model) {
+    public String listarMascotas(@RequestParam Long veterinarioId, Model model) {
         model.addAttribute("mascotas", mascotaService.listarMascotasDeVeterinario(veterinarioId));
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
@@ -56,7 +56,7 @@ public class VeterinarioMascotaController {
     }
 
     @GetMapping("/registrar-cliente")
-    public String registrarCliente(@RequestParam Integer veterinarioId, Model model) {
+    public String registrarCliente(@RequestParam Long veterinarioId, Model model) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         model.addAttribute("dueno", new Dueno());
@@ -65,7 +65,7 @@ public class VeterinarioMascotaController {
 
     @PostMapping("/registrar-cliente")
     public String guardarCliente(@ModelAttribute Dueno dueno,
-            @RequestParam Integer veterinarioId) {
+            @RequestParam Long veterinarioId) {
         try {
             duenoService.registrarClienteActivo(dueno);
             return "redirect:/veterinario/mascotas/registrar-mascota?veterinarioId=" + veterinarioId
@@ -77,8 +77,8 @@ public class VeterinarioMascotaController {
     }
 
     @GetMapping("/registrar-mascota")
-    public String registrarMascota(@RequestParam Integer veterinarioId,
-            @RequestParam Integer duenoId, Model model) {
+    public String registrarMascota(@RequestParam Long veterinarioId,
+            @RequestParam Long duenoId, Model model) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         model.addAttribute("duenoId", duenoId);
@@ -88,9 +88,9 @@ public class VeterinarioMascotaController {
 
     @PostMapping("/registrar-mascota")
     public String guardarMascota(@ModelAttribute Mascota mascota,
-            @RequestParam Integer veterinarioId,
+            @RequestParam Long veterinarioId,
             @RequestParam(defaultValue = "finish") String action,
-            @RequestParam Integer duenoId,
+            @RequestParam Long duenoId,
             @RequestParam(required = false) MultipartFile foto, Model model) {
         mascotaService.registrarMascota(mascota, duenoId, foto);
 
@@ -104,7 +104,7 @@ public class VeterinarioMascotaController {
     }
 
     @GetMapping("/tratamientos")
-    public String listarTratamientos(@RequestParam Integer veterinarioId, Model model) {
+    public String listarTratamientos(@RequestParam Long veterinarioId, Model model) {
         model.addAttribute("tratamientos",
                 tratamientoService.listarTratamientosPorVeterinarioConDroga(veterinarioId));
         model.addAttribute("veterinarioId", veterinarioId);
@@ -113,7 +113,7 @@ public class VeterinarioMascotaController {
     }
 
     @GetMapping("/asignar-tratamiento")
-    public String asignarTratamiento(@RequestParam(name = "veterinarioId") Integer veterinarioId,
+    public String asignarTratamiento(@RequestParam(name = "veterinarioId") Long veterinarioId,
             Model model) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
@@ -125,7 +125,7 @@ public class VeterinarioMascotaController {
 
     @PostMapping("/asignar-tratamiento")
     public String aplicarTratamiento(@ModelAttribute Tratamiento tratamiento,
-            @RequestParam Integer veterinarioId, Model model) {
+            @RequestParam Long veterinarioId, Model model) {
         try {
             ResultadoTratamiento resultado = tratamientoService.asignarTratamiento(tratamiento, veterinarioId);
             model.addAttribute("mascota", resultado.getMascota());
@@ -134,14 +134,14 @@ public class VeterinarioMascotaController {
             model.addAttribute("unidadesDescontadas", resultado.getUnidadesDescontadas());
             model.addAttribute("medicamentoNombre", resultado.getMedicamentoNombre());
             model.addAttribute("stockRestante", resultado.getStockRestante());
-            model.addAttribute("mascotaId", resultado.getTratamiento().getMascotaId());
+            model.addAttribute("mascotaId", resultado.getTratamiento().getMascota().getId());
             return "veterinario/tratamiento-confirmacion";
         } catch (IllegalArgumentException e) {
             return renderizarFormularioTratamiento(veterinarioId, model, e.getMessage());
         }
     }
 
-    private String renderizarFormularioTratamiento(Integer veterinarioId, Model model, String mensaje) {
+    private String renderizarFormularioTratamiento(Long veterinarioId, Model model, String mensaje) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         model.addAttribute("mascotas", mascotaService.listarMascotas());
@@ -152,14 +152,12 @@ public class VeterinarioMascotaController {
     }
 
     @GetMapping("/ficha")
-    public String verFichaClinica(@RequestParam Integer id,
-            @RequestParam Integer veterinarioId, Model model) {
+    public String verFichaClinica(@RequestParam Long id,
+            @RequestParam Long veterinarioId, Model model) {
         try {
             Mascota mascota = mascotaService.obtenerMascotaPorId(id);
-            Dueno propietario = null;
-            if (mascota.getDuenoId() != null) {
-                propietario = duenoService.obtenerDuenoPorId(mascota.getDuenoId());
-            }
+            // Con la relación JPA, el propietario se obtiene navegando la relación.
+            Dueno propietario = mascota.getDueno();
             model.addAttribute("mascota", mascota);
             model.addAttribute("propietario", propietario);
             model.addAttribute("historial", tratamientoService.listarHistorialDeMascota(id));
@@ -172,8 +170,8 @@ public class VeterinarioMascotaController {
     }
 
     @PostMapping("/ficha/estado")
-    public String cambiarEstado(@RequestParam Integer id,
-            @RequestParam Integer veterinarioId,
+    public String cambiarEstado(@RequestParam Long id,
+            @RequestParam Long veterinarioId,
             @RequestParam String estado) {
         try {
             mascotaService.cambiarEstado(id, estado);
@@ -185,28 +183,16 @@ public class VeterinarioMascotaController {
         }
     }
 
-    @PostMapping("/eliminar")
-    public String eliminarMascota(@RequestParam Integer id,
-            @RequestParam Integer veterinarioId) {
-        try {
-            mascotaService.eliminarMascota(id);
-        } catch (IllegalArgumentException e) {
-            return "redirect:/veterinario/mascotas?veterinarioId=" + veterinarioId
-                    + "&error=No se pudo eliminar la mascota.";
-        }
-        return "redirect:/veterinario/mascotas?veterinarioId=" + veterinarioId;
-    }
-
     @GetMapping("/editar")
-    public String editarMascota(@RequestParam Integer veterinarioId,
-            @RequestParam Integer id, Model model) {
+    public String editarMascota(@RequestParam Long veterinarioId,
+            @RequestParam Long id, Model model) {
         try {
             Mascota mascota = mascotaService.obtenerMascotaPorId(id);
             model.addAttribute("mascota", mascota);
             model.addAttribute("veterinarioId", veterinarioId);
             model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
-            if (mascota.getDuenoId() != null) {
-                model.addAttribute("duenoId", mascota.getDuenoId());
+            if (mascota.getDueno() != null) {
+                model.addAttribute("duenoId", mascota.getDueno().getId());
             }
             return "veterinario/editar-mascota";
         } catch (IllegalArgumentException e) {
@@ -216,7 +202,7 @@ public class VeterinarioMascotaController {
 
     @PostMapping("/editar")
     public String guardarEdicionMascota(@ModelAttribute Mascota mascota,
-            @RequestParam Integer veterinarioId,
+            @RequestParam Long veterinarioId,
             @RequestParam(required = false) MultipartFile foto) {
         mascotaService.actualizarMascota(mascota, foto);
         return "redirect:/veterinario/mascotas/ficha?veterinarioId=" + veterinarioId

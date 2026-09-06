@@ -1,24 +1,67 @@
 package com.vetopia.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 
-
+// Entidad Veterinario. Relación 1---n con Tratamiento: mappedBy apunta al
+// campo "veterinario" de Tratamiento (dueño de la FK veterinario_id).
+@Entity
+@Table(name = "veterinarios")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Veterinario {
 
-    
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 20, nullable = false)
     private String cedula;
+
+    @Column(length = 100, nullable = false)
     private String contrasena;
+
+    @Column(length = 100, nullable = false)
     private String correo;
+
+    @Column(length = 100, nullable = false)
     private String especialidad;
+
+    @Column(nullable = false)
     private Integer numeroAtenciones;
+
+    @Column(length = 100, nullable = false)
     private String nombre;
-    private String estado;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado", length = 20, nullable = false)
+    private DominioEstado estado;
+
+    @Column(name = "url_foto", length = 500)
     private String urlFoto;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "veterinario")
+    private List<Tratamiento> tratamientos = new ArrayList<>();
 }

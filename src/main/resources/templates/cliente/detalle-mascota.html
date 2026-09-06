@@ -202,7 +202,7 @@
                     <div class="row g-4 pt-4" style="border-top: 1px solid #e6e8ea;">
                         <div class="col-12 col-sm-6">
                             <div class="attr-label">Especie</div>
-                            <p class="attr-value" th:text="${mascota.especie != null and !mascota.especie.isBlank()} ? ${mascota.especie} : 'No registrada'">Perro</p>
+                            <p class="attr-value" th:text="${mascota.especie != null} ? ${mascota.especie} : 'No registrada'">Perro</p>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="attr-label">Raza</div>
@@ -210,7 +210,7 @@
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="attr-label">Sexo</div>
-                            <p class="attr-value" th:text="${mascota.sexo != null and !mascota.sexo.isBlank()} ? ${mascota.sexo} : 'No registrado'">Macho</p>
+                            <p class="attr-value" th:text="${mascota.sexo != null} ? ${mascota.sexo} : 'No registrado'">Macho</p>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="attr-label">Edad</div>
@@ -222,7 +222,7 @@
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="attr-label">Estado</div>
-                            <p class="attr-value" th:text="${mascota.estado != null and !mascota.estado.isBlank()} ? ${mascota.estado} : 'No registrado'">Activo</p>
+                            <p class="attr-value" th:text="${mascota.estado != null} ? ${mascota.estado} : 'No registrado'">Activo</p>
                         </div>
                     </div>
                 </div>

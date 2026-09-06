@@ -1,0 +1,4 @@
+2026-09-06 11:30:31.234740-05:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "IMAGEN CHARACTER VARYING(255)": "'https://imgs.search.brave.com/lyQdUI6O4tK7o734zlUOxuFLdw-1kUFmZssTDwlkam0/rs:fi... (290)"
+Value too long for column "IMAGEN CHARACTER VARYING(255)": "'https://imgs.search.brave.com/lyQdUI6O4tK7o734zlUOxuFLdw-1kUFmZssTDwlkam0/rs:fi... (290)"; SQL statement:
+insert into mascotas (color,dueno_id,edad,especie,estado,fecha_ingreso,imagen,nombre,peso_kg,raza,sexo,id) values (?,?,?,?,?,?,?,?,?,?,?,default) [22001-224]

@@ -66,7 +66,7 @@
                             <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest" th:text="|CLIENTE N° ${dueno.id}|">CLIENTE N° 0001</span>
                         </div>
                         <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full font-label-md text-label-md uppercase tracking-widest"
-                              th:classappend="${dueno.estado == 'Activo'} ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'"
+                              th:classappend="${dueno.estado != null and dueno.estado.name() == 'ACTIVO'} ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'"
                               th:text="${dueno.estado}">Activo</span>
                     </div>
 

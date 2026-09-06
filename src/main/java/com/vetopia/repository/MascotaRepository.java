@@ -1,25 +1,15 @@
 package com.vetopia.repository;
 
-import java.util.Collection;
+import java.util.List;
 
-import com.vetopia.entities.Mascota;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-// Esta interfaz define los métodos que deben implementarse para acceder y manipular los datos de mascotas en la aplicación.
-public interface MascotaRepository {
+import com.vetopia.entities.mascota.Mascota;
 
-    // Devuelve todas las mascotas registradas.
-    Collection<Mascota> searchAll();
-
-    // Busca una mascota por su identificador dentro del HashMap.
-    Mascota searchById(Integer id);
-
-    // Guarda una mascota en el HashMap asignándole automáticamente el siguiente id disponible.
-    void save(Mascota mascota);
-
-    void cambiarEstado(Integer id, String estado);
-
-    boolean eliminar(Integer id);
+// Repositorio JPA de Mascota. La consulta derivada findByDuenoId atraviesa la
+// relación: Spring la traduce a "WHERE dueno.id = :duenoId".
+public interface MascotaRepository extends JpaRepository<Mascota, Long> {
 
     // Devuelve las mascotas (pacientes) de un dueño concreto.
-    Collection<Mascota> searchByDuenoId(Integer duenoId);
+    List<Mascota> findByDuenoId(Long duenoId);
 }

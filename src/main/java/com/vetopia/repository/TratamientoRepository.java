@@ -1,27 +1,18 @@
 package com.vetopia.repository;
 
-import java.util.Collection;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.vetopia.entities.Tratamiento;
 
-// Esta interfaz define los métodos que deben implementarse para acceder y manipular los datos de tratamientos en la aplicación.
-public interface TratamientoRepository {
-
-    // Devuelve todos los tratamientos registrados.
-    Collection<Tratamiento> searchAll();
-
-    // Busca un tratamiento por su identificador dentro del HashMap.
-    Tratamiento searchById(Integer id);
-
-    // Guarda un tratamiento en el HashMap asignándole automáticamente el siguiente id disponible.
-    void save(Tratamiento tratamiento);
-
-    // Devuelve los tratamientos asociados a un veterinario.
-    Collection<Tratamiento> searchByVeterinarioId(Integer veterinarioId);
+// Repositorio JPA de Tratamiento. Las consultas derivadas atraviesan las
+// relaciones mascota y veterinario.
+public interface TratamientoRepository extends JpaRepository<Tratamiento, Long> {
 
     // Devuelve los tratamientos (historial médico) de una mascota.
-    Collection<Tratamiento> searchByMascotaId(Integer mascotaId);
+    List<Tratamiento> findByMascotaId(Long mascotaId);
 
-    // Elimina los tratamientos de una mascota (borrado en cascada).
-    void eliminarPorMascota(Integer mascotaId);
+    // Devuelve los tratamientos asociados a un veterinario.
+    List<Tratamiento> findByVeterinarioId(Long veterinarioId);
 }
