@@ -17,6 +17,7 @@ import com.vetopia.entities.mascota.Mascota;
 import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 import com.vetopia.entities.mascota.dominio_attr.DominioEspecie;
 import com.vetopia.entities.mascota.dominio_attr.DominioSexo;
+import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.AdministradorRepository;
 import com.vetopia.repository.DrogaRepository;
 import com.vetopia.repository.DuenoRepository;
@@ -24,14 +25,14 @@ import com.vetopia.repository.MascotaRepository;
 import com.vetopia.repository.TratamientoRepository;
 import com.vetopia.repository.VeterinarioRepository;
 
-// Script inicializador de datos de prueba. Puebla la BD (H2) al arrancar la
-// aplicación con datos seudoaleatorios (semilla 42) y construye el grafo de
+// Script inicializador de datos de prueba. Puebla la BD al arrancar la
+// aplicación con datos aleatorios con semilla y construye las relaciones entre
 // objetos con las relaciones JPA y @Builder: primero las entidades
 // independientes (duenos, veterinarios, administradores, drogas) y después las
 // que se asocian (mascotas y tratamientos) eligiendo las entidades
 // relacionadas con findById sobre un número al azar.
 @Component
-public class DataInitializer implements CommandLineRunner {
+public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private DuenoRepository duenoRepository;
@@ -155,19 +156,19 @@ public class DataInitializer implements CommandLineRunner {
                 "https://imgs.search.brave.com/lyQdUI6O4tK7o734zlUOxuFLdw-1kUFmZssTDwlkam0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTU0/MjEyMDY2L2VzL2Zv/dG8vZ2F0by1zaWFt/JUMzJUE5cy5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9ZV9V/WDktSU5fZ3VPQWhw/bUxVYk40VGktWVBj/LU92c3hWQXJUOWpn/MWxVWT0",
                 "https://imgs.search.brave.com/SpvOGsBrp_Lq8prflOD7fsZ5TRntmOqrUHvFvtSrWzg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9zZW50/YWRhLWdyaXMtZGVs/LXBlcnJpdG8tZG9n/by1mcmFuYyVDMyVB/OXMtYWlzbGFkYS0x/MDE3NTU1MzAuanBn" };
 
-        int cantidadMascotas = 6 + random.nextInt(6);
+        int cantidadMascotas = random.nextInt(15);
         for (int i = 0; i < cantidadMascotas; i++) {
             int numeroDueno = random.nextInt(1, (int) cantidadDuenos + 1);
             Dueno dueno = duenoRepository.findById((long) numeroDueno)
-                    .orElseThrow(() -> new IllegalArgumentException("Dueño no encontrado: " + numeroDueno));
+                    .orElseThrow(() -> new RecursoNoEncontradoException("Dueño no encontrado: " + numeroDueno));
             mascotaRepository.save(Mascota.builder()
                     .nombre(nombres[random.nextInt(nombres.length)])
                     .especie(DominioEspecie.values()[random.nextInt(DominioEspecie.values().length)])
                     .raza(razas[random.nextInt(razas.length)])
-                    .edad(redondear(0.5 + random.nextDouble() * 8.5))
+                    .edad(redondear(random.nextDouble() * 30))
                     .sexo(DominioSexo.values()[random.nextInt(DominioSexo.values().length)])
                     .imagen(imagenes[random.nextInt(imagenes.length)])
-                    .pesoKg(redondear(0.8 + random.nextDouble() * 38.0))
+                    .pesoKg(redondear(random.nextDouble() * 50))
                     .color(colores[random.nextInt(colores.length)])
                     .fechaIngreso(LocalDate.now().minusDays(random.nextInt(400) + 1))
                     .dueno(dueno)
@@ -192,17 +193,17 @@ public class DataInitializer implements CommandLineRunner {
                 "Limpieza de la zona, drenaje y vendaje.",
                 "Consulta con recomendaciones de alimentación y ejercicio." };
 
-        int cantidadTratamientos = 8 + random.nextInt(8);
+        int cantidadTratamientos = random.nextInt(20);
         for (int i = 0; i < cantidadTratamientos; i++) {
             int numeroMascota = random.nextInt(1, (int) cantidadMascotas + 1);
             Mascota mascota = mascotaRepository.findById((long) numeroMascota)
-                    .orElseThrow(() -> new IllegalArgumentException("Mascota no encontrada: " + numeroMascota));
+                    .orElseThrow(() -> new RecursoNoEncontradoException("Mascota no encontrada: " + numeroMascota));
             int numeroVeterinario = random.nextInt(1, (int) cantidadVeterinarios + 1);
             Veterinario veterinario = veterinarioRepository.findById((long) numeroVeterinario)
-                    .orElseThrow(() -> new IllegalArgumentException("Veterinario no encontrado: " + numeroVeterinario));
+                    .orElseThrow(() -> new RecursoNoEncontradoException("Veterinario no encontrado: " + numeroVeterinario));
             int numeroDroga = random.nextInt(1, (int) cantidadDrogas + 1);
             Droga droga = drogaRepository.findById((long) numeroDroga)
-                    .orElseThrow(() -> new IllegalArgumentException("Droga no encontrada: " + numeroDroga));
+                    .orElseThrow(() -> new RecursoNoEncontradoException("Droga no encontrada: " + numeroDroga));
             tratamientoRepository.save(Tratamiento.builder()
                     .fecha(LocalDate.now().minusDays(random.nextInt(120) + 1))
                     .mascota(mascota)

@@ -14,6 +14,8 @@ import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.Veterinario;
 import com.vetopia.entities.mascota.Mascota;
+import com.vetopia.exception.ParametroInvalidoException;
+import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.service.droga.DrogaService;
 import com.vetopia.service.dueno.DuenoService;
 import com.vetopia.service.mascota.MascotaService;
@@ -70,7 +72,7 @@ public class VeterinarioMascotaController {
             duenoService.registrarClienteActivo(dueno);
             return "redirect:/veterinario/mascotas/registrar-mascota?veterinarioId=" + veterinarioId
                     + "&duenoId=" + dueno.getId();
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
             return "redirect:/veterinario/mascotas/registrar-cliente?veterinarioId=" + veterinarioId
                     + "&error=No se pudo registrar el cliente.";
         }
@@ -92,7 +94,12 @@ public class VeterinarioMascotaController {
             @RequestParam(defaultValue = "finish") String action,
             @RequestParam Long duenoId,
             @RequestParam(required = false) MultipartFile foto, Model model) {
-        mascotaService.registrarMascota(mascota, duenoId, foto);
+        try {
+            mascotaService.registrarMascota(mascota, duenoId, foto);
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
+            return "redirect:/veterinario/mascotas/registrar-mascota?veterinarioId=" + veterinarioId
+                    + "&duenoId=" + duenoId + "&error=No se pudo registrar la mascota.";
+        }
 
         if ("newPet".equals(action)) {
             model.addAttribute("veterinarioId", veterinarioId);
@@ -136,7 +143,7 @@ public class VeterinarioMascotaController {
             model.addAttribute("stockRestante", resultado.getStockRestante());
             model.addAttribute("mascotaId", resultado.getTratamiento().getMascota().getId());
             return "veterinario/tratamiento-confirmacion";
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
             return renderizarFormularioTratamiento(veterinarioId, model, e.getMessage());
         }
     }
@@ -164,7 +171,7 @@ public class VeterinarioMascotaController {
             model.addAttribute("veterinarioId", veterinarioId);
             model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
             return "veterinario/ficha-clinica";
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException e) {
             return "redirect:/veterinario/mascotas?veterinarioId=" + veterinarioId;
         }
     }
@@ -177,7 +184,7 @@ public class VeterinarioMascotaController {
             mascotaService.cambiarEstado(id, estado);
             return "redirect:/veterinario/mascotas/ficha?veterinarioId="
                     + veterinarioId + "&id=" + id;
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
             return "redirect:/veterinario/mascotas/ficha?veterinarioId="
                     + veterinarioId + "&id=" + id;
         }
@@ -195,7 +202,7 @@ public class VeterinarioMascotaController {
                 model.addAttribute("duenoId", mascota.getDueno().getId());
             }
             return "veterinario/editar-mascota";
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException e) {
             return "redirect:/veterinario/mascotas?veterinarioId=" + veterinarioId;
         }
     }
@@ -204,7 +211,12 @@ public class VeterinarioMascotaController {
     public String guardarEdicionMascota(@ModelAttribute Mascota mascota,
             @RequestParam Long veterinarioId,
             @RequestParam(required = false) MultipartFile foto) {
-        mascotaService.actualizarMascota(mascota, foto);
+        try {
+            mascotaService.actualizarMascota(mascota, foto);
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
+            return "redirect:/veterinario/mascotas/editar?veterinarioId=" + veterinarioId
+                    + "&id=" + mascota.getId() + "&error=No se pudo actualizar la mascota.";
+        }
         return "redirect:/veterinario/mascotas/ficha?veterinarioId=" + veterinarioId
                 + "&id=" + mascota.getId();
     }

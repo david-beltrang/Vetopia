@@ -14,6 +14,7 @@ import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.mascota.Mascota;
 import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
+import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.MascotaRepository;
 import com.vetopia.service.ImagenService;
@@ -43,7 +44,7 @@ public class MascotaServiceImpl implements MascotaService {
     @Override
     public Mascota obtenerMascotaPorId(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador de la mascota.");
+            throw new ParametroInvalidoException("No se especificó el identificador de la mascota.");
         }
         return mascotaRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
@@ -59,15 +60,22 @@ public class MascotaServiceImpl implements MascotaService {
     @Transactional
     public Mascota registrarMascota(Mascota mascota, Long duenoId, MultipartFile foto) {
         if (mascota == null) {
-            throw new IllegalArgumentException("No se especificó la mascota a registrar.");
+            throw new ParametroInvalidoException("No se especificó la mascota a registrar.");
         }
         if (duenoId == null) {
-            throw new IllegalArgumentException("No se especificó el dueño de la mascota.");
+            throw new ParametroInvalidoException("No se especificó el dueño de la mascota.");
         }
-        // La relación n---1 se establece con la entidad, no con un id suelto.
+        // La relación n-1 se establece con la entidad, no con un id suelto.
         Dueno dueno = duenoService.obtenerDuenoPorId(duenoId);
         mascota.setDueno(dueno);
         mascota.setEstado(DominioEstado.ACTIVO);
+        // Datos obligatorios de la mascota.
+        if (mascota.getColor() == null || mascota.getColor().isBlank()) {
+            throw new ParametroInvalidoException("Debe indicar el color de la mascota.");
+        }
+        if (mascota.getFechaIngreso() == null) {
+            throw new ParametroInvalidoException("Debe indicar la fecha de ingreso de la mascota.");
+        }
         String imagen = imagenService.guardarFoto(foto);
         if (imagen != null) {
             mascota.setImagen(imagen);
@@ -80,7 +88,13 @@ public class MascotaServiceImpl implements MascotaService {
     @Transactional
     public Mascota actualizarMascota(Mascota mascota, MultipartFile foto) {
         if (mascota == null) {
-            throw new IllegalArgumentException("No se especificó la mascota a actualizar.");
+            throw new ParametroInvalidoException("No se especificó la mascota a actualizar.");
+        }
+        if (mascota.getColor() == null || mascota.getColor().isBlank()) {
+            throw new ParametroInvalidoException("Debe indicar el color de la mascota.");
+        }
+        if (mascota.getFechaIngreso() == null) {
+            throw new ParametroInvalidoException("Debe indicar la fecha de ingreso de la mascota.");
         }
         if (mascota.getId() != null) {
             Mascota actual = mascotaRepository.findById(mascota.getId()).orElse(null);
@@ -112,10 +126,10 @@ public class MascotaServiceImpl implements MascotaService {
     @Transactional
     public void cambiarEstado(Long id, String estado) {
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador de la mascota.");
+            throw new ParametroInvalidoException("No se especificó el identificador de la mascota.");
         }
         if (estado == null || estado.isBlank()) {
-            throw new IllegalArgumentException("No se especificó el estado de la mascota.");
+            throw new ParametroInvalidoException("No se especificó el estado de la mascota.");
         }
         Mascota mascota = obtenerMascotaPorId(id);
         mascota.setEstado(DominioEstado.fromValor(estado));
@@ -125,7 +139,7 @@ public class MascotaServiceImpl implements MascotaService {
     @Override
     public List<Mascota> listarMascotasDeCliente(Long duenoId) {
         if (duenoId == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del dueño.");
+            throw new ParametroInvalidoException("No se especificó el identificador del dueño.");
         }
         return mascotaRepository.findByDuenoId(duenoId);
     }
@@ -136,7 +150,7 @@ public class MascotaServiceImpl implements MascotaService {
     @Override
     public List<Mascota> listarMascotasDeVeterinario(Long veterinarioId) {
         if (veterinarioId == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del veterinario.");
+            throw new ParametroInvalidoException("No se especificó el identificador del veterinario.");
         }
         List<Mascota> mascotas = new ArrayList<>();
         Set<Long> idsYaVistos = new LinkedHashSet<>();
@@ -157,12 +171,12 @@ public class MascotaServiceImpl implements MascotaService {
     @Override
     public Mascota obtenerMascotaDeCliente(Long mascotaId, Long duenoId) {
         if (duenoId == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del dueño.");
+            throw new ParametroInvalidoException("No se especificó el identificador del dueño.");
         }
         Mascota mascota = obtenerMascotaPorId(mascotaId);
         Dueno dueno = mascota.getDueno();
         if (dueno == null || !duenoId.equals(dueno.getId())) {
-            throw new IllegalArgumentException("No tienes permiso para ver los detalles de esta mascota.");
+            throw new ParametroInvalidoException("No tienes permiso para ver los detalles de esta mascota.");
         }
         return mascota;
     }

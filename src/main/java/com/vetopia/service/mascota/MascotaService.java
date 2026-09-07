@@ -9,17 +9,16 @@ import com.vetopia.entities.mascota.Mascota;
 // Esta interfaz define los métodos que deben implementarse para acceder y manipular los datos de mascotas en la aplicación.
 public interface MascotaService {
 
-    // Devuelve todas las mascotas registradas.
+    
     List<Mascota> listarMascotas();
 
-    // Obtiene una mascota validando previamente el identificador.
+    
     Mascota obtenerMascotaPorId(Long id);
 
-    // Guarda una mascota nueva. El id lo asigna la base de datos.
+    
     void guardar(Mascota mascota);
 
-    // Registra una mascota nueva asignándole el dueño (relación JPA) y el estado
-    // "Activo", y guardando la foto subida si la hay.
+    
     Mascota registrarMascota(Mascota mascota, Long duenoId, MultipartFile foto);
 
     // Actualiza una mascota existente conservando dueño, estado e imagen

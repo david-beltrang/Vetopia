@@ -16,6 +16,6 @@ public interface DrogaService {
     // Guarda (registra) una droga nueva. El id lo asigna la base de datos.
     void guardar(Droga droga);
 
-    // Descuenta unidades del inventario de la droga (al asignar un tratamiento).
+    // Descuenta unidades del inventario de la droga
     void descontarUnidades(Long drogaId, Integer cantidad);
 }

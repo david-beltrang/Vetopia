@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vetopia.entities.Administrador;
+import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.AdministradorRepository;
 
@@ -25,7 +26,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public Administrador obtenerAdministradorPorId(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del administrador.");
+            throw new ParametroInvalidoException("No se especificó el identificador del administrador.");
         }
         return administradorRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
@@ -35,7 +36,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public void guardar(Administrador administrador) {
         if (administrador == null) {
-            throw new IllegalArgumentException("No se especificó el administrador a guardar.");
+            throw new ParametroInvalidoException("No se especificó el administrador a guardar.");
         }
         administradorRepository.save(administrador);
     }
@@ -43,8 +44,8 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public Administrador obtenerPorCorreoYContrasena(String correo, String contrasena) {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
-            throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
+            throw new ParametroInvalidoException("Debe indicar el correo y la contraseña.");
         }
-        return administradorRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena).orElse(null);
+        return administradorRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
     }
 }

@@ -13,12 +13,11 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-// Entidad Droga (medicamento). Relación 1---n con Tratamiento: mappedBy apunta
-// al campo "droga" de Tratamiento (dueño de la FK droga_id).
+// Entidad Droga. Relación 1-n con Tratamiento: mappedBy apunta
+// al campo "droga" de Tratamiento.
 @Entity
 @Table(name = "drogas")
 @Data
@@ -47,7 +46,6 @@ public class Droga {
     private Integer unidadesVendidas;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "droga")
     private List<Tratamiento> tratamientos = new ArrayList<>();
 }

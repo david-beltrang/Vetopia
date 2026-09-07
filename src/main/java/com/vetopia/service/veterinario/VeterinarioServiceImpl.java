@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vetopia.entities.Veterinario;
+import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.VeterinarioRepository;
 
@@ -28,7 +29,7 @@ public class VeterinarioServiceImpl implements VeterinarioService {
     public Veterinario obtenerVeterinarioPorId(Long id) {
         // Validamos que el id no sea nulo antes de buscar el veterinario en el repositorio
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del veterinario.");
+            throw new ParametroInvalidoException("No se especificó el identificador del veterinario.");
         }
         return veterinarioRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
@@ -39,7 +40,7 @@ public class VeterinarioServiceImpl implements VeterinarioService {
     @Override
     public void guardar(Veterinario veterinario) {
         if (veterinario == null) {
-            throw new IllegalArgumentException("No se especificó el veterinario a guardar.");
+            throw new ParametroInvalidoException("No se especificó el veterinario a guardar.");
         }
         veterinarioRepository.save(veterinario);
     }
@@ -48,8 +49,8 @@ public class VeterinarioServiceImpl implements VeterinarioService {
     @Override
     public Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena) {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
-            throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
+            throw new ParametroInvalidoException("Debe indicar el correo y la contraseña.");
         }
-        return veterinarioRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena).orElse(null);
+        return veterinarioRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.service.mascota.MascotaService;
 
 @Controller
@@ -29,7 +30,7 @@ public class ClienteMascotaController {
         model.addAttribute("duenoId", duenoId);
         try {
             model.addAttribute("mascota", mascotaService.obtenerMascotaDeCliente(id, duenoId));
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException e) {
             model.addAttribute("mensajeError", e.getMessage());
         }
         return "cliente/detalle-mascota";

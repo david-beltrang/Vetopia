@@ -15,14 +15,13 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 
-// Entidad Veterinario. Relación 1---n con Tratamiento: mappedBy apunta al
-// campo "veterinario" de Tratamiento (dueño de la FK veterinario_id).
+// Entidad Veterinario. Relación 1-n con Tratamiento: mappedBy apunta al
+// campo "veterinario" de Tratamiento.
 @Entity
 @Table(name = "veterinarios")
 @Data
@@ -61,7 +60,6 @@ public class Veterinario {
     private String urlFoto;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "veterinario")
     private List<Tratamiento> tratamientos = new ArrayList<>();
 }

@@ -11,6 +11,7 @@ import com.vetopia.entities.Droga;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.Veterinario;
 import com.vetopia.entities.mascota.Mascota;
+import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.MascotaRepository;
 import com.vetopia.repository.TratamientoRepository;
@@ -40,7 +41,7 @@ public class TratamientoServiceImpl implements TratamientoService {
     @Override
     public Tratamiento obtenerTratamientoPorId(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del tratamiento.");
+            throw new ParametroInvalidoException("No se especificó el identificador del tratamiento.");
         }
         return tratamientoRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
@@ -55,7 +56,7 @@ public class TratamientoServiceImpl implements TratamientoService {
     @Override
     public List<Tratamiento> listarTratamientosPorVeterinario(Long veterinarioId) {
         if (veterinarioId == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del veterinario.");
+            throw new ParametroInvalidoException("No se especificó el identificador del veterinario.");
         }
         return tratamientoRepository.findByVeterinarioId(veterinarioId);
     }
@@ -63,12 +64,12 @@ public class TratamientoServiceImpl implements TratamientoService {
     @Override
     public List<Tratamiento> listarTratamientosPorMascota(Long mascotaId) {
         if (mascotaId == null) {
-            throw new IllegalArgumentException("No se especificó el identificador de la mascota.");
+            throw new ParametroInvalidoException("No se especificó el identificador de la mascota.");
         }
         return tratamientoRepository.findByMascotaId(mascotaId);
     }
 
-    // Con la relación JPA, la droga del tratamiento se navega directamente con
+    // La droga del tratamiento se navega directamente con
     // tratamiento.getDroga().getNombre() en lugar de buscar por id.
     private String resolverNombreDroga(Tratamiento tratamiento) {
         if (tratamiento.getDroga() != null && tratamiento.getDroga().getNombre() != null) {
@@ -95,31 +96,31 @@ public class TratamientoServiceImpl implements TratamientoService {
         return historial;
     }
 
-    // Hace varias operaciones sobre la BD (guardar el tratamiento y descontar el
+    // Hace varias operaciones sobre la BD comoguardar el tratamiento y descontar el
     // inventario de la droga), por lo que va en una única transacción.
     @Override
     @Transactional
     public ResultadoTratamiento asignarTratamiento(Tratamiento tratamiento, Long veterinarioId) {
         if (tratamiento == null) {
-            throw new IllegalArgumentException("No se especificó el tratamiento a asignar.");
+            throw new ParametroInvalidoException("No se especificó el tratamiento a asignar.");
         }
         if (tratamiento.getMascota() == null || tratamiento.getMascota().getId() == null
                 || tratamiento.getDroga() == null || tratamiento.getDroga().getId() == null) {
-            throw new IllegalArgumentException("Debes seleccionar un paciente y un medicamento para asignar el tratamiento.");
+            throw new ParametroInvalidoException("Debes seleccionar un paciente y un medicamento para asignar el tratamiento.");
         }
 
         Droga droga = drogaService.obtenerDrogaPorId(tratamiento.getDroga().getId());
 
         int unidadesDisponibles = droga.getUnidadesDisponibles() == null ? 0 : droga.getUnidadesDisponibles();
         if (unidadesDisponibles <= 0) {
-            throw new IllegalArgumentException(
+            throw new ParametroInvalidoException(
                     "El medicamento \"" + droga.getNombre() + "\" no tiene unidades disponibles.");
         }
 
         Long idVeterinario = veterinarioId != null ? veterinarioId
                 : tratamiento.getVeterinario() != null ? tratamiento.getVeterinario().getId() : null;
         if (idVeterinario == null) {
-            throw new IllegalArgumentException("No se identificó al veterinario que aplica el tratamiento.");
+            throw new ParametroInvalidoException("No se identificó al veterinario que aplica el tratamiento.");
         }
         // La relación con el veterinario se establece con la entidad.
         Veterinario veterinario = veterinarioService.obtenerVeterinarioPorId(idVeterinario);
@@ -134,7 +135,7 @@ public class TratamientoServiceImpl implements TratamientoService {
 
         Mascota mascota = mascotaRepository.findById(tratamiento.getMascota().getId()).orElse(null);
         if (mascota == null) {
-            throw new IllegalArgumentException("El paciente seleccionado no existe.");
+            throw new ParametroInvalidoException("El paciente seleccionado no existe.");
         }
         return new ResultadoTratamiento(tratamiento, mascota, droga, 1);
     }

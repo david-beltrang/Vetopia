@@ -16,7 +16,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -60,12 +59,11 @@ public class Dueno {
     @Column(name = "estado", length = 20, nullable = false)
     private DominioEstado estado;
 
-    // Relación 1---n: cada dueño posee varias mascotas. El mappedBy apunta al
-    // campo "dueno" de Mascota (donde se guarda la FK dueno_id). Con cascade +
-    // orphanRemoval, borrar el dueño borra sus mascotas en cascada. Se excluye
+    // Relación 1-n: cada dueño posee varias mascotas. El mappedBy apunta al
+    // campo "dueno" de Mascota donde se guarda la FK dueno_id. Con cascade,
+    // borrar el dueño borra sus mascotas en cascada. Se excluye
     // de toString/equals para evitar recursión infinita con Mascota.
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL)
     private List<Mascota> mascotas = new ArrayList<>();
 }

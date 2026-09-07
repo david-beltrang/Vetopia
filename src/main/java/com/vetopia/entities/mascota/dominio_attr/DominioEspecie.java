@@ -1,5 +1,7 @@
 package com.vetopia.entities.mascota.dominio_attr;
 
+import com.vetopia.exception.ParametroInvalidoException;
+
 public enum DominioEspecie {
     PERRO("Perro"),
     GATO("Gato"),
@@ -26,6 +28,6 @@ public enum DominioEspecie {
                 return e;
             }
         }
-        throw new IllegalArgumentException("Especie desconocida: " + valor);
+        throw new ParametroInvalidoException("Especie desconocida: " + valor);
     }
 }

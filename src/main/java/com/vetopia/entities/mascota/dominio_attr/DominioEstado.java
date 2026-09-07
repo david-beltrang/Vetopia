@@ -1,5 +1,7 @@
 package com.vetopia.entities.mascota.dominio_attr;
 
+import com.vetopia.exception.ParametroInvalidoException;
+
 public enum DominioEstado {
     ACTIVO("Activo"),
     INACTIVO("Inactivo");
@@ -25,6 +27,6 @@ public enum DominioEstado {
                 return e;
             }
         }
-        throw new IllegalArgumentException("Estado desconocido: " + valor);
+        throw new ParametroInvalidoException("Estado desconocido: " + valor);
     }
 }

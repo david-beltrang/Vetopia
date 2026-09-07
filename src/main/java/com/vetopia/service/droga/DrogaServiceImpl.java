@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vetopia.entities.Droga;
+import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.DrogaRepository;
 
@@ -28,7 +29,7 @@ public class DrogaServiceImpl implements DrogaService {
     public Droga obtenerDrogaPorId(Long id) {
         // Validamos que el id no sea nulo antes de buscar la droga en el repositorio
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador de la droga.");
+            throw new ParametroInvalidoException("No se especificó el identificador de la droga.");
         }
         return drogaRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
@@ -39,7 +40,7 @@ public class DrogaServiceImpl implements DrogaService {
     @Override
     public void guardar(Droga droga) {
         if (droga == null) {
-            throw new IllegalArgumentException("No se especificó la droga a guardar.");
+            throw new ParametroInvalidoException("No se especificó la droga a guardar.");
         }
         drogaRepository.save(droga);
     }
@@ -50,7 +51,7 @@ public class DrogaServiceImpl implements DrogaService {
     @Transactional
     public void descontarUnidades(Long drogaId, Integer cantidad) {
         if (drogaId == null || cantidad == null) {
-            throw new IllegalArgumentException("Debe indicar la droga y la cantidad a descontar.");
+            throw new ParametroInvalidoException("Debe indicar la droga y la cantidad a descontar.");
         }
         Droga droga = drogaRepository.findById(drogaId).orElse(null);
         if (droga == null || cantidad <= 0) {

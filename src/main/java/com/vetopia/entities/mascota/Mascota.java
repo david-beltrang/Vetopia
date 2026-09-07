@@ -19,7 +19,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -72,9 +71,8 @@ public class Mascota {
     @Column(nullable = false)
     private LocalDate fechaIngreso;
 
-    // Relación n---1 con Dueno: esta es la parte DUEÑA de la FK (dueno_id).
+    // Relación n-1 con Dueno: esta es la parte dueña de la FK
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "dueno_id", nullable = false)
     private Dueno dueno;
@@ -83,12 +81,11 @@ public class Mascota {
     @Column(name = "estado", length = 20, nullable = false)
     private DominioEstado estado;
 
-    // Relación 1---n con Tratamiento: mappedBy apunta a "mascota" en Tratamiento
-    // (dueño de la FK). Cascade + orphanRemoval: al borrar la mascota se borran
+    // Relación 1-n con Tratamiento: mappedBy apunta a "mascota" en Tratamiento
+    // dueño de la FK. Con cascade, al borrar la mascota se borran
     // sus tratamientos.
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL)
     private List<Tratamiento> tratamientos = new ArrayList<>();
 
     // Método para verificar si la mascota tiene una imagen asociada

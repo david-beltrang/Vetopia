@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Veterinario;
+import com.vetopia.exception.ParametroInvalidoException;
+import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.service.dueno.DuenoService;
 import com.vetopia.service.veterinario.VeterinarioService;
 
@@ -62,7 +64,7 @@ public class VeterinarioClienteController {
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         try {
             model.addAttribute("dueno", duenoService.obtenerDuenoPorId(id));
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException e) {
             model.addAttribute("mensajeError", e.getMessage());
         }
         return "veterinario/detalle-cliente";
@@ -81,7 +83,7 @@ public class VeterinarioClienteController {
         try {
             model.addAttribute("dueno", duenoService.obtenerDuenoPorId(id));
             return "veterinario/editar-cliente";
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException e) {
             return "redirect:/veterinario/clientes?veterinarioId=" + veterinarioId;
         }
     }
@@ -96,7 +98,7 @@ public class VeterinarioClienteController {
             @RequestParam Long veterinarioId) {
         try {
             duenoService.guardar(dueno);
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
             return "redirect:/veterinario/clientes/editar?veterinarioId="
                     + veterinarioId + "&id=" + dueno.getId();
         }
@@ -114,7 +116,7 @@ public class VeterinarioClienteController {
             @RequestParam Long veterinarioId) {
         try {
             duenoService.eliminarCliente(id);
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
             return "redirect:/veterinario/clientes?veterinarioId=" + veterinarioId;
         }
         return "redirect:/veterinario/clientes?veterinarioId=" + veterinarioId;

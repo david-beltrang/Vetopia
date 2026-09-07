@@ -13,16 +13,15 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import com.vetopia.entities.mascota.Mascota;
 
-// Tratamiento (registro médico de una mascota). Guarda la fecha, el título,
+// Tratamiento. Guarda la fecha, el título,
 // la descripción y si ya ha sido completado, tal como se muestra en el
-// historial de la ficha clínica. Sus tres relaciones n---1 son la parte
-// DUEÑA de la FK (mascota_id, veterinario_id, droga_id).
+// historial de la ficha clínica. Sus tres relaciones n-1 son la parte
+// dueña de la FK
 @Entity
 @Table(name = "tratamientos")
 @Data
@@ -39,19 +38,16 @@ public class Tratamiento {
     private LocalDate fecha;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "mascota_id", nullable = false)
     private Mascota mascota;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "veterinario_id", nullable = false)
     private Veterinario veterinario;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "droga_id", nullable = false)
     private Droga droga;
