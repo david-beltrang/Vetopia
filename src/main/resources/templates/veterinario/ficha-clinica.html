@@ -7,7 +7,7 @@
 -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragmentos-portal :: head"></div>
+    <div th:replace="~{fragmentos-portal :: head}"></div>
     <title th:text="${mascota != null} ? 'Ficha Clínica: ' + ${mascota.nombre} + ' - Vetopia' : 'Vetopia - Ficha Clínica'">Vetopia - Ficha Clínica</title>
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
@@ -246,6 +246,6 @@
 </main>
 
 <!-- FOOTER: fragmento reutilizable del portal -->
-<footer th:replace="fragmentos-portal :: footer"></footer>
+<footer th:replace="~{fragmentos-portal :: footer}"></footer>
 </body>
 </html>
