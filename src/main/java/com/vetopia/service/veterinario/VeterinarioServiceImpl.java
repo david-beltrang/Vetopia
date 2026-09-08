@@ -1,4 +1,4 @@
-package com.vetopia.service;
+package com.vetopia.service.veterinario;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vetopia.entities.Veterinario;
+import com.vetopia.exception.ParametroInvalidoException;
+import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.VeterinarioRepository;
 
 // Esta clase implementa la interfaz VeterinarioService y define la lógica de negocio relacionada con veterinarios. Es el único punto al que los controladores acceden para obtener datos; a su vez, delega el acceso a datos en la capa repository.
@@ -24,23 +26,23 @@ public class VeterinarioServiceImpl implements VeterinarioService {
 
     // Obtiene un veterinario validando previamente el identificador
     @Override
-    public Veterinario obtenerVeterinarioPorId(Integer id) {
+    public Veterinario obtenerVeterinarioPorId(Long id) {
         // Validamos que el id no sea nulo antes de buscar el veterinario en el repositorio
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del veterinario.");
+            throw new ParametroInvalidoException("No se especificó el identificador del veterinario.");
         }
         Veterinario veterinario = veterinarioRepository.findById(id).orElse(null);
         if (veterinario == null) {
-            throw new IllegalArgumentException("No se encontró ningún veterinario con el identificador " + id + ".");
+            throw new RecursoNoEncontradoException("No se encontró ningún veterinario con el identificador " + id + ".");
         }
         return veterinario;
     }
 
-    // Guarda (registra) un veterinario nuevo. El id lo asigna el repositorio
+    // Guarda (registra) un veterinario nuevo. El id lo asigna la base de datos.
     @Override
     public void guardar(Veterinario veterinario) {
         if (veterinario == null) {
-            throw new IllegalArgumentException("No se especificó el veterinario a guardar.");
+            throw new ParametroInvalidoException("No se especificó el veterinario a guardar.");
         }
         veterinarioRepository.save(veterinario);
     }
@@ -49,8 +51,8 @@ public class VeterinarioServiceImpl implements VeterinarioService {
     @Override
     public Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena) {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
-            throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
+            throw new ParametroInvalidoException("Debe indicar el correo y la contraseña.");
         }
-        return veterinarioRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena).orElse(null);
+        return veterinarioRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
     }
 }

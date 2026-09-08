@@ -1,4 +1,4 @@
-package com.vetopia.service;
+package com.vetopia.service.admin;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vetopia.entities.Administrador;
+import com.vetopia.exception.ParametroInvalidoException;
+import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.AdministradorRepository;
 
 // Esta clase implementa la interfaz AdministradorService y define la lógica de negocio relacionada con administradores. Es el único punto al que los controladores acceden para obtener datos; a su vez, delega el acceso a datos en la capa repository.
@@ -22,13 +24,13 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
 
     @Override
-    public Administrador obtenerAdministradorPorId(Integer id) {
+    public Administrador obtenerAdministradorPorId(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del administrador.");
+            throw new ParametroInvalidoException("No se especificó el identificador del administrador.");
         }
         Administrador administrador = administradorRepository.findById(id).orElse(null);
         if (administrador == null) {
-            throw new IllegalArgumentException("No se encontró ningún administrador con el identificador " + id + ".");
+            throw new RecursoNoEncontradoException("No se encontró ningún administrador con el identificador " + id + ".");
         }
         return administrador;
     }
@@ -36,7 +38,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public void guardar(Administrador administrador) {
         if (administrador == null) {
-            throw new IllegalArgumentException("No se especificó el administrador a guardar.");
+            throw new ParametroInvalidoException("No se especificó el administrador a guardar.");
         }
         administradorRepository.save(administrador);
     }
@@ -44,8 +46,8 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public Administrador obtenerPorCorreoYContrasena(String correo, String contrasena) {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
-            throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
+            throw new ParametroInvalidoException("Debe indicar el correo y la contraseña.");
         }
-        return administradorRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena).orElse(null);
+        return administradorRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
     }
 }

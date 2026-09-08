@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragmentos-portal :: head"></div>
+    <title>Vetopia - Clientes</title>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+    <!-- HEADER del portal -->
+    <nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
+        <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a href="/" class="flex items-center">
+                    <img th:src="@{/images/logo_Vetopia.png}" alt="Vetopia Logo" class="h-8 w-auto object-contain"/>
+                </a>
+            </div>
+            <!-- Enlaces de navegación -->
+            <div class="hidden md:flex items-center gap-8">
+                <a th:href="@{/veterinario/mascotas(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Pacientes</a>
+                <a th:href="@{/veterinario/clientes(veterinarioId=${veterinarioId})}" class="text-primary font-body-md text-body-md font-bold border-b-2 border-primary pb-1 shadow-[0px_2px_4px_rgba(0,0,0,0.30)]">Clientes</a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Citas</a>
+                <a th:href="@{/veterinario/mascotas/asignar-tratamiento(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Tratamientos</a>
+            </div>
+            <!-- Trailing: notificaciones, usuario, logout -->
+            <div class="flex items-center gap-4">
+                <button class="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-2xl">notifications</span>
+                </button>
+                <div class="flex items-center gap-3">
+                    <span class="text-white font-label-md text-label-md uppercase tracking-widest hidden sm:inline" th:text="${veterinario != null} ? ${veterinario.nombre} : 'Veterinario'">Carlos Gómez</span>
+                    <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+                        <span class="text-on-primary-container font-bold text-body-md" th:text="${veterinario != null} ? ${#strings.toUpperCase(#strings.substring(veterinario.nombre, 0, 2))} : 'VE'">CG</span>
+                    </div>
+                </div>
+                <button class="px-6 py-3 rounded-full border border-gray-600 text-white font-button text-button uppercase hover:bg-white/5 transition-colors">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1">
+        <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+            <!-- Título y buscador -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-stack-lg">
+                <div>
+                    <h1 class="text-headline-xl font-headline-xl text-on-surface">Clientes</h1>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Consulta la información de los clientes registrados en Vetopia</p>
+                </div>
+
+                <!-- Buscador -->
+                <div class="w-full md:max-w-[448px] flex items-center gap-3">
+                    <div class="flex items-center gap-3 px-4 py-2 bg-surface-container-high rounded-full">
+                        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+                        <input type="text"
+                               placeholder="Buscar cliente..."
+                               class="flex-1 bg-transparent text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none font-body-md text-body-md border-0" />
+                    </div>
+                    <a th:href="@{/veterinario/mascotas/registrar-cliente(veterinarioId=${veterinarioId})}"
+                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-container text-on-primary-container font-button text-button uppercase rounded-full hover:bg-primary hover:text-on-primary transition-colors text-nowrap">
+                        NUEVO CLIENTE
+                        <span class="material-symbols-outlined text-sm">add</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tabla de clientes -->
+            <div class="bg-surface-container-lowest rounded-lg shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest overflow-hidden">
+                <!-- Encabezado de la tabla -->
+                <div class="flex flex-wrap items-center justify-between gap-4 px-8 py-6 border-b border-surface-container-high">
+                    <h2 class="text-headline-lg font-headline-lg text-on-surface">Listado de clientes</h2>
+                    <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest"
+                          th:text="${#lists.size(clientes) == 1} ? '1 CLIENTE REGISTRADO' : ${#lists.size(clientes)} + ' CLIENTES REGISTRADOS'">3 CLIENTES REGISTRADOS</span>
+                </div>
+
+                <!-- Tabla -->
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[720px]">
+                        <!-- Cabecera -->
+                        <thead class="bg-surface-container-low">
+                            <tr>
+                                <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">NOMBRE</th>
+                                <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CÉDULA</th>
+                                <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CORREO</th>
+                                <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">TELÉFONO</th>
+                                <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ESTADO</th>
+                                <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <!-- Cuerpo -->
+                        <tbody>
+                            <!-- Estado vacío cuando no hay clientes -->
+                            <tr th:if="${#lists.isEmpty(clientes)}">
+                                <td class="px-6 py-16 text-center" colspan="6">
+                                    <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant">person</span>
+                                    <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no hay clientes registrados.</p>
+                                </td>
+                            </tr>
+                            <!-- Una fila por cada cliente -->
+                            <tr th:each="cliente : ${clientes}"
+                                class="border-b border-surface-container-high hover:bg-surface-container-low transition-colors">
+                                <!-- Nombre -->
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center border border-surface-container-highest">
+                                            <span class="text-on-primary-container font-bold text-body-md"
+                                                  th:text="${#strings.toUpperCase(#strings.substring(cliente.nombre, 0, 2))}">MG</span>
+                                        </div>
+                                        <div>
+                                            <div class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-widest" th:text="${cliente.nombre}">Maria Gonzalez</div>
+                                            <div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest" th:text="|CLIENTE N° ${cliente.id}|">CLIENTE N° 0001</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- Cédula -->
+                                <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${cliente.cedula}">1234567890</td>
+                                <!-- Correo -->
+                                <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${cliente.correo}">maria@example.com</td>
+                                <!-- Teléfono -->
+                                <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${cliente.celular}">+1 (555) 000-0000</td>
+                                <!-- Estado -->
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full font-label-md text-label-md uppercase tracking-widest"
+                                          th:classappend="${cliente.estado != null and cliente.estado.name() == 'ACTIVO'} ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'"
+                                          th:text="${cliente.estado}">Activo</span>
+                                </td>
+                                <!-- Acciones -->
+                                <td class="px-6 py-4">
+                                    <a th:href="@{/veterinario/clientes/detalle(veterinarioId=${veterinarioId}, id=${cliente.id})}"
+                                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-container text-on-primary-container font-button text-button uppercase rounded-full hover:bg-primary/90 transition-colors">
+                                        VER DETALLE
+                                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer th:replace="fragmentos-portal :: footer"></footer>
+</body>
+</html>

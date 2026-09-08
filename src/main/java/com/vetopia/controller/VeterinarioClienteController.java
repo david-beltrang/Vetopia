@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Veterinario;
-import com.vetopia.service.DuenoService;
-import com.vetopia.service.VeterinarioService;
+import com.vetopia.exception.ParametroInvalidoException;
+import com.vetopia.exception.RecursoNoEncontradoException;
+import com.vetopia.service.dueno.DuenoService;
+import com.vetopia.service.veterinario.VeterinarioService;
 
 //CONTROLLER de portal del veterinario para la gestión de clientes (dueños)
 
@@ -30,7 +32,7 @@ public class VeterinarioClienteController {
 
     // Carga al veterinario logueado (el id llega por la URL) para mostrar
     // su nombre en el header; devuelve null si no hay id válido.
-    private Veterinario obtenerVeterinario(Integer veterinarioId) {
+    private Veterinario obtenerVeterinario(Long veterinarioId) {
         if (veterinarioId == null) {
             return null;
         }
@@ -43,7 +45,7 @@ public class VeterinarioClienteController {
      URL: http://localhost:8090/veterinario/clientes?veterinarioId=1
      */
     @GetMapping
-    public String listarClientes(@RequestParam Integer veterinarioId, Model model) {
+    public String listarClientes(@RequestParam Long veterinarioId, Model model) {
         model.addAttribute("clientes", duenoService.listarDuenos());
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
@@ -56,13 +58,13 @@ public class VeterinarioClienteController {
      URL: http://localhost:8090/veterinario/clientes/detalle?veterinarioId=1&id=1
      */
     @GetMapping("/detalle")
-    public String detalleCliente(@RequestParam Integer veterinarioId,
+    public String detalleCliente(@RequestParam Long veterinarioId,
             @RequestParam Long id, Model model) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         try {
             model.addAttribute("dueno", duenoService.obtenerDuenoPorId(id));
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException e) {
             model.addAttribute("mensajeError", e.getMessage());
         }
         return "veterinario/detalle-cliente";
@@ -74,14 +76,14 @@ public class VeterinarioClienteController {
      URL: http://localhost:8090/veterinario/clientes/editar?veterinarioId=1&id=1
      */
     @GetMapping("/editar")
-    public String editarCliente(@RequestParam Integer veterinarioId,
+    public String editarCliente(@RequestParam Long veterinarioId,
             @RequestParam Long id, Model model) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         try {
             model.addAttribute("dueno", duenoService.obtenerDuenoPorId(id));
             return "veterinario/editar-cliente";
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException e) {
             return "redirect:/veterinario/clientes?veterinarioId=" + veterinarioId;
         }
     }
@@ -93,10 +95,10 @@ public class VeterinarioClienteController {
      */
     @PostMapping("/editar")
     public String guardarEdicionCliente(@ModelAttribute Dueno dueno,
-            @RequestParam Integer veterinarioId) {
+            @RequestParam Long veterinarioId) {
         try {
             duenoService.guardar(dueno);
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
             return "redirect:/veterinario/clientes/editar?veterinarioId="
                     + veterinarioId + "&id=" + dueno.getId();
         }
@@ -106,14 +108,15 @@ public class VeterinarioClienteController {
 
     /*
      Atiende POST /veterinario/clientes/eliminar: elimina el cliente indicado
-     y redirige al listado de clientes.
+     y, en cascada, sus mascotas y los tratamientos de estas; luego redirige
+     al listado de clientes.
      */
     @PostMapping("/eliminar")
     public String eliminarCliente(@RequestParam Long id,
-            @RequestParam Integer veterinarioId) {
+            @RequestParam Long veterinarioId) {
         try {
             duenoService.eliminarCliente(id);
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
             return "redirect:/veterinario/clientes?veterinarioId=" + veterinarioId;
         }
         return "redirect:/veterinario/clientes?veterinarioId=" + veterinarioId;

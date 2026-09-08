@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.vetopia.service.LoginService;
-import com.vetopia.service.ResultadoLogin;
+import com.vetopia.exception.ParametroInvalidoException;
+import com.vetopia.service.login_temp.LoginService;
+import com.vetopia.service.login_temp.ResultadoLogin;
 
 //Este controller gestiona las landing page y el login 
 @Controller
@@ -41,7 +42,7 @@ public class HomeController {
         ResultadoLogin resultado;
         try {
             resultado = loginService.autenticar(username, password);
-        } catch (IllegalArgumentException e) {
+        } catch (ParametroInvalidoException e) {
             model.addAttribute("mensajeError", "Correo o contraseña incorrectos. Verifica tus credenciales.");
             return "login/login";
         }

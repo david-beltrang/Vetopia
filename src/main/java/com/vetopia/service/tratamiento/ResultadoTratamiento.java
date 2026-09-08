@@ -1,8 +1,8 @@
-package com.vetopia.service;
+package com.vetopia.service.tratamiento;
 
 import com.vetopia.entities.Droga;
-import com.vetopia.entities.Mascota;
 import com.vetopia.entities.Tratamiento;
+import com.vetopia.entities.mascota.Mascota;
 
 /**
  * DTO de confirmación de un tratamiento recién aplicado. Reúne el

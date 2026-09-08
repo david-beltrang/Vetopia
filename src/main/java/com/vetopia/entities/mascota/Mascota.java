@@ -1,74 +1,92 @@
-package com.vetopia.entities;
+package com.vetopia.entities.mascota;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
+import com.vetopia.entities.Dueno;
+import com.vetopia.entities.Tratamiento;
+import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
+import com.vetopia.entities.mascota.dominio_attr.DominioEspecie;
+import com.vetopia.entities.mascota.dominio_attr.DominioSexo;
 
-// Mascota (paciente). Guarda los datos del animal y su relación con el dueño
-// (cliente). Se encuentra en la ficha de "mis mascotas" del cliente y en el
-// listado de pacientes del veterinario.
-@Getter
-@Setter
-@ToString(exclude = {"tratamientos"})
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+
+//Anotacion para ORM
 @Entity
+@Table(name = "mascotas")
 public class Mascota {
 
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String nombre; 
-    private String especie; 
-    private String raza;
-    private Double edad;
-    private String sexo;
-    @Column(length = 1000)
-    private String imagen;
-    private Double pesoKg;
-    private String color;
-    private LocalDate fechaIngreso;
-    private String estado;
+    private Long id;
 
+    @Column(length = 100, nullable = false)
+    private String nombre;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "especie", length = 50, nullable = false)
+    private DominioEspecie especie;
+
+    @Column(length = 50, nullable = false)
+    private String raza;
+
+    @Column(nullable = false)
+    private Double edad;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sexo", length = 10, nullable = false)
+    private DominioSexo sexo;
+
+    @Column(length = 500, nullable = true)
+    private String imagen;
+
+    @Column(nullable = false)
+    private Double pesoKg;
+
+    @Column(length = 50, nullable = false)
+    private String color;
+
+    @Column(nullable = false)
+    private LocalDate fechaIngreso;
+
+    // Relación n-1 con Dueno: esta es la parte dueña de la FK
+    @ToString.Exclude
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "dueno_id", nullable = false)
     private Dueno dueno;
 
-    @OneToMany(mappedBy = "mascota")
-    private List<Tratamiento> tratamientos = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado", length = 20, nullable = false)
+    private DominioEstado estado;
 
-    public Mascota(String nombre, String especie, String raza, Double edad, String sexo, String imagen, Double pesoKg, String color, LocalDate fechaIngreso, Dueno dueno, String estado) {
-        this.nombre = nombre;
-        this.especie = especie;
-        this.raza = raza;
-        this.edad = edad;
-        this.sexo = sexo;
-        this.imagen = imagen;
-        this.pesoKg = pesoKg;
-        this.color = color;
-        this.fechaIngreso = fechaIngreso;
-        this.dueno = dueno;
-        this.estado = estado;
-    }
+    // Relación 1-n con Tratamiento: mappedBy apunta a "mascota" en Tratamiento
+    // dueño de la FK. Con cascade, al borrar la mascota se borran
+    // sus tratamientos.
+    @ToString.Exclude
+    @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL)
+    private List<Tratamiento> tratamientos = new ArrayList<>();
 
     // Método para verificar si la mascota tiene una imagen asociada
     public boolean tieneImagen() {

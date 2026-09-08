@@ -1,4 +1,4 @@
-package com.vetopia.service;
+package com.vetopia.service.tratamiento;
 
 import com.vetopia.entities.Tratamiento;
 

@@ -1,4 +1,4 @@
-package com.vetopia.service;
+package com.vetopia.service.admin;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface AdministradorService {
     List<Administrador> listarAdministradores();
 
     // Busca un administrador por su identificador.
-    Administrador obtenerAdministradorPorId(Integer id);
+    Administrador obtenerAdministradorPorId(Long id);
 
     // Guarda un administrador en la base de datos.
     void guardar(Administrador administrador);

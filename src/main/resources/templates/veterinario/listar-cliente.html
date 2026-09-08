@@ -124,7 +124,7 @@
                                 <!-- Columna: Estado con color dinámico -->
                                 <td class="px-6 py-4">
                                     <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full font-label-md text-label-md uppercase tracking-widest"
-                                          th:classappend="${cliente.estado == 'Activo'} ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'"
+                                          th:classappend="${cliente.estado != null and cliente.estado.name() == 'ACTIVO'} ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'"
                                           th:text="${cliente.estado}">Activo</span>
                                 </td>
                                 <!-- Columna: Botón de ver detalle -->

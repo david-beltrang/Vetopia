@@ -53,7 +53,7 @@
                 <!-- Identificador de la mascota, veterinario logueado y dueño asociado -->
                 <input type="hidden" name="id" th:value="${mascota != null ? mascota.id : ''}"/>
                 <input type="hidden" name="veterinarioId" th:if="${veterinarioId != null}" th:value="${veterinarioId}"/>
-                <input type="hidden" name="duenoId" th:if="${duenoId != null}" th:value="${duenoId}"/>
+                <input type="hidden" name="dueno.id" th:value="${mascota != null and mascota.dueno != null ? mascota.dueno.id : ''}"/>
                 <!-- Tarjeta del formulario -->
                 <div class="w-full bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant max-w-[604px]">
                     <!-- Encabezado de sección -->
@@ -122,9 +122,9 @@
                                 <select id="especie" name="especie"
                                         class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                                     <option value="">Seleccionar especie...</option>
-                                    <option value="Perro" th:selected="${mascota != null and mascota.especie == 'Perro'}">Perro</option>
-                                    <option value="Gato" th:selected="${mascota != null and mascota.especie == 'Gato'}">Gato</option>
-                                    <option value="Otro" th:selected="${mascota != null and mascota.especie == 'Otro'}">Otro</option>
+                                    <option value="PERRO" th:selected="${mascota != null and mascota.especie != null and mascota.especie.name() == 'PERRO'}">Perro</option>
+                                    <option value="GATO" th:selected="${mascota != null and mascota.especie != null and mascota.especie.name() == 'GATO'}">Gato</option>
+                                    <option value="OTRO" th:selected="${mascota != null and mascota.especie != null and mascota.especie.name() == 'OTRO'}">Otro</option>
                                 </select>
                             </div>
                             <div class="flex flex-col gap-2">
@@ -132,9 +132,26 @@
                                 <select id="sexo" name="sexo"
                                         class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                                     <option value="">Seleccionar sexo...</option>
-                                    <option value="Macho" th:selected="${mascota != null and mascota.sexo == 'Macho'}">Macho</option>
-                                    <option value="Hembra" th:selected="${mascota != null and mascota.sexo == 'Hembra'}">Hembra</option>
+                                    <option value="MACHO" th:selected="${mascota != null and mascota.sexo != null and mascota.sexo.name() == 'MACHO'}">Macho</option>
+                                    <option value="HEMBRA" th:selected="${mascota != null and mascota.sexo != null and mascota.sexo.name() == 'HEMBRA'}">Hembra</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <!-- Campos: Color y Fecha de ingreso -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label for="color" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Color</label>
+                                <input id="color" name="color" type="text"
+                                       class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                       placeholder="e.g. Marrón"
+                                       th:value="${mascota != null ? mascota.color : ''}" required />
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label for="fechaIngreso" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Fecha de ingreso</label>
+                                <input id="fechaIngreso" name="fechaIngreso" type="date"
+                                       class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                       th:value="${mascota != null and mascota.fechaIngreso != null ? mascota.fechaIngreso : ''}" required />
                             </div>
                         </div>
                     </div>

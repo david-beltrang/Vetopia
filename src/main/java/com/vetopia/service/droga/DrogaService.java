@@ -1,4 +1,4 @@
-package com.vetopia.service;
+package com.vetopia.service.droga;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ public interface DrogaService {
     // Obtiene una droga validando previamente el identificador.
     Droga obtenerDrogaPorId(Long id);
 
-    // Guarda (registra) una droga nueva. El id lo asigna el repositorio.
+    // Guarda (registra) una droga nueva. El id lo asigna la base de datos.
     void guardar(Droga droga);
 
-    // Descuenta unidades del inventario de la droga (al asignar un tratamiento).
+    // Descuenta unidades del inventario de la droga
     void descontarUnidades(Long drogaId, Integer cantidad);
 }

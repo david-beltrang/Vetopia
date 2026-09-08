@@ -1,4 +1,4 @@
-package com.vetopia.service;
+package com.vetopia.service.dueno;
 
 import java.util.List;
 
@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vetopia.entities.Dueno;
-import com.vetopia.entities.Mascota;
-import com.vetopia.errors.DuenoNotFoundException;
+import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
+import com.vetopia.exception.ParametroInvalidoException;
+import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.DuenoRepository;
 
 // Esta clase implementa la interfaz DuenoService y define la lógica de negocio relacionada con dueños. Es el único punto al que los controladores acceden para obtener datos; a su vez, delega el acceso a datos en la capa repository.
@@ -18,9 +19,6 @@ public class DuenoServiceImpl implements DuenoService {
     //Inyección de dependencias
     @Autowired
     private DuenoRepository duenoRepository;
-
-    @Autowired
-    private MascotaService mascotaService;
 
     // Devuelve todos los dueños registrados
     @Override
@@ -33,20 +31,22 @@ public class DuenoServiceImpl implements DuenoService {
     public Dueno obtenerDuenoPorId(Long id) {
         // Validamos que el id no sea nulo antes de buscar el dueño en el repositorio
         if (id == null) {
-            throw new IllegalArgumentException("No se especificó el identificador del dueño.");
+            throw new ParametroInvalidoException("No se especificó el identificador del dueño.");
         }
-        Dueno dueno = duenoRepository.findById(id).orElse(null);
-        if (dueno == null) {
-            throw new DuenoNotFoundException("No se encontró ningún dueño con el identificador " + id + ".");
-        }
-        return dueno;
+        return duenoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "No se encontró ningún dueño con el identificador " + id + "."));
     }
 
-    // Guarda (registra) un dueño nuevo. El id lo asigna el repositorio
+    // Guarda un dueño nuevo. El id lo asigna la base de datos.
     @Override
     public void guardar(Dueno dueno) {
         if (dueno == null) {
-            throw new IllegalArgumentException("No se especificó el dueño a guardar.");
+            throw new ParametroInvalidoException("No se especificó el dueño a guardar.");
+        }
+        // El formulario de edición no envía el estado: se conserva el actual.
+        if (dueno.getEstado() == null && dueno.getId() != null) {
+            dueno.setEstado(obtenerDuenoPorId(dueno.getId()).getEstado());
         }
         duenoRepository.save(dueno);
     }
@@ -54,30 +54,28 @@ public class DuenoServiceImpl implements DuenoService {
     @Override
     public Dueno registrarClienteActivo(Dueno dueno) {
         if (dueno == null) {
-            throw new IllegalArgumentException("No se especificó el cliente a registrar.");
+            throw new ParametroInvalidoException("No se especificó el cliente a registrar.");
         }
-        dueno.setEstado("Activo");
+        dueno.setEstado(DominioEstado.ACTIVO);
         duenoRepository.save(dueno);
         return dueno;
     }
 
-    // Elmina un dueño y en cascada sus mascotas y los tratamientos de estas.
+    // Elimina un dueño y, en cascada por sus
+    // mascotas y los tratamientos de estas.
     @Override
     @Transactional
     public void eliminarCliente(Long id) {
-        Dueno dueno = obtenerDuenoPorId(id);
-        for (Mascota mascota : dueno.getMascotas()) {
-            mascotaService.eliminarMascota(mascota.getId());
-        }
+        obtenerDuenoPorId(id);
         duenoRepository.deleteById(id);
     }
 
-    // Busca un dueño por correo y contraseña (para login)
+    // Busca un dueño por correo y contraseña para login
     @Override
     public Dueno obtenerPorCorreoYContrasena(String correo, String contrasena) {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
-            throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
+            throw new ParametroInvalidoException("Debe indicar el correo y la contraseña.");
         }
-        return duenoRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena).orElse(null);
+        return duenoRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
     }
 }

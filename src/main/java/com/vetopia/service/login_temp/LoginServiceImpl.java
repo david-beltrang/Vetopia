@@ -1,4 +1,4 @@
-package com.vetopia.service;
+package com.vetopia.service.login_temp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import com.vetopia.entities.Administrador;
 import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Veterinario;
+import com.vetopia.service.admin.AdministradorService;
+import com.vetopia.service.dueno.DuenoService;
+import com.vetopia.service.veterinario.VeterinarioService;
 /*
  Busca las credenciales en cada tabla (delegando en los services de cada
  entidad hasta encontrar un match.

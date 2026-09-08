@@ -1,4 +1,4 @@
-package com.vetopia.service;
+package com.vetopia.service.veterinario;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ public interface VeterinarioService {
     List<Veterinario> listarVeterinarios();
 
     // Obtiene un veterinario validando previamente el identificador.
-    Veterinario obtenerVeterinarioPorId(Integer id);
+    Veterinario obtenerVeterinarioPorId(Long id);
 
-    // Guarda (registra) un veterinario nuevo. El id lo asigna el repositorio.
+    // Guarda (registra) un veterinario nuevo. El id lo asigna la base de datos.
     void guardar(Veterinario veterinario);
 
     // Busca un veterinario por correo y contraseña (para login).

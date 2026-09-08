@@ -3,8 +3,11 @@ package com.vetopia.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,11 +19,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
+import com.vetopia.entities.mascota.Mascota;
+import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
+
 /**
  * ENTIDAD - Dueno
  * Representa el dueño (cliente) de una o varias mascotas registradas en
- * Vetopia. No contiene lógica de acceso a datos ni de presentación, solo
- * el estado y las reglas propias de la entidad.
+ * Vetopia. La relación con Mascota es 1---n: el lado 1 declara mappedBy
+ * apuntando al campo "dueno" que vive en Mascota (dueño de la FK).
  */
 @Getter
 @Setter
@@ -44,18 +51,10 @@ public class Dueno {
     private String contrasena;
     @Column(length = 10, unique = true, nullable = false)
     private String celular;
-    @Column(length = 20, nullable = false)
-    private String estado = "Activo";
+   @Enumerated(EnumType.STRING)
+    @Column(name = "estado", length = 20, nullable = false)
+    private DominioEstado estado;
 
-    @OneToMany(mappedBy = "dueno")
+    @OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL)
     private List<Mascota> mascotas = new ArrayList<>();
-
-    public Dueno(String cedula, String nombre, String correo, String contrasena, String celular, String estado) {
-        this.cedula = cedula;
-        this.nombre = nombre;
-        this.correo = correo;
-        this.contrasena = contrasena;
-        this.celular = celular;
-        this.estado = estado;
-    }
 }
