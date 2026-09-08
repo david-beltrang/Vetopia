@@ -2,6 +2,8 @@ package com.vetopia.entities;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +17,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
 
 import com.vetopia.entities.mascota.Mascota;
 
@@ -39,16 +42,19 @@ public class Tratamiento {
 
     @ToString.Exclude
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "mascota_id", nullable = false)
     private Mascota mascota;
 
     @ToString.Exclude
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "veterinario_id", nullable = false)
     private Veterinario veterinario;
 
     @ToString.Exclude
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "droga_id", nullable = false)
     private Droga droga;
 
@@ -60,4 +66,14 @@ public class Tratamiento {
 
     @Column(nullable = false)
     private Boolean completado = false;
+
+        public Tratamiento(LocalDate fecha, Mascota mascota, Veterinario veterinario, Droga droga, String titulo, String descripcion, Boolean completado) {
+        this.fecha = fecha;
+        this.mascota = mascota;
+        this.veterinario = veterinario;
+        this.droga = droga;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.completado = completado;
+    }
 }

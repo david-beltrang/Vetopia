@@ -9,43 +9,44 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
-// Entidad Droga. Relación 1-n con Tratamiento: mappedBy apunta
-// al campo "droga" de Tratamiento.
-@Entity
-@Table(name = "drogas")
-@Data
-@Builder
+@Getter
+@Setter
+@ToString(exclude = {"tratamientos"})
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Entity
 public class Droga {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(length = 100, nullable = false)
     private String nombre;
-
     @Column(nullable = false)
-    private Double precioCompra;
-
+    private Double precioCompra = 0.0;
     @Column(nullable = false)
-    private Double precioVenta;
-
+    private Double precioVenta = 0.0;
     @Column(nullable = false)
-    private Integer unidadesDisponibles;
-
+    private Integer unidadesDisponibles = 0;
     @Column(nullable = false)
-    private Integer unidadesVendidas;
+    private Integer unidadesVendidas = 0;
 
-    @ToString.Exclude
     @OneToMany(mappedBy = "droga")
     private List<Tratamiento> tratamientos = new ArrayList<>();
+
+    public Droga(String nombre, Double precioCompra, Double precioVenta, Integer unidadesDisponibles, Integer unidadesVendidas) {
+        this.nombre = nombre;
+        this.precioCompra = precioCompra;
+        this.precioVenta = precioVenta;
+        this.unidadesDisponibles = unidadesDisponibles;
+        this.unidadesVendidas = unidadesVendidas;
+    }
 }

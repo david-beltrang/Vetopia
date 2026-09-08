@@ -31,9 +31,11 @@ public class VeterinarioServiceImpl implements VeterinarioService {
         if (id == null) {
             throw new ParametroInvalidoException("No se especificó el identificador del veterinario.");
         }
-        return veterinarioRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "No se encontró ningún veterinario con el identificador " + id + "."));
+        Veterinario veterinario = veterinarioRepository.findById(id).orElse(null);
+        if (veterinario == null) {
+            throw new RecursoNoEncontradoException("No se encontró ningún veterinario con el identificador " + id + ".");
+        }
+        return veterinario;
     }
 
     // Guarda (registra) un veterinario nuevo. El id lo asigna la base de datos.

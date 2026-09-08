@@ -62,4 +62,15 @@ public class Veterinario {
     @ToString.Exclude
     @OneToMany(mappedBy = "veterinario")
     private List<Tratamiento> tratamientos = new ArrayList<>();
+
+        public Veterinario(String cedula, String contrasena, String correo, String especialidad, Integer numeroAtenciones, String nombre, DominioEstado estado, String urlFoto) {
+        this.cedula = cedula;
+        this.contrasena = contrasena;
+        this.correo = correo;
+        this.especialidad = especialidad;
+        this.numeroAtenciones = numeroAtenciones;
+        this.nombre = nombre;
+        this.estado = estado;
+        this.urlFoto = urlFoto;
+    }
 }

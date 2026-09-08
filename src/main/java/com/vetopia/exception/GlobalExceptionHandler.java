@@ -13,6 +13,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public String manejarNoEncontrado(RecursoNoEncontradoException ex, Model model) {
         model.addAttribute("mensaje", ex.getMessage());
+        model.addAttribute("mensajeError", ex.getMessage());
         return "error";
     }
 
@@ -20,6 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ParametroInvalidoException.class)
     public String manejarParametroInvalido(ParametroInvalidoException ex, Model model) {
         model.addAttribute("mensaje", ex.getMessage());
+        model.addAttribute("mensajeError", ex.getMessage());
         return "error";
     }
 }

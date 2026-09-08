@@ -9,6 +9,7 @@ public interface DuenoService {
 
     List<Dueno> listarDuenos();
 
+    // Obtiene un dueño validando previamente el identificador.
     Dueno obtenerDuenoPorId(Long id);
 
     void guardar(Dueno dueno);

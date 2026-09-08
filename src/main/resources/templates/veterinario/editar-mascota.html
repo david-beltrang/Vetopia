@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragmentos-portal :: head"></div>
+    <div th:replace="~{fragmentos-portal :: head}"></div>
     <title>Vetopia - Editar Mascota</title>
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
@@ -173,7 +173,7 @@
     </main>
 
     <!-- FOOTER -->
-    <footer th:replace="fragmentos-portal :: footer"></footer>
+    <footer th:replace="~{fragmentos-portal :: footer}"></footer>
 
     <!-- Vista previa de la foto seleccionada antes de subirla -->
     <script th:inline="javascript">

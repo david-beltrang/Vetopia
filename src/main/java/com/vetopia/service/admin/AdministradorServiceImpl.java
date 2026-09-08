@@ -28,9 +28,11 @@ public class AdministradorServiceImpl implements AdministradorService {
         if (id == null) {
             throw new ParametroInvalidoException("No se especificó el identificador del administrador.");
         }
-        return administradorRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "No se encontró ningún administrador con el identificador " + id + "."));
+        Administrador administrador = administradorRepository.findById(id).orElse(null);
+        if (administrador == null) {
+            throw new RecursoNoEncontradoException("No se encontró ningún administrador con el identificador " + id + ".");
+        }
+        return administrador;
     }
 
     @Override

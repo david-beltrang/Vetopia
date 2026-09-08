@@ -3,7 +3,7 @@
 <!-- Página estática servida por Spring Boot en: http://localhost:8080/ -->
 <html class="dark" lang="es">
 <head>
-        <div th:replace="fragmentos-landing :: head"></div>
+        <div th:replace="~{fragmentos-landing :: head}"></div>
 </head>
 <body class="font-body-md text-body-md overflow-x-hidden selection:bg-mint-accent selection:text-deep-carbon">
                 <!-- TopNavBar -->
@@ -378,7 +378,7 @@
 			</section>
                 </main>
         <!-- Footer de la landing page -->
-        <footer th:replace="fragmentos-landing :: footer"></footer>
+        <footer th:replace="~{fragmentos-landing :: footer}"></footer>
                 <script src="js/main.js" defer></script>
         </body>
 </html>

@@ -16,3 +16,7 @@ target/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# Base de datos local H2
+mydatabase.mv.db
+mydatabase.trace.db

@@ -41,14 +41,14 @@ public class LoginServiceImpl implements LoginService {
         // Buscamos primero en la tabla de veterinarios
         Veterinario veterinario = veterinarioService.obtenerPorCorreoYContrasena(correo, contrasena);
         if (veterinario != null) {
-            return new ResultadoLogin(veterinario.getId(), ROL_VETERINARIO, veterinario.getCorreo(), veterinario.getContrasena());
+            return new ResultadoLogin(Long.valueOf(veterinario.getId()), ROL_VETERINARIO, veterinario.getCorreo(), veterinario.getContrasena());
         }
 
         // Si no se encuentra en veterinarios, buscamos en la tabla de administradores
         Administrador administrador = administradorService.obtenerPorCorreoYContrasena(correo, contrasena);
         // Si se encuentra un administrador, devolvemos el resultado de login con el rol correspondiente
         if (administrador != null) {
-            return new ResultadoLogin(administrador.getId(), ROL_ADMINISTRADOR, administrador.getCorreo(), administrador.getContrasena());
+            return new ResultadoLogin(Long.valueOf(administrador.getId()), ROL_ADMINISTRADOR, administrador.getCorreo(), administrador.getContrasena());
         }
 
         // Si no se encuentra en administradores, buscamos en la tabla de dueños
