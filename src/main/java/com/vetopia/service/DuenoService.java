@@ -11,7 +11,7 @@ public interface DuenoService {
     List<Dueno> listarDuenos();
 
     // Obtiene un dueño validando previamente el identificador.
-    Dueno obtenerDuenoPorId(Integer id);
+    Dueno obtenerDuenoPorId(Long id);
 
     // Guarda (registra) un dueño nuevo. El id lo asigna el repositorio.
     void guardar(Dueno dueno);
@@ -21,7 +21,7 @@ public interface DuenoService {
     Dueno registrarClienteActivo(Dueno dueno);
 
     // Elimina un dueño por su identificador.
-    void eliminarCliente(Integer id);
+    void eliminarCliente(Long id);
 
     // Busca un dueño por correo y contraseña (para login).
     Dueno obtenerPorCorreoYContrasena(String correo, String contrasena);

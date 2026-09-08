@@ -1,13 +1,13 @@
 package com.vetopia.service;
 
 public class ResultadoLogin {
-    private Integer id;
+    private Long id;
     private String rol;
     private String correo;
     private String contrasena;
 
     // Constructor para inicializar los campos de la clase ResultadoLogin
-    public ResultadoLogin(Integer id, String rol, String correo, String contrasena) {
+    public ResultadoLogin(Long id, String rol, String correo, String contrasena) {
         this.id = id;
         this.rol = rol;
         this.correo = correo;
@@ -15,7 +15,7 @@ public class ResultadoLogin {
     }
 
     // Identificador del usuario autenticado (veterinario, administrador o dueño)
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

@@ -1,13 +1,14 @@
 package com.vetopia.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Mascota;
+import com.vetopia.errors.DuenoNotFoundException;
 import com.vetopia.repository.DuenoRepository;
 
 // Esta clase implementa la interfaz DuenoService y define la lógica de negocio relacionada con dueños. Es el único punto al que los controladores acceden para obtener datos; a su vez, delega el acceso a datos en la capa repository.
@@ -24,20 +25,19 @@ public class DuenoServiceImpl implements DuenoService {
     // Devuelve todos los dueños registrados
     @Override
     public List<Dueno> listarDuenos() {
-        Collection<Dueno> duenos = duenoRepository.searchAll();
-        return duenos == null ? List.of() : List.copyOf(duenos);
+        return duenoRepository.findAll();
     }
 
     // Obtiene un dueño validando previamente el identificador
     @Override
-    public Dueno obtenerDuenoPorId(Integer id) {
+    public Dueno obtenerDuenoPorId(Long id) {
         // Validamos que el id no sea nulo antes de buscar el dueño en el repositorio
         if (id == null) {
             throw new IllegalArgumentException("No se especificó el identificador del dueño.");
         }
-        Dueno dueno = duenoRepository.searchById(id);
+        Dueno dueno = duenoRepository.findById(id).orElse(null);
         if (dueno == null) {
-            throw new IllegalArgumentException("No se encontró ningún dueño con el identificador " + id + ".");
+            throw new DuenoNotFoundException("No se encontró ningún dueño con el identificador " + id + ".");
         }
         return dueno;
     }
@@ -63,12 +63,13 @@ public class DuenoServiceImpl implements DuenoService {
 
     // Elmina un dueño y en cascada sus mascotas y los tratamientos de estas.
     @Override
-    public void eliminarCliente(Integer id) {
-        obtenerDuenoPorId(id);
-        for (Mascota mascota : mascotaService.listarMascotasDeCliente(id)) {
+    @Transactional
+    public void eliminarCliente(Long id) {
+        Dueno dueno = obtenerDuenoPorId(id);
+        for (Mascota mascota : dueno.getMascotas()) {
             mascotaService.eliminarMascota(mascota.getId());
         }
-        duenoRepository.eliminar(id);
+        duenoRepository.deleteById(id);
     }
 
     // Busca un dueño por correo y contraseña (para login)
@@ -77,6 +78,6 @@ public class DuenoServiceImpl implements DuenoService {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
             throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
         }
-        return duenoRepository.searchByCorreoYContrasena(correo, contrasena);
+        return duenoRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena).orElse(null);
     }
 }

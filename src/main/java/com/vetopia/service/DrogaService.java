@@ -11,11 +11,11 @@ public interface DrogaService {
     List<Droga> listarDrogas();
 
     // Obtiene una droga validando previamente el identificador.
-    Droga obtenerDrogaPorId(Integer id);
+    Droga obtenerDrogaPorId(Long id);
 
     // Guarda (registra) una droga nueva. El id lo asigna el repositorio.
     void guardar(Droga droga);
 
     // Descuenta unidades del inventario de la droga (al asignar un tratamiento).
-    void descontarUnidades(Integer drogaId, Integer cantidad);
+    void descontarUnidades(Long drogaId, Integer cantidad);
 }

@@ -1,6 +1,5 @@
 package com.vetopia.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,7 @@ public class VeterinarioServiceImpl implements VeterinarioService {
     // Devuelve todos los veterinarios registrados
     @Override
     public List<Veterinario> listarVeterinarios() {
-        Collection<Veterinario> veterinarios = veterinarioRepository.searchAll();
-        return veterinarios == null ? List.of() : List.copyOf(veterinarios);
+        return veterinarioRepository.findAll();
     }
 
     // Obtiene un veterinario validando previamente el identificador
@@ -31,7 +29,7 @@ public class VeterinarioServiceImpl implements VeterinarioService {
         if (id == null) {
             throw new IllegalArgumentException("No se especificó el identificador del veterinario.");
         }
-        Veterinario veterinario = veterinarioRepository.searchById(id);
+        Veterinario veterinario = veterinarioRepository.findById(id).orElse(null);
         if (veterinario == null) {
             throw new IllegalArgumentException("No se encontró ningún veterinario con el identificador " + id + ".");
         }
@@ -53,6 +51,6 @@ public class VeterinarioServiceImpl implements VeterinarioService {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {
             throw new IllegalArgumentException("Debe indicar el correo y la contraseña.");
         }
-        return veterinarioRepository.searchByCorreoYContrasena(correo, contrasena);
+        return veterinarioRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena).orElse(null);
     }
 }

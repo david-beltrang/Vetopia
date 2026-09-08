@@ -20,7 +20,7 @@ public interface MascotaService {
 
     // Registra una mascota nueva asignándole el dueño y el estado "Activo",
     // y guardando la foto subida si la hay. El id lo asigna el repositorio.
-    Mascota registrarMascota(Mascota mascota, Integer duenoId, MultipartFile foto);
+    Mascota registrarMascota(Mascota mascota, Long duenoId, MultipartFile foto);
 
     // Actualiza una mascota existente conservando dueño, estado e imagen
     // cuando esos campos no vienen en el formulario.
@@ -33,13 +33,13 @@ public interface MascotaService {
     void eliminarMascota(Integer id);
 
     // Devuelve las mascotas asociadas a un dueño (cliente) concreto.
-    List<Mascota> listarMascotasDeCliente(Integer duenoId);
+    List<Mascota> listarMascotasDeCliente(Long duenoId);
 
     // Devuelve las mascotas asociadas a un veterinario: busca sus
     // tratamientos y de ahí obtiene las mascotas atendidas.
     List<Mascota> listarMascotasDeVeterinario(Integer veterinarioId);
 
     // Obtiene la mascota validando que pertenezca al dueño indicado.
-    Mascota obtenerMascotaDeCliente(Integer mascotaId, Integer duenoId);
+    Mascota obtenerMascotaDeCliente(Integer mascotaId, Long duenoId);
 
 }

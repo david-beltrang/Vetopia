@@ -1,6 +1,5 @@
 package com.vetopia.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +18,17 @@ public class DrogaServiceImpl implements DrogaService {
 
     @Override
     public List<Droga> listarDrogas() {
-        Collection<Droga> drogas = drogaRepository.searchAll();
-        return drogas == null ? List.of() : List.copyOf(drogas);
+        return drogaRepository.findAll();
     }
 
     // Obtiene una droga validando previamente el identificador
     @Override
-    public Droga obtenerDrogaPorId(Integer id) {
+    public Droga obtenerDrogaPorId(Long id) {
         // Validamos que el id no sea nulo antes de buscar la droga en el repositorio
         if (id == null) {
             throw new IllegalArgumentException("No se especificó el identificador de la droga.");
         }
-        Droga droga = drogaRepository.searchById(id);
+        Droga droga = drogaRepository.findById(id).orElse(null);
         if (droga == null) {
             throw new IllegalArgumentException("No se encontró ninguna droga con el identificador " + id + ".");
         }
@@ -48,10 +46,17 @@ public class DrogaServiceImpl implements DrogaService {
 
     // Descuenta unidades del inventario de la droga (al asignar un tratamiento)
     @Override
-    public void descontarUnidades(Integer drogaId, Integer cantidad) {
+    public void descontarUnidades(Long drogaId, Integer cantidad) {
         if (drogaId == null || cantidad == null) {
             throw new IllegalArgumentException("Debe indicar la droga y la cantidad a descontar.");
         }
-        drogaRepository.descontarUnidades(drogaId, cantidad);
+        Droga droga = obtenerDrogaPorId(drogaId);
+        // Se descuenta la cantidad de unidades disponibles, asegurando que no se
+        // descuente más de lo que hay disponible, y se suma a las vendidas.
+        int disponibles = droga.getUnidadesDisponibles() == null ? 0 : droga.getUnidadesDisponibles();
+        int vendidas = droga.getUnidadesVendidas() == null ? 0 : droga.getUnidadesVendidas();
+        droga.setUnidadesDisponibles(Math.max(0, disponibles - cantidad));
+        droga.setUnidadesVendidas(vendidas + cantidad);
+        drogaRepository.save(droga);
     }
 }
