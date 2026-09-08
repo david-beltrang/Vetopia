@@ -57,7 +57,7 @@ public class VeterinarioClienteController {
      */
     @GetMapping("/detalle")
     public String detalleCliente(@RequestParam Integer veterinarioId,
-            @RequestParam Integer id, Model model) {
+            @RequestParam Long id, Model model) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         try {
@@ -75,7 +75,7 @@ public class VeterinarioClienteController {
      */
     @GetMapping("/editar")
     public String editarCliente(@RequestParam Integer veterinarioId,
-            @RequestParam Integer id, Model model) {
+            @RequestParam Long id, Model model) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         try {
@@ -109,7 +109,7 @@ public class VeterinarioClienteController {
      y redirige al listado de clientes.
      */
     @PostMapping("/eliminar")
-    public String eliminarCliente(@RequestParam Integer id,
+    public String eliminarCliente(@RequestParam Long id,
             @RequestParam Integer veterinarioId) {
         try {
             duenoService.eliminarCliente(id);

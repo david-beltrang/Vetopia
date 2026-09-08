@@ -78,7 +78,7 @@ public class VeterinarioMascotaController {
 
     @GetMapping("/registrar-mascota")
     public String registrarMascota(@RequestParam Integer veterinarioId,
-            @RequestParam Integer duenoId, Model model) {
+            @RequestParam Long duenoId, Model model) {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         model.addAttribute("duenoId", duenoId);
@@ -90,7 +90,7 @@ public class VeterinarioMascotaController {
     public String guardarMascota(@ModelAttribute Mascota mascota,
             @RequestParam Integer veterinarioId,
             @RequestParam(defaultValue = "finish") String action,
-            @RequestParam Integer duenoId,
+            @RequestParam Long duenoId,
             @RequestParam(required = false) MultipartFile foto, Model model) {
         mascotaService.registrarMascota(mascota, duenoId, foto);
 
@@ -125,8 +125,14 @@ public class VeterinarioMascotaController {
 
     @PostMapping("/asignar-tratamiento")
     public String aplicarTratamiento(@ModelAttribute Tratamiento tratamiento,
-            @RequestParam Integer veterinarioId, Model model) {
+            @RequestParam Integer veterinarioId,
+            @RequestParam Integer mascotaId,
+            @RequestParam Long drogaId,
+            Model model) {
         try {
+            tratamiento.setMascota(mascotaService.obtenerMascotaPorId(mascotaId));
+            tratamiento.setDroga(drogaService.obtenerDrogaPorId(drogaId));
+            tratamiento.setVeterinario(obtenerVeterinario(veterinarioId));
             ResultadoTratamiento resultado = tratamientoService.asignarTratamiento(tratamiento, veterinarioId);
             model.addAttribute("mascota", resultado.getMascota());
             model.addAttribute("veterinarioId", veterinarioId);
@@ -134,7 +140,7 @@ public class VeterinarioMascotaController {
             model.addAttribute("unidadesDescontadas", resultado.getUnidadesDescontadas());
             model.addAttribute("medicamentoNombre", resultado.getMedicamentoNombre());
             model.addAttribute("stockRestante", resultado.getStockRestante());
-            model.addAttribute("mascotaId", resultado.getTratamiento().getMascotaId());
+            model.addAttribute("mascotaId", resultado.getTratamiento().getMascota().getId());
             return "veterinario/tratamiento-confirmacion";
         } catch (IllegalArgumentException e) {
             return renderizarFormularioTratamiento(veterinarioId, model, e.getMessage());
@@ -156,10 +162,7 @@ public class VeterinarioMascotaController {
             @RequestParam Integer veterinarioId, Model model) {
         try {
             Mascota mascota = mascotaService.obtenerMascotaPorId(id);
-            Dueno propietario = null;
-            if (mascota.getDuenoId() != null) {
-                propietario = duenoService.obtenerDuenoPorId(mascota.getDuenoId());
-            }
+            Dueno propietario = mascota.getDueno();
             model.addAttribute("mascota", mascota);
             model.addAttribute("propietario", propietario);
             model.addAttribute("historial", tratamientoService.listarHistorialDeMascota(id));
@@ -205,8 +208,8 @@ public class VeterinarioMascotaController {
             model.addAttribute("mascota", mascota);
             model.addAttribute("veterinarioId", veterinarioId);
             model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
-            if (mascota.getDuenoId() != null) {
-                model.addAttribute("duenoId", mascota.getDuenoId());
+            if (mascota.getDueno() != null) {
+                model.addAttribute("duenoId", mascota.getDueno().getId());
             }
             return "veterinario/editar-mascota";
         } catch (IllegalArgumentException e) {

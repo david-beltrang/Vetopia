@@ -19,7 +19,7 @@ public class ClienteMascotaController {
     private MascotaService mascotaService;
 
     @GetMapping
-    public String listarMascotas(@RequestParam Integer duenoId, Model model) {
+    public String listarMascotas(@RequestParam Long duenoId, Model model) {
         model.addAttribute("mascotas", mascotaService.listarMascotasDeCliente(duenoId));
         model.addAttribute("duenoId", duenoId);
         return "cliente/listar-mascota";
@@ -27,7 +27,7 @@ public class ClienteMascotaController {
 
     @GetMapping("/detalle")
     public String verDetalle(@RequestParam(name = "id") Integer id,
-            @RequestParam Integer duenoId, Model model) {
+            @RequestParam Long duenoId, Model model) {
         model.addAttribute("duenoId", duenoId);
         try {
             model.addAttribute("mascota", mascotaService.obtenerMascotaDeCliente(id, duenoId));
