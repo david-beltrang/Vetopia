@@ -1,30 +1,74 @@
 package com.vetopia.entities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-@Data
-@AllArgsConstructor
+
+// Mascota (paciente). Guarda los datos del animal y su relación con el dueño
+// (cliente). Se encuentra en la ficha de "mis mascotas" del cliente y en el
+// listado de pacientes del veterinario.
+@Getter
+@Setter
+@ToString(exclude = {"tratamientos"})
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
 public class Mascota {
 
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nombre; 
     private String especie; 
     private String raza;
     private Double edad;
     private String sexo;
+    @Column(length = 1000)
     private String imagen;
     private Double pesoKg;
     private String color;
     private LocalDate fechaIngreso;
-    private Integer duenoId;
     private String estado;
 
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Dueno dueno;
+
+    @OneToMany(mappedBy = "mascota")
+    private List<Tratamiento> tratamientos = new ArrayList<>();
+
+    public Mascota(String nombre, String especie, String raza, Double edad, String sexo, String imagen, Double pesoKg, String color, LocalDate fechaIngreso, Dueno dueno, String estado) {
+        this.nombre = nombre;
+        this.especie = especie;
+        this.raza = raza;
+        this.edad = edad;
+        this.sexo = sexo;
+        this.imagen = imagen;
+        this.pesoKg = pesoKg;
+        this.color = color;
+        this.fechaIngreso = fechaIngreso;
+        this.dueno = dueno;
+        this.estado = estado;
+    }
 
     // Método para verificar si la mascota tiene una imagen asociada
     public boolean tieneImagen() {
