@@ -1,7 +1,9 @@
 package com.vetopia.config;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -55,6 +57,21 @@ public class DataLoader implements CommandLineRunner {
     // Semilla fija: la distribución aleatoria es la misma en cada ejecución.
     private final Random random = new Random(42L);
 
+    // Cantidad de datos de prueba: 50 clientes y 100 mascotas aleatorias.
+    private static final int CANTIDAD_DUENOS = 50;
+    private static final int CANTIDAD_MASCOTAS = 100;
+
+    // Pools de nombres para generar clientes aleatorios con variedad.
+    private final String[] nombresPila = {
+            "Ana", "Pedro", "María", "Luis", "Carmen", "Diego", "Valentina", "Andrés", "Laura", "Camilo",
+            "Sofía", "Julián", "Paola", "Ricardo", "Daniela", "Felipe", "Natalia", "Óscar", "Lucía", "Gabriel",
+            "Isabella", "Mateo", "Elena", "Samuel", "Antonia", "Héctor", "Carolina", "Esteban", "Mariana", "Tomás" };
+
+    private final String[] apellidos = {
+            "Rodríguez", "Gómez", "López", "Martínez", "Silva", "García", "Rojas", "Hernández", "Pérez", "Torres",
+            "Ramírez", "Vargas", "Castro", "Mora", "Jiménez", "Álvarez", "Ríos", "Quintero", "Salazar", "Navarro",
+            "Ortiz", "Mendoza", "Cárdenas", "Pineda", "Aguilar", "Barrera", "Valencia", "Medina", "Guzmán", "Santos" };
+
     // Hace varias operaciones sobre la BD: una única transacción para que si
     // algo falla a la mitad, no queden datos parciales.
     @Override
@@ -69,22 +86,44 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void poblarDuenos() {
-        String[][] datos = {
-                { "1020304050", "Ana Rodríguez", "ana@correo.com", "dueno123", "3001234567" },
-                { "1020304051", "Pedro Gómez", "pedro@correo.com", "dueno123", "3007654321" },
-                { "1020304052", "María López", "maria@correo.com", "dueno123", "3010001111" },
-                { "1020304053", "Luis Martínez", "luis@correo.com", "dueno123", "3020002222" },
-                { "1020304054", "Carmen Silva", "carmen@correo.com", "dueno123", "3030003333" } };
-        for (String[] d : datos) {
+        Set<String> cedulasUsadas = new HashSet<>();
+        Set<String> celularesUsados = new HashSet<>();
+        for (int i = 0; i < CANTIDAD_DUENOS; i++) {
+            String cedula = cedulaUnica(cedulasUsadas);
             duenoRepository.save(Dueno.builder()
-                    .cedula(d[0])
-                    .nombre(d[1])
-                    .correo(d[2])
-                    .contrasena(d[3])
-                    .celular(d[4])
+                    .cedula(cedula)
+                    .nombre(nombreAleatorio())
+                    .correo("cliente" + cedula + "@correo.com")
+                    .contrasena("dueno123")
+                    .celular(celularUnico(celularesUsados))
                     .estado(estadoAleatorio())
                     .build());
         }
+    }
+
+    // Genera un nombre completo aleatorio combinando dos apellidos y un nombre de pila.
+    private String nombreAleatorio() {
+        return nombresPila[random.nextInt(nombresPila.length)] + " "
+                + apellidos[random.nextInt(apellidos.length)] + " "
+                + apellidos[random.nextInt(apellidos.length)];
+    }
+
+    // Genera una cédula de 10 dígitos que no se haya usado antes (columna unique).
+    private String cedulaUnica(Set<String> usadas) {
+        String cedula;
+        do {
+            cedula = Long.toString(random.nextLong(1_000_000_000L, 10_000_000_000L));
+        } while (!usadas.add(cedula));
+        return cedula;
+    }
+
+    // Genera un celular de 10 dígitos iniciado en 3 que no se haya usado antes (columna unique).
+    private String celularUnico(Set<String> usados) {
+        String celular;
+        do {
+            celular = "3" + Long.toString(random.nextLong(100_000_000L, 1_000_000_000L));
+        } while (!usados.add(celular));
+        return celular;
     }
 
     private void poblarVeterinarios() {
@@ -156,8 +195,7 @@ public class DataLoader implements CommandLineRunner {
                 "https://imgs.search.brave.com/lyQdUI6O4tK7o734zlUOxuFLdw-1kUFmZssTDwlkam0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTU0/MjEyMDY2L2VzL2Zv/dG8vZ2F0by1zaWFt/JUMzJUE5cy5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9ZV9V/WDktSU5fZ3VPQWhw/bUxVYk40VGktWVBj/LU92c3hWQXJUOWpn/MWxVWT0",
                 "https://imgs.search.brave.com/SpvOGsBrp_Lq8prflOD7fsZ5TRntmOqrUHvFvtSrWzg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9zZW50/YWRhLWdyaXMtZGVs/LXBlcnJpdG8tZG9n/by1mcmFuYyVDMyVB/OXMtYWlzbGFkYS0x/MDE3NTU1MzAuanBn" };
 
-        int cantidadMascotas = random.nextInt(15);
-        for (int i = 0; i < cantidadMascotas; i++) {
+        for (int i = 0; i < CANTIDAD_MASCOTAS; i++) {
             int numeroDueno = random.nextInt(1, (int) cantidadDuenos + 1);
             Dueno dueno = duenoRepository.findById((long) numeroDueno)
                     .orElseThrow(() -> new RecursoNoEncontradoException("Dueño no encontrado: " + numeroDueno));
