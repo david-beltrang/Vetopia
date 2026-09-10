@@ -1,43 +1,52 @@
 package com.vetopia.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * ENTIDAD - Droga
- * Representa un medicamento/droga del inventario de Vetopia. No contiene
- * lógica de acceso a datos ni de presentación, solo el estado y las reglas
- * propias de la entidad.
- *
- * Lombok genera automáticamente getters/setters (@Data), el constructor
- * vacío (@NoArgsConstructor) y el constructor con todos los atributos
- * (@AllArgsConstructor), eliminando el código boilerplate.
- *
- * Según el diagrama de clases (docs/diagrams/script-class-diagram.txt),
- * expone operaciones de inventario (actualizarInventario, venderUnidad,
- * hayDisponibilidad, etc.) que se implementarán en la capa de servicio.
- */
-@Data
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString(exclude = {"tratamientos"})
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Entity
 public class Droga {
 
-    /** Identificador único de la droga. */
-    private Integer id;
-
-    /** Nombre del medicamento. */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(length = 100, nullable = false)
     private String nombre;
+    @Column(nullable = false)
+    private Double precioCompra = 0.0;
+    @Column(nullable = false)
+    private Double precioVenta = 0.0;
+    @Column(nullable = false)
+    private Integer unidadesDisponibles = 0;
+    @Column(nullable = false)
+    private Integer unidadesVendidas = 0;
 
-    /** Precio de compra del medicamento. */
-    private Double precioCompra;
+    @OneToMany(mappedBy = "droga")
+    private List<Tratamiento> tratamientos = new ArrayList<>();
 
-    /** Precio de venta del medicamento. */
-    private Double precioVenta;
-
-    /** Unidades disponibles en inventario. */
-    private Integer unidadesDisponibles;
-
-    /** Unidades vendidas acumuladas. */
-    private Integer unidadesVendidas;
+    public Droga(String nombre, Double precioCompra, Double precioVenta, Integer unidadesDisponibles, Integer unidadesVendidas) {
+        this.nombre = nombre;
+        this.precioCompra = precioCompra;
+        this.precioVenta = precioVenta;
+        this.unidadesDisponibles = unidadesDisponibles;
+        this.unidadesVendidas = unidadesVendidas;
+    }
 }

@@ -1,49 +1,50 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragmentos-portal :: head"></div>
+    <div th:replace="~{fragmentos-portal :: head}"></div>
     <title>Vetopia - Asignar Nuevo Tratamiento</title>
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
-    <!-- HEADER del portal -->
+
+    <!-- HEADER: barra de navegación del panel veterinario -->
     <nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
         <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
-            <!-- Logo -->
+            <!-- Logo: enlace al inicio del sistema -->
             <div class="flex items-center">
                 <a href="/" class="flex items-center">
                     <img th:src="@{/images/logo_Vetopia.png}" alt="Vetopia Logo" class="h-8 w-auto object-contain"/>
                 </a>
             </div>
-            <!-- Enlaces de navegación -->
+            <!-- Navegación del veterinario: enlaces a secciones principales -->
             <div class="hidden md:flex items-center gap-8">
-                <a href="/veterinario/mascotas" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Pacientes</a>
-                <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Clientes</a>
+                <a th:href="@{/veterinario/mascotas(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Pacientes</a>
+                <a th:href="@{/veterinario/clientes(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Clientes</a>
                 <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Citas</a>
-                <a href="/veterinario/mascotas/asignar-tratamiento" class="text-primary font-body-md text-body-md font-bold border-b-2 border-primary pb-1 shadow-[0px_2px_4px_rgba(0,0,0,0.30)]">Tratamientos</a>
+                <a th:href="@{/veterinario/mascotas/asignar-tratamiento(veterinarioId=${veterinarioId})}" class="text-primary font-body-md text-body-md font-bold border-b-2 border-primary pb-1 shadow-[0px_2px_4px_rgba(0,0,0,0.30)]">Tratamientos</a>
             </div>
-            <!-- Trailing: notificaciones, usuario, logout -->
+            <!-- Barra de herramientas: notificaciones, perfil del veterinario y logout -->
             <div class="flex items-center gap-4">
                 <button class="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition-colors">
                     <span class="material-symbols-outlined text-2xl">notifications</span>
                 </button>
                 <div class="flex items-center gap-3">
-                    <span class="text-white font-label-md text-label-md uppercase tracking-widest hidden sm:inline">Carlos Gómez</span>
+                    <span class="text-white font-label-md text-label-md uppercase tracking-widest hidden sm:inline" th:text="${veterinario != null ? veterinario.nombre : 'Veterinario'}">Veterinario</span>
                     <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
-                        <span class="text-on-primary-container font-bold text-body-md">CG</span>
+                        <span class="text-on-primary-container font-bold text-body-md" th:text="${veterinario != null ? #strings.toUpperCase(#strings.substring(veterinario.nombre,0,2)) : 'VT'}">VT</span>
                     </div>
                 </div>
-                <button class="px-6 py-3 rounded-full border border-gray-600 text-white font-button text-button uppercase hover:bg-white/5 transition-colors">
+                <a class="px-6 py-3 rounded-full border border-gray-600 text-white font-button text-button uppercase hover:bg-white/5 transition-colors" th:href="@{/login}">
                     Logout
-                </button>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- CONTENIDO PRINCIPAL: formulario de asignación de tratamiento -->
     <main class="flex-1">
         <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
             <div class="max-w-[768px] mx-auto">
-                <!-- Título y subtítulo -->
+                <!-- Encabezado de la sección -->
                 <div class="mb-stack-lg">
                     <div class="flex items-center gap-3">
                         <div class="w-6 h-6 bg-primary rounded-full"></div>
@@ -52,13 +53,21 @@
                     <p class="text-body-lg font-body-lg text-on-surface-variant mt-1">Portal Veterinario / Registro Clínico</p>
                 </div>
 
-                <!-- Tarjeta del formulario -->
+                <!-- Mensaje de error: se muestra cuando hay validación del backend -->
+                <div th:if="${mensajeError != null}" class="mb-stack-md rounded-lg border border-error bg-error-container px-4 py-3 font-body-md text-body-md text-on-error-container">
+                    <p th:text="${mensajeError}"></p>
+                </div>
+
+                <!-- Formulario de asignación de tratamiento -->
                 <form class="bg-surface-container-lowest p-6 md:p-10 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest" th:action="@{/veterinario/mascotas/asignar-tratamiento}" method="post">
-                    <!-- Veterinario Responsable -->
+                    <!-- Campo oculto: ID del veterinario que asigna el tratamiento -->
+                    <input type="hidden" name="veterinarioId" th:if="${veterinarioId != null}" th:value="${veterinarioId}"/>
+
+                    <!-- Tarjeta: veterinario responsable -->
                     <div class="flex items-center justify-between p-4 bg-surface-container-low rounded-full border border-surface-container-highest">
                         <div>
                             <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">VETERINARIO RESPONSABLE</span>
-                            <p class="font-body-md text-body-md text-on-surface font-semibold">Dr. Carlos Ruiz</p>
+                            <p class="font-body-md text-body-md text-on-surface font-semibold" th:text="${veterinario != null ? 'Dr. ' + veterinario.nombre : 'Dr. Veterinario'}">Dr. Veterinario</p>
                         </div>
                         <div class="p-2 bg-primary-container/30 rounded-full">
                             <span class="material-symbols-outlined text-primary text-xl">verified</span>
@@ -66,15 +75,15 @@
                     </div>
 
                     <div class="mt-6 space-y-6">
-                        <!-- Selector de Mascota y Fecha -->
+                        <!-- Campos selector: dueño y fecha de aplicación -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Selector de Mascota -->
+                            <!-- Selector de dueño: lista dinámica del repositorio -->
                             <div class="flex flex-col gap-1">
-                                <label class="font-body-md text-body-md text-on-surface">Selector de Mascota</label>
+                                <label class="font-body-md text-body-md text-on-surface">Selector de Dueño</label>
                                 <div class="relative">
-                                    <select name="mascotaId" class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
-                                        <option value="">Seleccionar paciente activo...</option>
-                                        <option th:each="mascota : ${mascotas}" th:value="${mascota.id}" th:text="${mascota.nombre}"></option>
+                                    <select name="dueno.id" class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
+                                        <option value="">Seleccionar dueño...</option>
+                                        <option th:each="dueno : ${dueños}" th:value="${dueno.id}" th:text="${dueno.correo}"></option>
                                     </select>
                                     <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
                                         <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
@@ -82,7 +91,7 @@
                                 </div>
                             </div>
 
-                            <!-- Fecha de Aplicación -->
+                            <!-- Fecha de Aplicación del tratamiento -->
                             <div class="flex flex-col gap-1">
                                 <label class="font-body-md text-body-md text-on-surface">Fecha de Aplicación</label>
                                 <input type="date" name="fecha"
@@ -93,11 +102,25 @@
 
                         <hr class="border-surface-container-highest" />
 
-                        <!-- Medicamento -->
+                        <!-- Selector de mascota -->
+                        <div class="flex flex-col gap-1">
+                            <label class="font-body-md text-body-md text-on-surface">Nombre de la mascota</label>
+                            <div class="relative">
+                                <select name="mascota.id" class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
+                                    <option value="">Seleccionar nombre de mascota...</option>
+                                    <option th:each="mascota : ${mascotas}" th:value="${mascota.id}" th:text="${mascota.nombre}"></option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                                    <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selector de Medicamento/Droga -->
                         <div class="flex flex-col gap-1">
                             <label class="font-body-md text-body-md text-on-surface">Medicamento / Droga</label>
                             <div class="relative">
-                                <select name="drogaId" class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
+                                <select name="droga.id" class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
                                     <option value="">Seleccionar medicamento...</option>
                                     <option th:each="droga : ${drogas}" th:value="${droga.id}" th:text="${droga.nombre}"></option>
                                 </select>
@@ -107,11 +130,27 @@
                             </div>
                         </div>
 
-                        <!-- Botones de acción -->
+                        <!-- Campo: Título del tratamiento -->
+                        <div class="flex flex-col gap-1">
+                            <label class="font-body-md text-body-md text-on-surface">Título del Tratamiento</label>
+                            <input type="text" name="titulo"
+                                   class="w-full px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="e.g. Vacunación anual" required />
+                        </div>
+
+                        <!-- Campo: Descripción del tratamiento -->
+                        <div class="flex flex-col gap-1">
+                            <label class="font-body-md text-body-md text-on-surface">Descripción</label>
+                            <textarea name="descripcion" rows="4"
+                                      class="w-full px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                                      placeholder="Detalles del procedimiento, dosis, indicaciones..." required></textarea>
+                        </div>
+
+                        <!-- Botones de acción: cancelar o aplicar tratamiento -->
                         <div class="flex flex-wrap items-center justify-end gap-4 pt-6 border-t border-surface-container-highest">
-                            <button type="button" class="px-8 py-4 rounded-full border border-surface-container-highest text-on-surface font-button text-button uppercase hover:bg-surface-container-high transition-colors">
+                            <a th:href="@{/veterinario/mascotas/tratamientos(veterinarioId=${veterinarioId})}" class="px-8 py-4 rounded-full border border-surface-container-highest text-on-surface font-button text-button uppercase hover:bg-surface-container-high transition-colors">
                                 Cancelar
-                            </button>
+                            </a>
                             <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary">
                                 Aplicar Tratamiento
                                 <span class="material-symbols-outlined text-lg">check_circle</span>
@@ -123,7 +162,7 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer th:replace="fragmentos-portal :: footer"></footer>
+    <!-- FOOTER: fragmento reutilizable del portal -->
+    <footer th:replace="~{fragmentos-portal :: footer}"></footer>
 </body>
 </html>

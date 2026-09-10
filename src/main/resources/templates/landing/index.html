@@ -3,7 +3,7 @@
 <!-- Página estática servida por Spring Boot en: http://localhost:8080/ -->
 <html class="dark" lang="es">
 <head>
-        <div th:replace="fragmentos-landing :: head"></div>
+        <div th:replace="~{fragmentos-landing :: head}"></div>
 </head>
 <body class="font-body-md text-body-md overflow-x-hidden selection:bg-mint-accent selection:text-deep-carbon">
                 <!-- TopNavBar -->
@@ -31,7 +31,7 @@
                                 href="#": Redirige al inicio de la página al hacer clic.
                                 flex items-center: centra verticalmente la imagen en su interior. 
                                 -->
-                                <a class="flex items-center" href="#">
+                                <a class="flex items-center" th:href="@{/}">
 
                                         <!-- Imagen del logo
                                         h-8: En pantallas móviles, fija la altura a 32px.
@@ -61,9 +61,10 @@
                                         font-bold: Texto en negrita.
                                         border-b-2 border-primary pb-1: Subrayado inferior de 2px en color primario.
                                         -->
-                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#experiencia">Experiencia</a>
-                                        <a class="text-primary font-bold border-b-2 border-primary pb-1" href="#servicios">Servicios</a>
-                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#timeline">Timeline</a>
+                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#servicios">Qué hacemos</a>
+                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#equipo">Equipo</a>
+                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#funcionamiento">Funcionamiento</a>
+                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#ubicacion">Ubicación</a>
                                         <a class="hover:text-primary transition-colors duration-300 font-medium" href="#contacto">Contacto</a>
                                 </nav>
                                 <!-- Contenedor de acciones del lado derecho
@@ -206,7 +207,7 @@
                                                 font-headline-lg text-headline-lg: Tipografía Bricolage Grotesque de 64px.
                                                 El span text-mint-accent resalta "HACEMOS" en verde con sombra.
                                                 -->
-                                                <h2 class="font-headline-lg text-headline-lg mb-8 text-deep-carbon">QUÉ <span class="text-mint-accent text-shadow-mint">HACEMOS</span></h2>
+                                                <h2 class="font-headline-lg text-headline-lg mb-8 text-deep-carbon">¿QUÉ <span class="text-mint-accent text-shadow-mint">HACEMOS?</span></h2>
                                                 <!-- Párrafo que unifica la información de las antiguas tarjetas -->
                                                 <p class="text-body-lg text-text-secondary">
                                                         En Vetopia ofrecemos una atención integral y de vanguardia para tu mascota: hospitalización con monitoreo constante 24/7 en instalaciones de última generación, planes de tratamiento personalizados basados en perfiles genéticos y biométricos precisos, y acceso instantáneo a los signos vitales y al progreso de tu mascota a través de nuestra plataforma digital integrada.
@@ -236,7 +237,7 @@
                                         <div class="flex gap-gutter overflow-x-auto snap-x snap-mandatory scroll-smooth pt-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" id="team-carousel">
 
                                                 <!-- Tarjeta de veterinario
-                                                snap-center shrink-0 w-[85%] sm:w-[45%] md:w-[30%]: Tarjeta responsive, se ve 1 en móvil, 2 en tablet y 3 en escritorio.
+                                                snap-center shrink-0 w-[85%] sm:w-[45%] md:w-[30F%]: Tarjeta responsive, se ve 1 en móvil, 2 en tablet y 3 en escritorio.
                                                 -->
                                                 <div class="snap-center shrink-0 w-[85%] sm:w-[45%] md:w-[30%] bg-surface-elevated border border-white/10 rounded-xl overflow-hidden card-hover transition-all duration-500">
                                                         <div class="h-64 md:h-80 overflow-hidden">
@@ -308,11 +309,11 @@
                         <!-- Sección "CÓMO FUNCIONA". id="timeline" es el destino del enlace "Timeline" del menú.
                         mb-section-gap: Separación vertical de 160px con la sección anterior.
                         -->
-                        <section class="mb-section-gap" id="timeline">
+                        <section class="mb-section-gap" id="funcionamiento">
                                 <!-- Título de sección "CÓMO FUNCIONA"
                                 El span text-mint-accent resalta "FUNCIONA" en verde con sombra.
                                 -->
-                                <h2 class="font-headline-lg text-headline-lg mb-8 text-deep-carbon">CÓMO <span class="text-mint-accent text-shadow-mint">FUNCIONA</span></h2>
+                                <h2 class="font-headline-lg text-headline-lg mb-8 text-deep-carbon">¿CÓMO <span class="text-mint-accent text-shadow-mint">FUNCIONA?</span></h2>
                                 <!-- Contenido en dos columnas
                                 grid grid-cols-1 lg:grid-cols-2: 1 columna en móvil, 2 en escritorio.
                                 gap-gutter: Espacio de 32px entre columnas.
@@ -359,7 +360,7 @@
 							border border-white/10: Borde sutil.
 							-->
 							<div class="order-2 lg:order-1 rounded-3xl overflow-hidden border border-white/10 shadow-2xl aspect-video">
-									<iframe class="w-full h-full" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31814.088114193386!2d-74.0655104!3d4.636672!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f99a8193f1c9f%3A0xf93431640f134c07!2sPontificia%20Universidad%20Javeriana!5e0!3m2!1ses!2sco!4v1787244200838!5m2!1ses!2sco" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de ubicación de Vetopia"></iframe>
+									<iframe class="w-full h-full" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50468.1617901351!2d-122.48903509984926!3d37.76049872889394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808580b1c0b578e5%3A0xe44b29c544feb06a!2sSan%20Francisco%20Pet%20Hospital!5e0!3m2!1ses!2sco!4v1788989791358!5m2!1ses!2sco" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de ubicación de Vetopia"></iframe>
 							</div>
 
 							<!-- Texto a la derecha
@@ -369,16 +370,19 @@
 									<!-- Título de sección "DÓNDE UBICARNOS"
 									El span text-mint-accent resalta "UBICARNOS" en verde con sombra.
 									-->
-									<h2 class="font-headline-lg text-headline-lg mb-8 text-deep-carbon">DÓNDE <span class="text-mint-accent text-shadow-mint">UBICARNOS</span></h2>
+									<h2 class="font-headline-lg text-headline-lg mb-8 text-deep-carbon">¿DÓNDE <span class="text-mint-accent text-shadow-mint">UBICARNOS?</span></h2>
 									<p class="text-body-lg text-text-secondary max-w-3xl">
-											Visítanos en nuestras instalaciones de última generación, pensadas para el bienestar y la recuperación de tu mascota. Encuéntranos en <span class="text-deep-carbon font-semibold">Ak 7 #40 - 62, Bogotá D.C., Colombia</span>.
+											Visítanos en nuestras instalaciones de última generación, pensadas para el bienestar y la recuperación de tu mascota. Encuéntranos en <span class="text-deep-carbon font-semibold">San Francisco Vetopia Hospital</span>.
 									</p>
 							</div>
 					</div>
 			</section>
                 </main>
         <!-- Footer de la landing page -->
-        <footer th:replace="fragmentos-landing :: footer"></footer>
+         <div id="contacto">
+                <footer th:replace="~{fragmentos-landing :: footer}"></footer>
                 <script src="js/main.js" defer></script>
+         </div>
+        
         </body>
 </html>

@@ -3,16 +3,28 @@
 <head></head>
 <body>
 
-<!-- Head del portal (Material Design 3) -->
+<!-- ============================================
+     FRAGMENTO: head del portal (Material Design 3)
+     Se reutiliza en todas las páginas del portal
+     ============================================ -->
 <th:block th:fragment="head">
+    <!-- Metadatos básicos -->
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Vetopia - Hospital Veterinario del Futuro</title>
+
+    <!-- Tailwind CSS: framework de diseño utility-first -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Material Icons: iconos de Google Material Design -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+    <!-- Google Fonts: tipografías del proyecto -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+
+    <!-- Configuración de Tailwind: paleta de colores Material Design 3 -->
     <script id="tailwind-config">
     tailwind.config = {
         darkMode: "class",
@@ -105,20 +117,29 @@
         }
     }
     </script>
+
+    <!-- Estilos CSS personalizados del portal -->
     <link href="css/styles.css" rel="stylesheet"/>
 </th:block>
 
-<!-- Footer del portal del cliente -->
+<!-- 
+     FRAGMENTO: Footer del portal del cliente
+      -->
 <footer th:fragment="footer" class="bg-[#0f1115] text-white py-12">
     <div class="max-w-container-max mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-gutter">
+        <!-- Logo de Vetopia -->
         <a class="flex items-center" href="#">
             <img alt="Vetopia Logo" class="h-10 w-auto object-contain" th:src="@{/images/logo_Vetopia.png}"/>
         </a>
+
+        <!-- Enlaces de navegación del footer -->
         <div class="flex items-center justify-center gap-x-12 whitespace-nowrap font-label-md text-label-md uppercase tracking-widest text-gray-300 w-full md:w-auto">
             <a class="hover:text-primary transition-colors" href="#">Política de Privacidad</a>
             <a class="hover:text-primary transition-colors" href="#">Términos de Servicio</a>
             <a class="hover:text-primary transition-colors" href="#">Protocolo de Emergencia</a>
         </div>
+
+        <!-- Copyright -->
         <div class="text-xs uppercase tracking-widest text-gray-400 text-center md:text-right">
             <p>&copy; 2026 VETOPIA. CARE FOR THE NEXT GENERATION.</p>
         </div>

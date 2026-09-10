@@ -2,51 +2,78 @@ package com.vetopia.entities;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.OnDeleteAction;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
 
-/**
- * ENTIDAD - Tratamiento
- * Representa un tratamiento aplicado a una mascota en Vetopia. No contiene
- * lógica de acceso a datos ni de presentación, solo el estado y las reglas
- * propias de la entidad.
- *
- * Lombok genera automáticamente getters/setters (@Data), el constructor
- * vacío (@NoArgsConstructor) y el constructor con todos los atributos
- * (@AllArgsConstructor), eliminando el código boilerplate.
- *
- * Según el diagrama de clases (docs/diagrams/script-class-diagram.txt),
- * el tratamiento está asociado a una mascota y a una droga, y expone
- * operaciones (crear, consultarDetalle) que se implementarán en la capa
- * de servicio.
- */
+import com.vetopia.entities.mascota.Mascota;
+
+// Tratamiento. Guarda la fecha, el título,
+// la descripción y si ya ha sido completado, tal como se muestra en el
+// historial de la ficha clínica. Sus tres relaciones n-1 son la parte
+// dueña de la FK
+@Entity
+@Table(name = "tratamientos")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tratamiento {
 
-    /** Identificador único del tratamiento. */
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    /** Fecha en que se aplicó el tratamiento. */
+    @Column(nullable = false)
     private LocalDate fecha;
 
-    /**
-     * Identificador de la mascota que recibe el tratamiento
-     * (llave foránea a Mascota).
-     */
-    private Integer mascotaId;
+    @ToString.Exclude
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "mascota_id", nullable = false)
+    private Mascota mascota;
 
-    /**
-     * Identificador de la droga utilizada en el tratamiento
-     * (llave foránea a Droga).
-     */
-    private Integer drogaId;
+    @ToString.Exclude
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "veterinario_id", nullable = false)
+    private Veterinario veterinario;
 
-    /**
-     * Identificador del veterinario que realizó el tratamiento
-     * (llave foránea a Veterinario).
-     */
-    private Integer veterinarioId;
+    @ToString.Exclude
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "droga_id", nullable = false)
+    private Droga droga;
+
+    @Column(length = 150, nullable = false)
+    private String titulo;
+
+    @Column(length = 500)
+    private String descripcion;
+
+    @Column(nullable = false)
+    private Boolean completado = false;
+
+        public Tratamiento(LocalDate fecha, Mascota mascota, Veterinario veterinario, Droga droga, String titulo, String descripcion, Boolean completado) {
+        this.fecha = fecha;
+        this.mascota = mascota;
+        this.veterinario = veterinario;
+        this.droga = droga;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.completado = completado;
+    }
 }
