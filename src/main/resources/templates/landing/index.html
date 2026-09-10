@@ -61,9 +61,10 @@
                                         font-bold: Texto en negrita.
                                         border-b-2 border-primary pb-1: Subrayado inferior de 2px en color primario.
                                         -->
-                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#experiencia">Experiencia</a>
-                                        <a class="text-primary font-bold border-b-2 border-primary pb-1" href="#servicios">Servicios</a>
-                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#timeline">Timeline</a>
+                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#servicios">Qué hacemos</a>
+                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#equipo">Equipo</a>
+                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#funcionamiento">Funcionamiento</a>
+                                        <a class="hover:text-primary transition-colors duration-300 font-medium" href="#ubicacion">Ubicación</a>
                                         <a class="hover:text-primary transition-colors duration-300 font-medium" href="#contacto">Contacto</a>
                                 </nav>
                                 <!-- Contenedor de acciones del lado derecho
@@ -308,7 +309,7 @@
                         <!-- Sección "CÓMO FUNCIONA". id="timeline" es el destino del enlace "Timeline" del menú.
                         mb-section-gap: Separación vertical de 160px con la sección anterior.
                         -->
-                        <section class="mb-section-gap" id="timeline">
+                        <section class="mb-section-gap" id="funcionamiento">
                                 <!-- Título de sección "CÓMO FUNCIONA"
                                 El span text-mint-accent resalta "FUNCIONA" en verde con sombra.
                                 -->
@@ -378,7 +379,10 @@
 			</section>
                 </main>
         <!-- Footer de la landing page -->
-        <footer th:replace="~{fragmentos-landing :: footer}"></footer>
+         <div id="contacto">
+                <footer th:replace="~{fragmentos-landing :: footer}"></footer>
                 <script src="js/main.js" defer></script>
+         </div>
+        
         </body>
 </html>
