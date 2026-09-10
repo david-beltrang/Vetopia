@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.service.mascota.MascotaService;
+import com.vetopia.service.tratamiento.TratamientoService;
 
 @Controller
 @RequestMapping("/cliente/mascotas")
@@ -16,6 +17,9 @@ public class ClienteMascotaController {
 
     @Autowired
     private MascotaService mascotaService;
+
+    @Autowired
+    private TratamientoService tratamientoService;
 
     @GetMapping
     public String listarMascotas(@RequestParam Long duenoId, Model model) {
@@ -27,9 +31,10 @@ public class ClienteMascotaController {
     @GetMapping("/detalle")
     public String verDetalle(@RequestParam(name = "id") Long id,
             @RequestParam Long duenoId, Model model) {
-        model.addAttribute("duenoId", duenoId);
         try {
+            model.addAttribute("duenoId", duenoId);
             model.addAttribute("mascota", mascotaService.obtenerMascotaDeCliente(id, duenoId));
+            model.addAttribute("historial", tratamientoService.listarHistorialDeMascota(id));
         } catch (ParametroInvalidoException e) {
             model.addAttribute("mensajeError", e.getMessage());
         }
