@@ -147,6 +147,7 @@ public class VeterinarioMascotaController {
                 model.addAttribute("stockRestante", resultado.getStockRestante());
                 model.addAttribute("mascotaId", resultado.getTratamiento().getMascota().getId());
                 return "veterinario/tratamiento-confirmacion";
+        //Catch de excepciones desde el sevice
         } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
             return renderizarFormularioTratamiento(veterinarioId, model, e.getMessage());
         }
