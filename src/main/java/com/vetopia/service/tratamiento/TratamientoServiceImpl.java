@@ -11,6 +11,7 @@ import com.vetopia.entities.Droga;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.Veterinario;
 import com.vetopia.entities.mascota.Mascota;
+import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.MascotaRepository;
@@ -114,7 +115,7 @@ public class TratamientoServiceImpl implements TratamientoService {
         int unidadesDisponibles = droga.getUnidadesDisponibles() == null ? 0 : droga.getUnidadesDisponibles();
         if (unidadesDisponibles <= 0) {
             throw new ParametroInvalidoException(
-                    "El medicamento \"" + droga.getNombre() + "\" no tiene unidades disponibles.");
+                    "El medicamento " + droga.getNombre() + " no tiene unidades disponibles.");
         }
 
         Long idVeterinario = veterinarioId != null ? veterinarioId
@@ -136,6 +137,11 @@ public class TratamientoServiceImpl implements TratamientoService {
         Mascota mascota = mascotaRepository.findById(tratamiento.getMascota().getId()).orElse(null);
         if (mascota == null) {
             throw new ParametroInvalidoException("El paciente seleccionado no existe.");
+        }
+
+        if (mascota.getEstado() != DominioEstado.ACTIVO) {
+            mascota.setEstado(DominioEstado.ACTIVO);
+            mascotaRepository.save(mascota);
         }
         return new ResultadoTratamiento(tratamiento, mascota, droga, 1);
     }
