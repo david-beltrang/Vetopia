@@ -125,6 +125,7 @@ public class VeterinarioMascotaController {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         model.addAttribute("mascotas", mascotaService.listarMascotas());
+        model.addAttribute("dueños", duenoService.listarDuenos());
         model.addAttribute("drogas", drogaService.listarDrogas());
         model.addAttribute("tratamiento", new Tratamiento());
         return "veterinario/asignar-tratamiento";
@@ -159,6 +160,7 @@ public class VeterinarioMascotaController {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         model.addAttribute("mascotas", mascotaService.listarMascotas());
+        model.addAttribute("dueños", duenoService.listarDuenos());
         model.addAttribute("drogas", drogaService.listarDrogas());
         model.addAttribute("tratamiento", new Tratamiento());
         model.addAttribute("mensajeError", mensaje);
