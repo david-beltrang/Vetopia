@@ -75,15 +75,15 @@
                     </div>
 
                     <div class="mt-6 space-y-6">
-                        <!-- Campos selector: mascota y fecha de aplicación -->
+                        <!-- Campos selector: dueño y fecha de aplicación -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Selector de Mascota: lista dinámica del repositorio -->
+                            <!-- Selector de dueño: lista dinámica del repositorio -->
                             <div class="flex flex-col gap-1">
-                                <label class="font-body-md text-body-md text-on-surface">Selector de Mascota</label>
+                                <label class="font-body-md text-body-md text-on-surface">Selector de Dueño</label>
                                 <div class="relative">
-                                    <select name="mascota.id" class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
-                                        <option value="">Seleccionar paciente activo...</option>
-                                        <option th:each="mascota : ${mascotas}" th:value="${mascota.id}" th:text="${mascota.nombre}"></option>
+                                    <select name="dueno.id" class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
+                                        <option value="">Seleccionar dueño...</option>
+                                        <option th:each="dueno : ${dueños}" th:value="${dueno.id}" th:text="${dueno.correo}"></option>
                                     </select>
                                     <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
                                         <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
@@ -101,6 +101,20 @@
                         </div>
 
                         <hr class="border-surface-container-highest" />
+
+                        <!-- Selector de mascota -->
+                        <div class="flex flex-col gap-1">
+                            <label class="font-body-md text-body-md text-on-surface">Nombre de la mascota</label>
+                            <div class="relative">
+                                <select name="mascota.id" class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
+                                    <option value="">Seleccionar nombre de mascota...</option>
+                                    <option th:each="mascota : ${mascotas}" th:value="${mascota.id}" th:text="${mascota.nombre}"></option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                                    <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Selector de Medicamento/Droga -->
                         <div class="flex flex-col gap-1">
