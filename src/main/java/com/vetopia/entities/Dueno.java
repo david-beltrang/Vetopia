@@ -6,8 +6,6 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,7 +19,6 @@ import lombok.ToString;
 
 
 import com.vetopia.entities.mascota.Mascota;
-import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 
 /**
  * ENTIDAD - Dueno
@@ -51,9 +48,6 @@ public class Dueno {
     private String contrasena;
     @Column(length = 10, unique = true, nullable = false)
     private String celular;
-   @Enumerated(EnumType.STRING)
-    @Column(name = "estado", length = 20, nullable = false)
-    private DominioEstado estado;
 
     @OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL)
     private List<Mascota> mascotas = new ArrayList<>();
