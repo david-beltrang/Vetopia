@@ -51,7 +51,7 @@ public class VeterinarioMascotaController {
 
     @GetMapping
     public String listarMascotas(@RequestParam Long veterinarioId, Model model) {
-        model.addAttribute("mascotas", mascotaService.listarMascotasDeVeterinario(veterinarioId));
+        model.addAttribute("mascotas", mascotaService.listarMascotas());
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         return "veterinario/mascotas-cargo";
