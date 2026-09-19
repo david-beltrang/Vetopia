@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragmentos-portal :: head}"></div>
+    <title>Vetopia - Panel del Administrador</title>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+    <!-- HEADER del portal -->
+    <nav class="w-full top-0 sticky bg-[#0f1115] shadow-sm z-50">
+        <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+            <div class="flex items-center">
+                <a href="/" class="flex items-center">
+                    <img th:src="@{/images/logo_Vetopia.png}" alt="Vetopia Logo" class="h-8 w-auto object-contain"/>
+                </a>
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="/admin" class="text-primary font-body-md text-body-md font-bold border-b-2 border-primary pb-1 shadow-[0px_2px_4px_rgba(0,0,0,0.30)]">Dashboard</a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Veterinarios</a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Inventario</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1">
+        <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+            <div class="mb-stack-lg">
+                <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 bg-primary rounded-full"></div>
+                    <h1 class="text-headline-lg font-headline-lg text-on-surface">Panel del Administrador</h1>
+                </div>
+                <p class="text-body-lg font-body-lg text-on-surface-variant mt-1">Bienvenido al portal de administración de Vetopia</p>
+            </div>
+            <!-- Tarjetas de navegación -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant">
+                    <span class="material-symbols-outlined text-primary text-4xl">pets</span>
+                    <h2 class="text-headline-lg font-headline-lg text-on-surface mt-3">Mascotas</h2>
+                    <p class="text-body-md text-body-md text-on-surface-variant mt-1">Gestión de pacientes registrados en el hospital.</p>
+                </div>
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant">
+                    <span class="material-symbols-outlined text-primary text-4xl">stethoscope</span>
+                    <h2 class="text-headline-lg font-headline-lg text-on-surface mt-3">Veterinarios</h2>
+                    <p class="text-body-md text-body-md text-on-surface-variant mt-1">Módulo de veterinarios (próximamente).</p>
+                </div>
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant">
+                    <span class="material-symbols-outlined text-primary text-4xl">medication</span>
+                    <h2 class="text-headline-lg font-headline-lg text-on-surface mt-3">Inventario</h2>
+                    <p class="text-body-md text-body-md text-on-surface-variant mt-1">Módulo de drogas y medicamentos (próximamente).</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer th:replace="~{fragmentos-portal :: footer}"></footer>
+</body>
+</html>

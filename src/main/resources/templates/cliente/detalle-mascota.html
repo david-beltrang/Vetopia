@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragmentos-portal :: head}"></div>
+    <title th:text="${mascota != null} ? ${mascota.nombre} + ' - Vetopia' : 'Vetopia - Detalle de Mascota'">Vetopia - Detalle de Mascota</title>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+
+<!-- TopNavBar del Portal del Cliente: barra de navegación fija -->
+<header class="sticky top-0 z-50 bg-[#0f1115] text-white">
+    <div class="max-w-container-max mx-auto flex items-center justify-between px-gutter py-stack-md">
+        <!-- Logo y nombre del portal -->
+        <a class="flex items-center gap-3" th:href="@{/}">
+            <img alt="Vetopia Logo" class="h-10 w-auto object-contain" th:src="@{/images/logo_Vetopia.png}"/>
+            <span class="hidden sm:block font-label-md text-label-md uppercase tracking-widest text-gray-300">Portal Veterinario</span>
+        </a>
+        <!-- Navegación del portal: enlaces a secciones principales -->
+        <nav class="flex items-center gap-6 md:gap-8 font-label-md text-label-md uppercase tracking-widest">
+            <a class="font-bold text-primary-fixed border-b-2 border-primary-fixed pb-1" th:href="@{/cliente/mascotas(duenoId=${duenoId})}">Mascotas</a>
+            <a class="hidden sm:inline text-gray-300 hover:text-primary-fixed transition-colors" href="#">Citas</a>
+            <a class="flex items-center gap-2 text-gray-300 hover:text-error transition-colors" th:href="@{/login}">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
+                Cerrar Sesión
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- Contenido Principal: sección central con detalle de mascota -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+
+    <!-- Navegación de regreso: enlace para volver al listado de mascotas -->
+    <div class="mb-stack-lg">
+        <a class="inline-flex items-center gap-2 font-button text-button uppercase text-on-surface-variant hover:text-primary transition-colors" th:href="@{/cliente/mascotas(duenoId=${duenoId})}">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+            Volver a Mis Mascotas
+        </a>
+    </div>
+
+    <!-- Vista de Detalle: se muestra solo si la mascota existe en la BD -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5" th:if="${mascota != null}">
+        <!-- Columna izquierda: imagen de la mascota -->
+        <div class="lg:col-span-5">
+            <div class="h-full bg-surface-container-lowest rounded-DEFAULT border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] p-3">
+                <div class="flex h-full items-center justify-center overflow-hidden rounded-DEFAULT bg-surface-container-high">
+                    <!-- Imagen real de la mascota si tiene imagen cargada -->
+                    <img alt="Foto de la mascota"
+                         class="h-full w-full object-cover"
+                         th:alt="'Foto de ' + ${mascota.nombre}"
+                         th:if="${mascota.tieneImagen()}"
+                         th:src="${mascota.imagen}"/>
+                    <!-- Icono por defecto si no tiene imagen -->
+                    <span class="material-symbols-outlined text-6xl text-outline"
+                          th:if="${!mascota.tieneImagen()}"
+                          style="font-variation-settings: 'FILL' 0;">pets</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna derecha: información detallada de la mascota -->
+        <div class="lg:col-span-7">
+            <div class="h-full bg-surface-container-lowest rounded-DEFAULT border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] p-4 md:p-5">
+                <!-- ID del paciente formateado con 4 dígitos -->
+                <p class="mb-2 font-label-md text-label-md uppercase tracking-widest text-primary"
+                   th:text="'Paciente N° ' + ${#numbers.formatInteger(mascota.id, 4)}">Paciente N° 0001</p>
+                <h1 class="mb-5 font-headline-xl text-headline-xl text-on-surface" th:text="${mascota.nombre}">Max</h1>
+
+                <!-- Datos básicos: grid de atributos de la mascota -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-surface-container-high">
+                    <div>
+                        <div class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Especie</div>
+                        <p class="font-body-lg text-body-lg font-semibold text-on-surface" th:text="${mascota.especie != null} ? ${mascota.especie} : 'No registrada'">Perro</p>
+                    </div>
+                    <div>
+                        <div class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Raza</div>
+                        <p class="font-body-lg text-body-lg font-semibold text-on-surface" th:text="${mascota.raza != null and !mascota.raza.isBlank()} ? ${mascota.raza} : 'No registrada'">Golden Retriever</p>
+                    </div>
+                    <div>
+                        <div class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Sexo</div>
+                        <p class="font-body-lg text-body-lg font-semibold text-on-surface" th:text="${mascota.sexo != null} ? ${mascota.sexo} : 'No registrado'">Macho</p>
+                    </div>
+                    <div>
+                        <div class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Edad</div>
+                        <p class="font-body-lg text-body-lg font-semibold text-on-surface" th:text="${mascota.obtenerEdadDescripcion()}">3 años</p>
+                    </div>
+                    <div>
+                        <div class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Peso</div>
+                        <p class="font-body-lg text-body-lg font-semibold text-on-surface" th:text="${mascota.pesoKg != null} ? ${mascota.pesoKg} + ' kg' : 'No registrado'">15.5 kg</p>
+                    </div>
+                    <div>
+                        <div class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Estado</div>
+                        <p class="font-body-lg text-body-lg font-semibold text-on-surface" th:text="${mascota.estado != null} ? ${mascota.estado} : 'No registrado'">Activo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Historial de tratamientos-->
+        <div class="pt-10 lg:col-span-12">
+            <h3 class="font-headline-lg text-headline-lg text-on-surface mb-8">Historial Médico Cronológico</h3>
+            <div class="border-l-2 border-surface-container-highest flex flex-col gap-8">
+                <!-- Estado vacío: mascota sin tratamientos registrados -->
+                <div th:if="${#lists.isEmpty(historial)}" class="relative pl-8">
+                    <span class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-surface-container-highest border-4 border-surface-container-lowest"></span>
+                    <div class="p-4 bg-surface-container-lowest rounded-xl border border-surface-container-highest text-on-surface-variant font-body-md text-body-md">
+                        Esta mascota aún no tiene tratamientos registrados.
+                    </div>
+                </div>
+
+                <!-- Fila por cada tratamiento del historial -->
+                <div class="relative pl-8" th:each="item : ${historial}">
+                    <span class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-primary border-4 border-surface-container-lowest"
+                          th:classappend="${item.tratamiento.completado} ? 'bg-primary' : 'bg-outline'"></span>
+                    <div class="p-4 bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-[0px_1px_2px_rgba(0,0,0,0.05)]">
+                        <!-- Cabecera del tratamiento: medicamento, estado y fecha -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="rounded-full bg-primary/10 px-3 py-1 font-label-md text-label-md uppercase tracking-widest text-primary"
+                                      th:text="${item.drogaNombre}">Medicamento</span>
+                                <span class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant"
+                                      th:text="${item.tratamiento.completado} ? 'Completado' : 'Pendiente'">Completado</span>
+                            </div>
+                            <span class="font-body-md text-body-md text-on-surface-variant"
+                                  th:text="'Fecha: ' + ${item.tratamiento.fecha}">15 Oct 2023</span>
+                        </div>
+                        <!-- Título y descripción del tratamiento -->
+                        <h4 class="font-body-lg text-body-lg font-bold text-on-surface mb-2" th:text="${item.tratamiento.titulo}">Título</h4>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-4" th:text="${item.tratamiento.descripcion}">Descripción</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de mascota no encontrada: se muestra cuando mascota es null -->
+    <div class="bg-surface-container-lowest rounded-DEFAULT border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] p-4 md:p-5 text-center" th:if="${mascota == null}">
+        <span class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-high">
+            <span class="material-symbols-outlined text-3xl text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">search_off</span>
+        </span>
+        <h1 class="mb-2 font-headline-lg text-headline-lg text-on-surface">Mascota no encontrada</h1>
+        <!-- Mensaje dinámico: error del backend o mensaje por defecto -->
+        <p class="mx-auto mb-4 max-w-[600px] font-body-lg text-body-lg text-on-surface-variant"
+           th:text="${mensajeError != null} ? ${mensajeError} : 'No encontramos ninguna mascota registrada.'">No encontramos ninguna mascota registrada.</p>
+        <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary" th:href="@{/cliente/mascotas(duenoId=${duenoId})}">
+            Ver mis mascotas
+            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
+        </a>
+    </div>
+</main>
+
+<!-- Footer del portal: fragmento reutilizable -->
+<footer th:replace="~{fragmentos-portal :: footer}"></footer>
+</body>
+</html>

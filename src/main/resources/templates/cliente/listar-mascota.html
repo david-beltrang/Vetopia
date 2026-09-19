@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragmentos-portal :: head}"></div>
+    <title>Vetopia - Mis Mascotas</title>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+
+<!-- TopNavBar del Portal del Cliente: barra de navegación fija -->
+<header class="sticky top-0 z-50 bg-[#0f1115] text-white">
+    <div class="max-w-container-max mx-auto flex items-center justify-between px-gutter py-stack-md">
+        <!-- Logo y nombre del portal -->
+        <a class="flex items-center gap-3" th:href="@{/}">
+            <img alt="Vetopia Logo" class="h-10 w-auto object-contain" th:src="@{/images/logo_Vetopia.png}"/>
+            <span class="hidden sm:block font-label-md text-label-md uppercase tracking-widest text-gray-300">Portal Veterinario</span>
+        </a>
+        <!-- Navegación del portal: enlaces a secciones principales -->
+        <nav class="flex items-center gap-6 md:gap-8 font-label-md text-label-md uppercase tracking-widest">
+            <a class="font-bold text-primary-fixed border-b-2 border-primary-fixed pb-1" href="#">Mascotas</a>
+            <a class="hidden sm:inline text-gray-300 hover:text-primary-fixed transition-colors" href="#">Citas</a>
+            <a class="flex items-center gap-2 text-gray-300 hover:text-error transition-colors" th:href="@{/login}">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
+                Cerrar Sesión
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- Contenido Principal: listado de mascotas del cliente -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+
+    <!-- Encabezado de la sección: título y descripción -->
+    <section class="mb-stack-lg">
+        <h1 class="mb-2 font-headline-xl text-headline-xl text-on-surface">Mis Mascotas</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant">
+            Consulta la información de tus mascotas registradas en Vetopia. Selecciona en Ver Detalles para visualizar su perfil completo.
+        </p>
+    </section>
+
+    <!-- Tarjeta contenedora del listado: muestra tabla con todas las mascotas del cliente -->
+    <section class="bg-surface-container-lowest rounded-DEFAULT border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+        <!-- Cabecera de la tarjeta: título del listado y contador dinámico -->
+        <div class="flex items-center justify-between gap-4 p-stack-lg border-b border-surface-container-high">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface">Listado de mascotas</h2>
+            <span class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant"
+                  th:text="${#lists.size(mascotas) == 1} ? '1 mascota registrada' : ${#lists.size(mascotas)} + ' mascotas registradas'"></span>
+        </div>
+        <!-- Tabla de mascotas: diseño responsive con scroll horizontal en móviles -->
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[720px] text-left">
+                <!-- Cabecera de la tabla: columnas de datos -->
+                <thead>
+                <tr class="bg-surface-container-low uppercase">
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Foto</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Nombre</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Especie</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Raza</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Edad</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Sexo</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Estado vacío: se muestra cuando no hay mascotas registradas -->
+                <tr th:if="${#lists.isEmpty(mascotas)}">
+                    <td class="px-6 py-16 text-center" colspan="7">
+                        <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant" style="font-variation-settings: 'FILL' 0;">pets</span>
+                        <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no tienes mascotas registradas.</p>
+                    </td>
+                </tr>
+                <!-- Filas de mascotas: una por cada registro del repositorio -->
+                <tr class="border-b border-surface-container-high transition-colors last:border-0 hover:bg-surface-container-low"
+                    th:each="mascota : ${mascotas}">
+                    <!-- Columna Foto: imagen de la mascota o icono por defecto -->
+                    <td class="px-6 py-4">
+                        <img alt="Foto de la mascota"
+                             class="h-14 w-14 rounded-full border border-surface-container-highest object-cover"
+                             th:if="${mascota.tieneImagen()}"
+                             th:alt="'Foto de ' + ${mascota.nombre}"
+                             th:src="${mascota.imagen}"/>
+                        <div aria-label="Sin fotografía disponible"
+                             class="flex h-14 w-14 items-center justify-center rounded-full bg-surface-container-high text-outline"
+                             role="img"
+                             th:unless="${mascota.tieneImagen()}">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">pets</span>
+                        </div>
+                    </td>
+                    <!-- Columna Nombre: nombre y número de paciente -->
+                    <td class="px-6 py-4">
+                        <p class="font-label-md text-label-md text-on-surface" th:text="${mascota.nombre}"></p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant"
+                           th:text="'Paciente N° ' + ${#numbers.formatInteger(mascota.id, 4)}"></p>
+                    </td>
+                    <!-- Columnas de datos básicos: especie, raza, edad y sexo -->
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${mascota.especie}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${mascota.raza}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${mascota.obtenerEdadDescripcion()}"></td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${mascota.sexo}"></td>
+                    <!-- Columna Acciones: botón para ver detalles de la mascota -->
+                    <td class="px-6 py-4">
+                        <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2.5 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
+                           th:aria-label="'Consultar detalles de ' + ${mascota.nombre}"
+                           th:href="@{/cliente/mascotas/detalle(duenoId=${duenoId}, id=${mascota.id})}">
+                            Ver detalles
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">visibility</span>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<!-- Footer del portal: fragmento reutilizable -->
+<footer th:replace="~{fragmentos-portal :: footer}"></footer>
+</body>
+</html>

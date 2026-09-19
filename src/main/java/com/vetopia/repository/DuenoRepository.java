@@ -1,0 +1,12 @@
+package com.vetopia.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.vetopia.entities.Dueno;
+
+
+public interface DuenoRepository extends JpaRepository<Dueno, Long> {
+
+    // Consulta derivada para el login del portal. Devuelve null si no hay coincidencia.
+    Dueno findByCorreoIgnoreCaseAndContrasena(String correo, String contrasena);
+}

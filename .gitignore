@@ -1,0 +1,22 @@
+# Compilados y artefactos de build (Maven)
+target/
+*.class
+
+# Logs
+*.log
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Base de datos local H2
+mydatabase.mv.db
+mydatabase.trace.db
