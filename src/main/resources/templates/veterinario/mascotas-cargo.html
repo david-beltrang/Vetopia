@@ -77,6 +77,7 @@
                     <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Raza</th>
                     <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Edad</th>
                     <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Sexo</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Dueño</th>
                     <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Acciones</th>
                 </tr>
                 </thead>
@@ -84,7 +85,7 @@
                 <tbody>
                 <!-- Estado vacío: no hay mascotas registradas -->
                 <tr th:if="${#lists.isEmpty(mascotas)}">
-                    <td class="px-6 py-16 text-center" colspan="7">
+                    <td class="px-6 py-16 text-center" colspan="8">
                         <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant" style="font-variation-settings: 'FILL' 0;">pets</span>
                         <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no tienes mascotas registradas.</p>
                     </td>
@@ -117,6 +118,9 @@
                     <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${mascota.raza}"></td>
                     <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${mascota.obtenerEdadDescripcion()}"></td>
                     <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${mascota.sexo}"></td>
+                    <!-- Columna: Dueño de la mascota -->
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant"
+                        th:text="${mascota.dueno != null} ? ${mascota.dueno.nombre} : 'No registrado'"></td>
                     <!-- Columna: Botón para ver ficha clínica -->
                     <td class="px-6 py-4">
                         <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2.5 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
