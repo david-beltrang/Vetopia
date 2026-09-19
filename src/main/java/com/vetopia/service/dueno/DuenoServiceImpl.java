@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vetopia.entities.Dueno;
-import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.DuenoRepository;
@@ -44,10 +43,6 @@ public class DuenoServiceImpl implements DuenoService {
         if (dueno == null) {
             throw new ParametroInvalidoException("No se especificó el dueño a guardar.");
         }
-        // El formulario de edición no envía el estado: se conserva el actual.
-        if (dueno.getEstado() == null && dueno.getId() != null) {
-            dueno.setEstado(obtenerDuenoPorId(dueno.getId()).getEstado());
-        }
         duenoRepository.save(dueno);
     }
 
@@ -56,7 +51,6 @@ public class DuenoServiceImpl implements DuenoService {
         if (dueno == null) {
             throw new ParametroInvalidoException("No se especificó el cliente a registrar.");
         }
-        dueno.setEstado(DominioEstado.ACTIVO);
         duenoRepository.save(dueno);
         return dueno;
     }

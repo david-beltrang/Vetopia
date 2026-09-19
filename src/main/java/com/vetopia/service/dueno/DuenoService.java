@@ -14,7 +14,7 @@ public interface DuenoService {
 
     void guardar(Dueno dueno);
 
-    // Registra un dueño nuevo con estado "Activo" y devuelve el objeto
+    // Registra un dueño nuevo y devuelve el objeto
     // resultante para poder obtener su id tras el guardado.
     Dueno registrarClienteActivo(Dueno dueno);
 

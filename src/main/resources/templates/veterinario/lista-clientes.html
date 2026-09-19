@@ -84,7 +84,6 @@
                                 <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CÉDULA</th>
                                 <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CORREO</th>
                                 <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">TELÉFONO</th>
-                                <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ESTADO</th>
                                 <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ACCIONES</th>
                             </tr>
                         </thead>
@@ -92,7 +91,7 @@
                         <tbody>
                             <!-- Estado vacío cuando no hay clientes -->
                             <tr th:if="${#lists.isEmpty(clientes)}">
-                                <td class="px-6 py-16 text-center" colspan="6">
+                                <td class="px-6 py-16 text-center" colspan="5">
                                     <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant">person</span>
                                     <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no hay clientes registrados.</p>
                                 </td>
@@ -119,12 +118,6 @@
                                 <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant" th:text="${cliente.correo}">maria@example.com</td>
                                 <!-- Teléfono -->
                                 <td class="px-6 py-4 font-body-md text-body-md text-on-surface" th:text="${cliente.celular}">+1 (555) 000-0000</td>
-                                <!-- Estado -->
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full font-label-md text-label-md uppercase tracking-widest"
-                                          th:classappend="${cliente.estado != null and cliente.estado.name() == 'ACTIVO'} ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'"
-                                          th:text="${cliente.estado}">Activo</span>
-                                </td>
                                 <!-- Acciones -->
                                 <td class="px-6 py-4">
                                     <a th:href="@{/veterinario/clientes/detalle(veterinarioId=${veterinarioId}, id=${cliente.id})}"

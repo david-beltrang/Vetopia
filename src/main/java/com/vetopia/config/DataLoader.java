@@ -27,12 +27,7 @@ import com.vetopia.repository.MascotaRepository;
 import com.vetopia.repository.TratamientoRepository;
 import com.vetopia.repository.VeterinarioRepository;
 
-// Script inicializador de datos de prueba. Puebla la BD al arrancar la
-// aplicación con datos aleatorios con semilla y construye las relaciones entre
-// objetos con las relaciones JPA y @Builder: primero las entidades
-// independientes (duenos, veterinarios, administradores, drogas) y después las
-// que se asocian (mascotas y tratamientos) eligiendo las entidades
-// relacionadas con findById sobre un número al azar.
+// Script inicializador de datos para poblar la BD
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -54,14 +49,14 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private AdministradorRepository administradorRepository;
 
-    // Semilla fija: la distribución aleatoria es la misma en cada ejecución.
+    // Semilla fija: la distribución aleatoria es la misma en cada ejecución
     private final Random random = new Random(42L);
 
-    // Cantidad de datos de prueba: 50 clientes y 100 mascotas aleatorias.
+    // Cantidad de datos de prueba: 50 clientes y 100 mascotas aleatorias
     private static final int CANTIDAD_DUENOS = 50;
     private static final int CANTIDAD_MASCOTAS = 100;
 
-    // Pools de nombres para generar clientes aleatorios con variedad.
+    // Opciones de nombres para generar clientes aleatorios con variedad
     private final String[] nombresPila = {
             "Ana", "Pedro", "María", "Luis", "Carmen", "Diego", "Valentina", "Andrés", "Laura", "Camilo",
             "Sofía", "Julián", "Paola", "Ricardo", "Daniela", "Felipe", "Natalia", "Óscar", "Lucía", "Gabriel",
@@ -72,8 +67,6 @@ public class DataLoader implements CommandLineRunner {
             "Ramírez", "Vargas", "Castro", "Mora", "Jiménez", "Álvarez", "Ríos", "Quintero", "Salazar", "Navarro",
             "Ortiz", "Mendoza", "Cárdenas", "Pineda", "Aguilar", "Barrera", "Valencia", "Medina", "Guzmán", "Santos" };
 
-    // Hace varias operaciones sobre la BD: una única transacción para que si
-    // algo falla a la mitad, no queden datos parciales.
     @Override
     @Transactional
     public void run(String... args) {
@@ -85,9 +78,12 @@ public class DataLoader implements CommandLineRunner {
         poblarTratamientos();
     }
 
+    // Crea los clientes (dueños) de prueba. Lleva registro de las cédulas y
+    // celulares ya usados para no violar las restricciones unique de la BD
     private void poblarDuenos() {
         Set<String> cedulasUsadas = new HashSet<>();
         Set<String> celularesUsados = new HashSet<>();
+        // Crea los dueños con datos aleatorios y asigna cédula y celular únicos    
         for (int i = 0; i < CANTIDAD_DUENOS; i++) {
             String cedula = cedulaUnica(cedulasUsadas);
             duenoRepository.save(Dueno.builder()
@@ -96,19 +92,18 @@ public class DataLoader implements CommandLineRunner {
                     .correo("cliente" + cedula + "@correo.com")
                     .contrasena("dueno123")
                     .celular(celularUnico(celularesUsados))
-                    .estado(estadoAleatorio())
                     .build());
         }
     }
 
-    // Genera un nombre completo aleatorio combinando dos apellidos y un nombre de pila.
+    // Genera un nombre completo aleatorio combinando dos apellidos y un nombre de pila
     private String nombreAleatorio() {
         return nombresPila[random.nextInt(nombresPila.length)] + " "
                 + apellidos[random.nextInt(apellidos.length)] + " "
                 + apellidos[random.nextInt(apellidos.length)];
     }
 
-    // Genera una cédula de 10 dígitos que no se haya usado antes (columna unique).
+    // Genera una cédula de 10 dígitos que no se haya usado antes
     private String cedulaUnica(Set<String> usadas) {
         String cedula;
         do {
@@ -117,7 +112,7 @@ public class DataLoader implements CommandLineRunner {
         return cedula;
     }
 
-    // Genera un celular de 10 dígitos iniciado en 3 que no se haya usado antes (columna unique).
+    // Genera un celular de 10 dígitos iniciado en 3 que no se haya usado antes
     private String celularUnico(Set<String> usados) {
         String celular;
         do {
@@ -126,6 +121,7 @@ public class DataLoader implements CommandLineRunner {
         return celular;
     }
 
+    // Crea los veterinarios a partir de una lista
     private void poblarVeterinarios() {
         String[] fotos = {
                 "https://example.com/foto-carlos.jpg",
@@ -136,6 +132,7 @@ public class DataLoader implements CommandLineRunner {
                 { "1002003003", "Jorge Santana", "jorge.santana@vetopia.com", "Dermatología" },
                 { "1002003004", "Sofía Ramírez", "sofia.ramirez@vetopia.com", "Odontología" },
                 { "1002003005", "Andrés Peña", "andres.pena@vetopia.com", "Nutrición" } };
+        // Crea los veterinarios con datos fijos y asigna una foto aleatoria (o ninguna)
         for (String[] d : datos) {
             int indiceFoto = random.nextInt(fotos.length + 1);
             veterinarioRepository.save(Veterinario.builder()
@@ -151,11 +148,13 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
+    // Crea los administradores del sistema con datos fijos
     private void poblarAdministradores() {
         String[][] datos = {
                 { "1000000001", "Dirección Vetopia", "admin@vetopia.com", "admin123" },
                 { "1000000002", "Gerencia General", "gerencia@vetopia.com", "gerencia123" },
                 { "1000000003", "Finanzas", "finanzas@vetopia.com", "finanzas123" } };
+        // Crea los administradores con datos fijos y asigna una foto aleatoria
         for (String[] d : datos) {
             administradorRepository.save(Administrador.builder()
                     .cedula(d[0])
@@ -166,6 +165,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
+    // Crea el inventario inicial de drogas con datos fijos. Las unidades vendidas
     private void poblarDrogas() {
         String[][] datos = {
                 { "Amoxicilina", "8000", "15000", "100" },
@@ -173,6 +173,7 @@ public class DataLoader implements CommandLineRunner {
                 { "Metronidazol", "6000", "11000", "75" },
                 { "Carprofeno", "18000", "32000", "40" },
                 { "Meloxicam", "15000", "28000", "60" } };
+        // Crea las drogas con datos fijos y asigna un número aleatorio de unidades vendidas
         for (String[] d : datos) {
             drogaRepository.save(Droga.builder()
                     .nombre(d[0])
@@ -184,6 +185,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
+    // Crea mascotas aleatorias asignando cada una a un dueño
     private void poblarMascotas() {
         long cantidadDuenos = duenoRepository.count();
         String[] nombres = { "Max", "Luna", "Rocky", "Bella", "Toby", "Nala", "Coco", "Milo", "Lola", "Simba" };
@@ -195,6 +197,7 @@ public class DataLoader implements CommandLineRunner {
                 "https://imgs.search.brave.com/lyQdUI6O4tK7o734zlUOxuFLdw-1kUFmZssTDwlkam0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTU0/MjEyMDY2L2VzL2Zv/dG8vZ2F0by1zaWFt/JUMzJUE5cy5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9ZV9V/WDktSU5fZ3VPQWhw/bUxVYk40VGktWVBj/LU92c3hWQXJUOWpn/MWxVWT0",
                 "https://imgs.search.brave.com/SpvOGsBrp_Lq8prflOD7fsZ5TRntmOqrUHvFvtSrWzg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9zZW50/YWRhLWdyaXMtZGVs/LXBlcnJpdG8tZG9n/by1mcmFuYyVDMyVB/OXMtYWlzbGFkYS0x/MDE3NTU1MzAuanBn" };
 
+        // Crea mascotas aleatorias asignando cada una a un dueño
         for (int i = 0; i < CANTIDAD_MASCOTAS; i++) {
             int numeroDueno = random.nextInt(1, (int) cantidadDuenos + 1);
             Dueno dueno = duenoRepository.findById((long) numeroDueno)
@@ -215,6 +218,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
+    // Cada tratamiento se asocia con una mascota, un veterinario y una droga existentes
     private void poblarTratamientos() {
         long cantidadMascotas = mascotaRepository.count();
         long cantidadVeterinarios = veterinarioRepository.count();
@@ -232,6 +236,7 @@ public class DataLoader implements CommandLineRunner {
                 "Consulta con recomendaciones de alimentación y ejercicio." };
 
         int cantidadTratamientos = random.nextInt(20);
+        // Crea tratamientos aleatorios asignando cada uno a una mascota, un veterinario y una droga existentes
         for (int i = 0; i < cantidadTratamientos; i++) {
             int numeroMascota = random.nextInt(1, (int) cantidadMascotas + 1);
             Mascota mascota = mascotaRepository.findById((long) numeroMascota)
@@ -254,10 +259,12 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
+    // Devuelve un estado aleatorio entre (activo - suspendido)
     private DominioEstado estadoAleatorio() {
         return DominioEstado.values()[random.nextInt(DominioEstado.values().length)];
     }
 
+    // Redondea un valor a 2 decimales
     private static double redondear(double valor) {
         return Math.round(valor * 100.0) / 100.0;
     }

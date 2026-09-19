@@ -185,7 +185,7 @@
                 </div>
             </div>
             <a class="mt-6 inline-flex w-full items-center justify-center rounded-full border border-outline px-8 py-2 font-button text-button uppercase tracking-widest text-on-surface transition-colors hover:bg-surface-container-low"
-               href="#">
+               th:href="${propietario != null} ? @{/veterinario/clientes/detalle(veterinarioId=${veterinarioId}, id=${propietario.id})} : @{/error}">
                 Ver Perfil Completo
             </a>
         </div>
