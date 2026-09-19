@@ -14,6 +14,7 @@ import com.vetopia.entities.Veterinario;
 import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.service.dueno.DuenoService;
+import com.vetopia.service.mascota.MascotaService;
 import com.vetopia.service.veterinario.VeterinarioService;
 
 //CONTROLLER de portal del veterinario para la gestión de clientes (dueños)
@@ -26,6 +27,9 @@ public class VeterinarioClienteController {
 
     @Autowired
     private DuenoService duenoService;
+
+    @Autowired
+    private MascotaService mascotaService;
 
     @Autowired
     private VeterinarioService veterinarioService;
@@ -63,7 +67,9 @@ public class VeterinarioClienteController {
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
         try {
-            model.addAttribute("dueno", duenoService.obtenerDuenoPorId(id));
+            Dueno dueno = duenoService.obtenerDuenoPorId(id);
+            model.addAttribute("dueno", dueno);
+            model.addAttribute("mascotas", mascotaService.listarMascotasDeCliente(dueno.getId()));
         } catch (ParametroInvalidoException e) {
             model.addAttribute("mensajeError", e.getMessage());
         }

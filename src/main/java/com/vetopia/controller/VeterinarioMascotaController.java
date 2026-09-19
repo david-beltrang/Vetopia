@@ -121,21 +121,38 @@ public class VeterinarioMascotaController {
 
     @GetMapping("/asignar-tratamiento")
     public String asignarTratamiento(@RequestParam(name = "veterinarioId") Long veterinarioId,
+            @RequestParam(name = "id") Long id,
             Model model) {
-        model.addAttribute("veterinarioId", veterinarioId);
-        model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
-        model.addAttribute("mascotas", mascotaService.listarMascotas());
-        model.addAttribute("dueños", duenoService.listarDuenos());
-        model.addAttribute("drogas", drogaService.listarDrogas());
-        model.addAttribute("tratamiento", new Tratamiento());
-        return "veterinario/asignar-tratamiento";
+        try {
+            Mascota mascota = mascotaService.obtenerMascotaPorId(id);
+            model.addAttribute("veterinarioId", veterinarioId);
+            model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
+            model.addAttribute("mascota", mascota);
+            model.addAttribute("dueno", mascota.getDueno());
+            model.addAttribute("drogas", drogaService.listarDrogas());
+            model.addAttribute("tratamiento", new Tratamiento());
+            return "veterinario/asignar-tratamiento";
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
+            return "redirect:/veterinario/mascotas?veterinarioId=" + veterinarioId;
+        }
     }
 
     @PostMapping("/asignar-tratamiento")
     public String aplicarTratamiento(@ModelAttribute Tratamiento tratamiento,
-            @RequestParam Long veterinarioId, Model model) {
+            @RequestParam Long veterinarioId,
+            @RequestParam(required = false) Long id, Model model) {
             try {
-                tratamiento.setMascota(mascotaService.obtenerMascotaPorId(tratamiento.getMascota().getId()));
+                Long mascotaId = id != null ? id
+                        : (tratamiento.getMascota() != null ? tratamiento.getMascota().getId() : null);
+                if (mascotaId == null) {
+                    return "redirect:/veterinario/mascotas?veterinarioId=" + veterinarioId;
+                }
+                tratamiento.setMascota(mascotaService.obtenerMascotaPorId(mascotaId));
+                tratamiento.setId(null);
+                if (tratamiento.getDroga() == null || tratamiento.getDroga().getId() == null) {
+                    return renderizarFormularioTratamiento(veterinarioId, mascotaId, model,
+                            "Debes seleccionar un medicamento para asignar el tratamiento.");
+                }
                 tratamiento.setDroga(drogaService.obtenerDrogaPorId(tratamiento.getDroga().getId()));
                 tratamiento.setVeterinario(obtenerVeterinario(veterinarioId));
                 ResultadoTratamiento resultado = tratamientoService.asignarTratamiento(tratamiento, veterinarioId);
@@ -149,15 +166,25 @@ public class VeterinarioMascotaController {
                 return "veterinario/tratamiento-confirmacion";
         //Catch de excepciones desde el sevice
         } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
-            return renderizarFormularioTratamiento(veterinarioId, model, e.getMessage());
+            Long mascotaId = id != null ? id
+                    : (tratamiento.getMascota() != null ? tratamiento.getMascota().getId() : null);
+            if (mascotaId == null) {
+                return "redirect:/veterinario/mascotas?veterinarioId=" + veterinarioId;
+            }
+            return renderizarFormularioTratamiento(veterinarioId, mascotaId, model, e.getMessage());
         }
     }
 
-    private String renderizarFormularioTratamiento(Long veterinarioId, Model model, String mensaje) {
+    private String renderizarFormularioTratamiento(Long veterinarioId, Long mascotaId, Model model, String mensaje) {
+        try {
+            Mascota mascota = mascotaService.obtenerMascotaPorId(mascotaId);
+            model.addAttribute("mascota", mascota);
+            model.addAttribute("dueno", mascota.getDueno());
+        } catch (ParametroInvalidoException | RecursoNoEncontradoException e) {
+            return "redirect:/veterinario/mascotas?veterinarioId=" + veterinarioId;
+        }
         model.addAttribute("veterinarioId", veterinarioId);
         model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));
-        model.addAttribute("mascotas", mascotaService.listarMascotas());
-        model.addAttribute("dueños", duenoService.listarDuenos());
         model.addAttribute("drogas", drogaService.listarDrogas());
         model.addAttribute("tratamiento", new Tratamiento());
         model.addAttribute("mensajeError", mensaje);
