@@ -9,4 +9,7 @@ public interface DuenoRepository extends JpaRepository<Dueno, Long> {
 
     // Consulta derivada para el login del portal. Devuelve null si no hay coincidencia.
     Dueno findByCorreoIgnoreCaseAndContrasena(String correo, String contrasena);
+
+    // Consulta derivada para buscar un dueño por su cédula.
+    java.util.Optional<Dueno> findByCedula(String cedula);
 }

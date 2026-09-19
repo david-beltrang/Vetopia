@@ -37,6 +37,17 @@ public class DuenoServiceImpl implements DuenoService {
                         "No se encontró ningún dueño con el identificador " + id + "."));
     }
 
+    // Busca un dueño por su cédula.
+    @Override
+    public Dueno obtenerPorCedula(String cedula) {
+        if (cedula == null || cedula.isBlank()) {
+            throw new ParametroInvalidoException("Debe indicar la cédula del dueño a buscar.");
+        }
+        return duenoRepository.findByCedula(cedula.trim())
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "No se encontró ningún dueño con la cédula " + cedula + "."));
+    }
+
     // Guarda un dueño nuevo. El id lo asigna la base de datos.
     @Override
     public void guardar(Dueno dueno) {

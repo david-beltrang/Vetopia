@@ -12,6 +12,9 @@ public interface DuenoService {
     // Obtiene un dueño validando previamente el identificador.
     Dueno obtenerDuenoPorId(Long id);
 
+    // Busca un dueño por su cédula.
+    Dueno obtenerPorCedula(String cedula);
+
     void guardar(Dueno dueno);
 
     // Registra un dueño nuevo y devuelve el objeto
