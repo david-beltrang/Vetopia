@@ -1,6 +1,6 @@
 # Vetopia
 
-**Vetopia – Hospital Veterinario del Futuro.** Aplicación web de un hospital veterinario con portal del cliente para consulta de mascotas registradas, construida con **Spring Boot** siguiendo el patrón de diseño de capas.
+**Vetopia – Hospital Veterinario.** Aplicación web de un hospital veterinario con portal del cliente para consulta de mascotas registradas, construida con **Spring Boot** siguiendo el patrón de diseño de capas.
 
 ## Descripción
 
@@ -8,9 +8,7 @@ Aplicación servidor con separación clara de responsabilidades mediante el patr
 
 ```
 Controller  ->  Service  ->  Repository
-(@Controller)   (@Service)   (@Repository, HashMap en memoria)
 ```
-
 Cada capa se comunica únicamente con la capa inferior y las dependencias se gestionan con inyección por `@Autowired`, de modo que Spring crea e inyecta automáticamente las instancias de cada clase.
 
 ## Estructura del proyecto
@@ -71,16 +69,16 @@ Luego abre en el navegador:
 
 | Ruta | Descripción |
 |---|---|
-| `http://localhost:8080/` | Landing institucional |
-| `http://localhost:8080/login` | Inicio de sesión |
-| `http://localhost:8080/veterinario/mascotas` | Portal del veterinario: listado de mascotas a cargo |
-| `http://localhost:8080/veterinario/mascotas/ficha?id=1` | Ficha clínica de la mascota con id 1 |
-| `http://localhost:8080/cliente/mascotas` | Portal del cliente: listado de mascotas |
-| `http://localhost:8080/cliente/mascotas/detalle?id=1` | Detalle de la mascota con id 1 |
+| `http://localhost:8090/` | Landing institucional |
+| `http://localhost:8090/login` | Inicio de sesión |
+| `http://localhost:8090/veterinario/mascotas` | Portal del veterinario: listado de mascotas a cargo |
+| `http://localhost:8090/veterinario/mascotas/ficha?id=1` | Ficha clínica de la mascota con id 1 |
+| `http://localhost:8090/cliente/mascotas` | Portal del cliente: listado de mascotas |
+| `http://localhost:8090/cliente/mascotas/detalle?id=1` | Detalle de la mascota con id 1 |
 
 ## Funcionalidades
 
-- **Listado de mascotas** ordenadas alfabéticamente (regla de negocio en el Service).
+- **Listado de mascotas** ordenadas alfabéticamente.
 - **Detalle de mascota** con validación del identificador y panel amigable cuando no existe.
 - **Persistencia simulada** en memoria (`HashMap`) precargada con datos de ejemplo; al conectar una base de datos real solo cambia la implementación del repositorio.
 
