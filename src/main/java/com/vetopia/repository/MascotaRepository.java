@@ -10,4 +10,7 @@ public interface MascotaRepository extends JpaRepository<Mascota, Long> {
 
     // Devuelve las mascotas (pacientes) de un dueño concreto.
     List<Mascota> findByDuenoId(Long duenoId);
+
+    // Busca mascotas por nombre (contiene, sin importar mayúsculas).
+    List<Mascota> findByNombreContainingIgnoreCase(String nombre);
 }

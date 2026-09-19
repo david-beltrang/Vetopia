@@ -180,4 +180,13 @@ public class MascotaServiceImpl implements MascotaService {
         }
         return mascota;
     }
+
+    // Busca mascotas por nombre, parcial e insensible a mayúsculas.
+    @Override
+    public List<Mascota> buscarPorNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            throw new ParametroInvalidoException("Debe indicar el nombre de la mascota a buscar.");
+        }
+        return mascotaRepository.findByNombreContainingIgnoreCase(nombre.trim());
+    }
 }

@@ -38,4 +38,7 @@ public interface MascotaService {
     // Obtiene la mascota validando que pertenezca al dueño indicado.
     Mascota obtenerMascotaDeCliente(Long mascotaId, Long duenoId);
 
+    // Busca mascotas por nombre.
+    List<Mascota> buscarPorNombre(String nombre);
+
 }
