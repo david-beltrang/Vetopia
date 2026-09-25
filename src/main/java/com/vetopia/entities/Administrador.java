@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// Entidad Administrador (sin relaciones en el modelo actual).
+// Entidad Administrador
 @Entity
 @Table(name = "administradores")
 @Data

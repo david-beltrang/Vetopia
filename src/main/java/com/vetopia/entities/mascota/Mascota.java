@@ -82,8 +82,7 @@ public class Mascota {
     private DominioEstado estado;
 
     // Relación 1-n con Tratamiento: mappedBy apunta a "mascota" en Tratamiento
-    // dueño de la FK. Con cascade, al borrar la mascota se borran
-    // sus tratamientos.
+    // dueño de la FK. Con cascade, al borrar la mascota se borran sus tratamientos
     @ToString.Exclude
     @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL)
     private List<Tratamiento> tratamientos = new ArrayList<>();

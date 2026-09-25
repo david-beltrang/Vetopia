@@ -2,6 +2,7 @@ package com.vetopia.entities.mascota.dominio_attr;
 
 import com.vetopia.exception.ParametroInvalidoException;
 
+// Enum que representa las especies de mascotas disponibles en Vetopia
 public enum DominioEspecie {
     PERRO("Perro"),
     GATO("Gato"),

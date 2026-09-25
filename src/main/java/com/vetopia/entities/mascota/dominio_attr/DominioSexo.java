@@ -1,5 +1,6 @@
 package com.vetopia.entities.mascota.dominio_attr;
 
+// Enum que representa los sexos posibles de una mascota en Vetopia
 public enum DominioSexo {
     MACHO("Macho"),
     HEMBRA("Hembra");
