@@ -41,6 +41,7 @@ public class MascotaServiceImpl implements MascotaService {
         return mascotaRepository.findAll();
     }
 
+    // Obtiene una mascota validando previamente el identificador
     @Override
     public Mascota obtenerMascotaPorId(Long id) {
         if (id == null) {
@@ -51,17 +52,21 @@ public class MascotaServiceImpl implements MascotaService {
                         "No se encontró ninguna mascota con el identificador " + id + "."));
     }
 
+    // Guarda (registra) una mascota nueva. El id lo asigna la base de datos
     @Override
     public void guardar(Mascota mascota) {
         mascotaRepository.save(mascota);
     }
 
+    // Registra una mascota nueva asociándola a un dueño y guardando su foto. El id lo asigna la base de datos
     @Override
     @Transactional
     public Mascota registrarMascota(Mascota mascota, Long duenoId, MultipartFile foto) {
+        // Validaciones de parámetros
         if (mascota == null) {
             throw new ParametroInvalidoException("No se especificó la mascota a registrar.");
         }
+        // Validamos que el dueño exista antes de asociarlo a la mascota
         if (duenoId == null) {
             throw new ParametroInvalidoException("No se especificó el dueño de la mascota.");
         }
@@ -73,10 +78,12 @@ public class MascotaServiceImpl implements MascotaService {
         if (mascota.getColor() == null || mascota.getColor().isBlank()) {
             throw new ParametroInvalidoException("Debe indicar el color de la mascota.");
         }
+        // Validamos que la fecha de ingreso no sea nula
         if (mascota.getFechaIngreso() == null) {
             throw new ParametroInvalidoException("Debe indicar la fecha de ingreso de la mascota.");
         }
         String imagen = imagenService.guardarFoto(foto);
+        // Si se subió una foto, la asociamos a la mascota
         if (imagen != null) {
             mascota.setImagen(imagen);
         }

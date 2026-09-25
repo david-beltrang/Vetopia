@@ -22,23 +22,23 @@ public interface MascotaService {
     Mascota registrarMascota(Mascota mascota, Long duenoId, MultipartFile foto);
 
     // Actualiza una mascota existente conservando dueño, estado e imagen
-    // cuando esos campos no vienen en el formulario.
+    // cuando esos campos no vienen en el formulario
     Mascota actualizarMascota(Mascota mascota, MultipartFile foto);
 
-    // Cambia el estado de una mascota de "activo" a "inactivo".
+    // Cambia el estado de una mascota de "activo" a "inactivo"
     void cambiarEstado(Long id, String estado);
 
-    // Devuelve las mascotas asociadas a un dueño (cliente) concreto.
+    // Devuelve las mascotas asociadas a un dueño (cliente) concreto
     List<Mascota> listarMascotasDeCliente(Long duenoId);
 
     // Devuelve las mascotas asociadas a un veterinario: busca sus
-    // tratamientos y de ahí obtiene las mascotas atendidas (orquestación).
+    // tratamientos y de ahí obtiene las mascotas atendidas
     List<Mascota> listarMascotasDeVeterinario(Long veterinarioId);
 
-    // Obtiene la mascota validando que pertenezca al dueño indicado.
+    // Obtiene la mascota validando que pertenezca al dueño indicado
     Mascota obtenerMascotaDeCliente(Long mascotaId, Long duenoId);
 
-    // Busca mascotas por nombre.
+    // Busca mascotas por nombre
     List<Mascota> buscarPorNombre(String nombre);
 
 }

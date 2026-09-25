@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.vetopia.entities.Droga;
 
-
+// Repositorio JPA de Droga
 public interface DrogaRepository extends JpaRepository<Droga, Long> {
 }

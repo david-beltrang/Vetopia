@@ -36,7 +36,7 @@ public class DrogaServiceImpl implements DrogaService {
                         "No se encontró ninguna droga con el identificador " + id + "."));
     }
 
-    // Guarda (registra) una droga nueva. El id lo asigna la base de datos.
+    // Guarda (registra) una droga nueva. El id lo asigna la base de datos
     @Override
     public void guardar(Droga droga) {
         if (droga == null) {
@@ -45,8 +45,7 @@ public class DrogaServiceImpl implements DrogaService {
         drogaRepository.save(droga);
     }
 
-    // Descuenta unidades del inventario de la droga (al asignar un tratamiento).
-    // Lee y escribe el registro, así que va en @Transactional.
+    // Descuenta unidades del inventario de la droga por esto va en @Transactional
     @Override
     @Transactional
     public void descontarUnidades(Long drogaId, Integer cantidad) {

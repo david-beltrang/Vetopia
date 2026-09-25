@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Recurso no encontrado como dueño o mascota con id inexistente).
+    // Recurso no encontrado como dueño o mascota con id inexistente
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public String manejarNoEncontrado(RecursoNoEncontradoException ex, Model model) {
         model.addAttribute("mensaje", ex.getMessage());
@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
         return "error";
     }
 
-    // Parámetro inválido como id nulo o vacío.
+    // Parámetro inválido como id nulo o vacío
     @ExceptionHandler(ParametroInvalidoException.class)
     public String manejarParametroInvalido(ParametroInvalidoException ex, Model model) {
         model.addAttribute("mensaje", ex.getMessage());

@@ -7,6 +7,6 @@ import com.vetopia.entities.Veterinario;
 // Repositorio JPA de Veterinario.
 public interface VeterinarioRepository extends JpaRepository<Veterinario, Long> {
 
-    // Consulta derivada para el login del portal. Devuelve null si no hay coincidencia.
+    // Consulta derivada para el login del portal. Devuelve null si no hay coincidencia
     Veterinario findByCorreoIgnoreCaseAndContrasena(String correo, String contrasena);
 }

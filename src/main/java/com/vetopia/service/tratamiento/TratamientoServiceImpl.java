@@ -34,11 +34,13 @@ public class TratamientoServiceImpl implements TratamientoService {
     @Autowired
     private MascotaRepository mascotaRepository;
 
+    // Lista todos los tratamientos registrados en la base de datos
     @Override
     public List<Tratamiento> listarTratamientos() {
         return tratamientoRepository.findAll();
     }
 
+    // Obtiene un tratamiento por su identificador
     @Override
     public Tratamiento obtenerTratamientoPorId(Long id) {
         if (id == null) {
@@ -49,11 +51,13 @@ public class TratamientoServiceImpl implements TratamientoService {
                         "No se encontró ningún tratamiento con el identificador " + id + "."));
     }
 
+    // Guarda (registra) un tratamiento nuevo. El id lo asigna la base de datos
     @Override
     public void guardar(Tratamiento tratamiento) {
         tratamientoRepository.save(tratamiento);
     }
 
+    // Lista los tratamientos asociados a un veterinario específico
     @Override
     public List<Tratamiento> listarTratamientosPorVeterinario(Long veterinarioId) {
         if (veterinarioId == null) {
@@ -62,6 +66,7 @@ public class TratamientoServiceImpl implements TratamientoService {
         return tratamientoRepository.findByVeterinarioId(veterinarioId);
     }
 
+    // Lista los tratamientos asociados a una mascota específica
     @Override
     public List<Tratamiento> listarTratamientosPorMascota(Long mascotaId) {
         if (mascotaId == null) {
@@ -71,7 +76,7 @@ public class TratamientoServiceImpl implements TratamientoService {
     }
 
     // La droga del tratamiento se navega directamente con
-    // tratamiento.getDroga().getNombre() en lugar de buscar por id.
+    // tratamiento.getDroga().getNombre() en lugar de buscar por id
     private String resolverNombreDroga(Tratamiento tratamiento) {
         if (tratamiento.getDroga() != null && tratamiento.getDroga().getNombre() != null) {
             return tratamiento.getDroga().getNombre();
@@ -79,6 +84,7 @@ public class TratamientoServiceImpl implements TratamientoService {
         return "Medicamento";
     }
 
+    // Lista los tratamientos asociados a un veterinario específico, incluyendo el nombre de la droga utilizada
     @Override
     public List<HistorialTratamientoMascota> listarTratamientosPorVeterinarioConDroga(Long veterinarioId) {
         List<HistorialTratamientoMascota> items = new ArrayList<>();
@@ -88,6 +94,7 @@ public class TratamientoServiceImpl implements TratamientoService {
         return items;
     }
 
+    // Lista los tratamientos asociados a una mascota específica, incluyendo el nombre de la droga utilizada
     @Override
     public List<HistorialTratamientoMascota> listarHistorialDeMascota(Long mascotaId) {
         List<HistorialTratamientoMascota> historial = new ArrayList<>();
@@ -98,13 +105,15 @@ public class TratamientoServiceImpl implements TratamientoService {
     }
 
     // Hace varias operaciones sobre la BD comoguardar el tratamiento y descontar el
-    // inventario de la droga), por lo que va en una única transacción.
+    // inventario de la droga), por lo que va en una única transacción
     @Override
     @Transactional
-    public ResultadoTratamiento asignarTratamiento(Tratamiento tratamiento, Long veterinarioId) {
+    public ResultadoTratamiento asignarTratamiento(Tratamiento tratamiento, Long veterinarioId) {   
+        //  Validamos que se haya especificado el tratamiento a asignar
         if (tratamiento == null) {
             throw new ParametroInvalidoException("No se especificó el tratamiento a asignar.");
         }
+        // Validamos que se haya seleccionado un paciente y un medicamento para asignar el tratamiento
         if (tratamiento.getMascota() == null || tratamiento.getMascota().getId() == null
                 || tratamiento.getDroga() == null || tratamiento.getDroga().getId() == null) {
             throw new ParametroInvalidoException("Debes seleccionar un paciente y un medicamento para asignar el tratamiento.");
@@ -113,6 +122,7 @@ public class TratamientoServiceImpl implements TratamientoService {
         Droga droga = drogaService.obtenerDrogaPorId(tratamiento.getDroga().getId());
 
         int unidadesDisponibles = droga.getUnidadesDisponibles() == null ? 0 : droga.getUnidadesDisponibles();
+        // Validamos que haya unidades disponibles del medicamento antes de asignar el tratamiento
         if (unidadesDisponibles <= 0) {
             throw new ParametroInvalidoException(
                     "El medicamento " + droga.getNombre() + " no tiene unidades disponibles.");
@@ -120,6 +130,7 @@ public class TratamientoServiceImpl implements TratamientoService {
 
         Long idVeterinario = veterinarioId != null ? veterinarioId
                 : tratamiento.getVeterinario() != null ? tratamiento.getVeterinario().getId() : null;
+        // Validamos que se haya especificado el veterinario que aplicará el tratamiento
         if (idVeterinario == null) {
             throw new ParametroInvalidoException("No se identificó al veterinario que aplica el tratamiento.");
         }
@@ -135,10 +146,12 @@ public class TratamientoServiceImpl implements TratamientoService {
         drogaService.descontarUnidades(tratamiento.getDroga().getId(), 1);
 
         Mascota mascota = mascotaRepository.findById(tratamiento.getMascota().getId()).orElse(null);
+        // Validamos que la mascota asociada al tratamiento exista en la base de datos
         if (mascota == null) {
             throw new ParametroInvalidoException("El paciente seleccionado no existe.");
         }
 
+        // Si la mascota estaba inactiva, la activamos al aplicarle un tratamiento
         if (mascota.getEstado() != DominioEstado.ACTIVO) {
             mascota.setEstado(DominioEstado.ACTIVO);
             mascotaRepository.save(mascota);
