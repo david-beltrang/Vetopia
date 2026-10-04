@@ -1,8 +1,15 @@
 # Vetopia
 
-**Vetopia – Hospital Veterinario del Futuro.** Aplicación web de un hospital veterinario con portal del cliente para consulta de mascotas registradas, construida con **Spring Boot** siguiendo el patrón de diseño de capas.
+**Vetopia – Hospital Veterinario del Futuro.** Aplicación web de un hospital veterinario con portal del cliente para consulta de mascotas registradas.
 
-## Descripción
+El repositorio convive con dos proyectos en la raíz:
+
+- **Backend** — Spring Boot 3.5.4 con Maven y Thymeleaf, siguiendo el patrón de diseño de capas.
+- **Frontend** — Angular 19 con Vite y Tailwind CSS 4.
+
+## Backend (Spring Boot)
+
+### Descripción
 
 Aplicación servidor con separación clara de responsabilidades mediante el patrón de capas:
 
@@ -13,10 +20,9 @@ Controller  ->  Service  ->  Repository
 
 Cada capa se comunica únicamente con la capa inferior y las dependencias se gestionan con inyección por `@Autowired`, de modo que Spring crea e inyecta automáticamente las instancias de cada clase.
 
-## Estructura del proyecto
+### Estructura del backend
 
 ```
-Vetopia/
 ├── pom.xml                                  # Configuración Maven (Spring Boot 3.5.4, Lombok, Thymeleaf)
 └── src/main/
     ├── java/com/vetopia/
@@ -56,12 +62,12 @@ Vetopia/
             └── images/                      # Logo y recursos visuales
 ```
 
-## Requisitos
+### Requisitos
 
 - JDK 21 o superior
 - Maven 3.9+
 
-## Cómo ejecutar
+### Cómo ejecutar el backend
 
 ```bash
 mvn spring-boot:run
@@ -78,16 +84,88 @@ Luego abre en el navegador:
 | `http://localhost:8080/cliente/mascotas` | Portal del cliente: listado de mascotas |
 | `http://localhost:8080/cliente/mascotas/detalle?id=1` | Detalle de la mascota con id 1 |
 
-## Funcionalidades
+### Funcionalidades
 
 - **Listado de mascotas** ordenadas alfabéticamente (regla de negocio en el Service).
 - **Detalle de mascota** con validación del identificador y panel amigable cuando no existe.
 - **Persistencia simulada** en memoria (`HashMap`) precargada con datos de ejemplo; al conectar una base de datos real solo cambia la implementación del repositorio.
 
-## Tecnologías
+### Tecnologías del backend
 
 - Java 21
 - Spring Boot 3.5.4 (Web + Thymeleaf)
 - Lombok
 - Tailwind CSS (vía CDN) con paleta Material Design M3 personalizada
 - Google Fonts: Hanken Grotesk, Bricolage Grotesque, JetBrains Mono y Material Symbols Outlined
+
+## Frontend (Angular)
+
+Proyecto generado con [Angular CLI](https://github.com/angular/angular-cli) versión 19.2.27, con Vite y Tailwind CSS 4.
+
+### Estructura del frontend
+
+```
+├── angular.json                             # Configuración del workspace Angular
+├── package.json / package-lock.json         # Dependencias npm
+├── tsconfig.json / tsconfig.app.json / tsconfig.spec.json
+├── vite.config.ts                           # Configuración Vite + plugin Tailwind
+├── tailwind.config.js                       # Tema Tailwind (paleta Vetopia)
+├── postcss.config.json
+├── src/
+│   ├── app/
+│   │   ├── models/                          # Modelos de dominio (Mascota, Duño, Veterinario, Administrador, FichaClinica, Tratamiento, Droga) + enums
+│   │   ├── pages/                           # landing, mascotas, ficha-clinica, registrar-mascota, editar-mascota
+│   │   ├── service/                         # mascota.service.ts
+│   │   ├── utils/                           # header, footer
+│   │   ├── app.component.ts                 # Componente raíz
+│   │   ├── app.config.ts
+│   │   └── app.routes.ts                    # Rutas de la aplicación
+│   ├── index.html
+│   ├── main.ts
+│   └── styles.css
+└── public/                                  # favicon e imágenes
+```
+
+### Requisitos
+
+- Node.js y npm (versión compatible con Angular 19)
+
+### Cómo ejecutar el frontend
+
+```bash
+ng serve
+```
+
+Una vez en marcha, abre `http://localhost:4200/`. La aplicación recarga automáticamente al modificar los fuentes.
+
+### Generar componentes
+
+```bash
+ng generate component component-name
+```
+
+Para una lista completa de esquemas (componentes, directivas, pipes), ejecuta:
+
+```bash
+ng generate --help
+```
+
+### Build
+
+```bash
+ng build
+```
+
+Compila el proyecto y almacena los artefactos en el directorio `dist/`. Por defecto, el build de producción optimiza la aplicación para rendimiento y velocidad.
+
+### Tests unitarios
+
+```bash
+ng test
+```
+
+Ejecuta los tests unitarios con [Karma](https://karma-runner.github.io).
+
+### Recursos adicionales
+
+Para más información sobre Angular CLI, incluyendo referencias de comandos, visita la [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli).

@@ -1,0 +1,65 @@
+<!-- CONTENIDO PRINCIPAL: ficha clínica de la mascota -->
+<app-header-veterinario [veterinario]="veterinario"></app-header-veterinario>
+
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter pt-20 pb-stack-lg">
+
+    <!-- Vista de la ficha clínica: se renderiza solo cuando el Service encontró la mascota -->
+    <section *ngIf="mascotaSeleccionada && !cargando">
+        <!-- Encabezado de la sección: título y panel de estado -->
+        <div class="flex flex-wrap items-center justify-between gap-stack-md mb-12">
+            <div>
+                <h1 class="text-5xl font-bold text-gray-900 mb-2">
+                    Ficha Clínica: {{ mascotaSeleccionada.nombre }}
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Registro médico completo y vinculación de propietario.
+                </p>
+            </div>
+            <!-- Panel de estado del paciente -->
+            <app-estado-paciente
+                [mascota]="mascotaSeleccionada"
+                (estadoCambiado)="onEstadoCambiado($event)">
+            </app-estado-paciente>
+        </div>
+
+        <!-- Tarjetas de información: datos de la mascota y propietario lado a lado -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch mb-stack-lg">
+            <!-- Tarjeta de datos de la mascota -->
+            <app-datos-mascota
+                [mascota]="mascotaSeleccionada">
+            </app-datos-mascota>
+
+            <!-- Tarjeta de propietario -->
+            <app-datos-propietario
+                [propietario]="propietarioSeleccionado">
+            </app-datos-propietario>
+        </div>
+
+        <!-- Historial médico cronológico -->
+        <app-historial-medico [historial]="historialSeleccionado"></app-historial-medico>
+    </section>
+
+    <!-- Panel de error: mascota no encontrada -->
+    <section *ngIf="!mascotaSeleccionada && !cargando"
+             class="bg-white rounded-2xl border border-gray-100 shadow-sm p-stack-lg text-center">
+        <span class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+            <span class="material-symbols-outlined text-[32px] text-gray-400" style="font-variation-settings: 'FILL' 0;">search_off</span>
+        </span>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Mascota no encontrada</h1>
+        <p class="max-w-xl mx-auto text-lg text-gray-600 mb-8">
+            {{ mensajeError || 'No encontramos ninguna mascota registrada.' }}
+        </p>
+        <a class="inline-flex items-center gap-2 rounded-full bg-emerald-700 px-6 py-3 font-button text-button uppercase text-white transition-colors hover:bg-emerald-800"
+           (click)="navigateToMascotas()">
+            Ver mis mascotas
+            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
+        </a>
+    </section>
+
+    <!-- Loading state -->
+    <div *ngIf="cargando" class="flex items-center justify-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+    </div>
+</main>
+
+<app-footer></app-footer>

@@ -1,0 +1,26 @@
+<section id="equipo" class="mb-section-gap scroll-mt-28">
+  <h2 class="font-headline-lg text-headline-lg mb-10 text-deep-carbon">NUESTRO <span class="text-mint-accent text-shadow-mint">EQUIPO</span></h2>
+
+  <div class="relative">
+    <div #carousel class="flex gap-gutter overflow-x-auto snap-x snap-mandatory scroll-smooth pt-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      @for (member of teamMembers; track member.name) {
+        <div class="snap-center shrink-0 w-[85%] sm:w-[45%] md:w-[30%] bg-surface-elevated border border-white/10 rounded-xl overflow-hidden card-hover transition-all duration-500">
+          <div class="h-64 md:h-80 overflow-hidden">
+            <img [src]="member.imageUrl" [alt]="member.imageAlt" class="w-full h-full object-cover object-center">
+          </div>
+          <div class="p-6 text-center">
+            <h3 class="font-headline-md text-headline-md text-white mb-1">{{ member.name }}</h3>
+            <p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-widest">{{ member.specialty }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <button (click)="scrollPrev()" aria-label="Anterior" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 rounded-full bg-deep-carbon border border-mint-accent text-mint-accent hover:bg-mint-accent/10 transition-colors duration-300">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <button (click)="scrollNext()" aria-label="Siguiente" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 rounded-full bg-deep-carbon border border-mint-accent text-mint-accent hover:bg-mint-accent/10 transition-colors duration-300">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
+</section>
