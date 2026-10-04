@@ -1,0 +1,34 @@
+<!-- Tarjeta de propietario: información del dueño de la mascota -->
+<div class="p-8 h-full min-w-0 overflow-hidden bg-white rounded-2xl border border-gray-200 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+    <div class="flex items-center gap-3 pb-4 mb-4 border-b border-gray-100">
+        <span class="flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+        </span>
+        <h3 class="text-xl font-bold text-gray-900">Propietario</h3>
+    </div>
+    <!-- Datos de contacto del propietario -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div>
+            <dt class="mb-1 text-xs font-medium uppercase tracking-wider text-gray-500">Nombre</dt>
+            <dd class="text-lg font-semibold text-gray-900 break-words">
+                {{ propietario()?.nombre || 'No registrado' }}
+            </dd>
+        </div>
+        <div>
+            <dt class="mb-1 text-xs font-medium uppercase tracking-wider text-gray-500">Teléfono</dt>
+            <dd class="text-lg font-semibold text-gray-900 break-words">
+                {{ propietario()?.celular || 'No registrado' }}
+            </dd>
+        </div>
+        <div>
+            <dt class="mb-1 text-xs font-medium uppercase tracking-wider text-gray-500">Email</dt>
+            <dd class="text-lg text-gray-900 break-words">
+                {{ propietario()?.correo || 'No registrado' }}
+            </dd>
+        </div>
+    </div>
+    <a class="mt-6 inline-flex w-full items-center justify-center rounded-full border border-gray-300 px-8 py-2 text-sm font-medium uppercase tracking-wider text-gray-700 transition-colors hover:bg-gray-50"
+       (click)="navigateToPerfil()">
+        Ver Perfil Completo
+    </a>
+</div>
