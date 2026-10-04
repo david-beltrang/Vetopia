@@ -39,9 +39,12 @@ public class Droga {
     @Column(nullable = false)
     private Integer unidadesVendidas = 0;
 
+    // Relación 1-n con Tratamiento: mappedBy apunta a "droga" en Tratamiento
+    // dueño de la FK. Con cascade, al borrar la droga se borran sus tratamientos
     @OneToMany(mappedBy = "droga")
     private List<Tratamiento> tratamientos = new ArrayList<>();
 
+    // Constructor adicional para crear una Droga con atributos específicos
     public Droga(String nombre, Double precioCompra, Double precioVenta, Integer unidadesDisponibles, Integer unidadesVendidas) {
         this.nombre = nombre;
         this.precioCompra = precioCompra;

@@ -49,6 +49,8 @@ public class Dueno {
     @Column(length = 10, unique = true, nullable = false)
     private String celular;
 
+    // Relación 1-n con Mascota: mappedBy apunta a "dueno" en Mascota
+    // dueño de la FK. Con cascade, al borrar el dueño se borran sus mascotas
     @OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL)
     private List<Mascota> mascotas = new ArrayList<>();
 }

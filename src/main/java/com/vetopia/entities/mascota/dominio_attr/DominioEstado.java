@@ -2,6 +2,7 @@ package com.vetopia.entities.mascota.dominio_attr;
 
 import com.vetopia.exception.ParametroInvalidoException;
 
+// Enum que representa los estados posibles de una mascota en Vetopia
 public enum DominioEstado {
     ACTIVO("Activo"),
     INACTIVO("Inactivo");

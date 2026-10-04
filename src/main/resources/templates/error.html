@@ -10,10 +10,6 @@
                 <img alt="Vetopia Logo" class="h-12 md:h-16 w-auto object-contain" th:src="@{/images/logo_Vetopia.png}"/>
             </a>
 
-            <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-4" th:if="${status != null}">
-                Código de error <span class="text-mint-accent font-bold">[[${status}]]</span>
-            </p>
-
             <h1 class="font-display-xl text-display-xl text-white leading-tight mb-6">¡UPS! ALGO<br/><span class="text-mint-accent text-shadow-mint">SALIÓ MAL</span></h1>
 
             <p class="text-body-lg text-on-surface-variant max-w-md mx-auto mb-10" th:text="${mensajeError} ?: 'No te preocupes, nada está perdido. Vuelve al inicio o intenta de nuevo.'">No te preocupes, nada está perdido. Vuelve al inicio o intenta de nuevo.</p>

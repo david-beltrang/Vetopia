@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ImagenService {
 
-    /**
+    /*
      * Guarda la foto subida en el directorio de imágenes de mascotas y
      * devuelve la ruta pública para servirla. Si no hay foto, devuelve null.
      */

@@ -20,3 +20,6 @@ Thumbs.db
 # Base de datos local H2
 mydatabase.mv.db
 mydatabase.trace.db
+
+# Enunciado del proyecto (no versionar)
+docs/enunciado/

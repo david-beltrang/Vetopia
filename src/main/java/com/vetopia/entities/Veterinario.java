@@ -59,6 +59,8 @@ public class Veterinario {
     @Column(name = "url_foto", length = 500)
     private String urlFoto;
 
+    // Relación 1-n con Tratamiento: mappedBy apunta al campo "veterinario" de
+    // Tratamiento. Con cascade, al borrar el veterinario se borran sus tratamientos
     @ToString.Exclude
     @OneToMany(mappedBy = "veterinario")
     private List<Tratamiento> tratamientos = new ArrayList<>();

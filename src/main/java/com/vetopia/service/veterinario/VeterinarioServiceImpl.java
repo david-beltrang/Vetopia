@@ -38,7 +38,7 @@ public class VeterinarioServiceImpl implements VeterinarioService {
         return veterinario;
     }
 
-    // Guarda (registra) un veterinario nuevo. El id lo asigna la base de datos.
+    // Guarda (registra) un veterinario nuevo. El id lo asigna la base de datos
     @Override
     public void guardar(Veterinario veterinario) {
         if (veterinario == null) {
@@ -47,7 +47,7 @@ public class VeterinarioServiceImpl implements VeterinarioService {
         veterinarioRepository.save(veterinario);
     }
 
-    // Busca un veterinario por correo y contraseña (para login)
+    // Busca un veterinario por correo y contraseña
     @Override
     public Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena) {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {

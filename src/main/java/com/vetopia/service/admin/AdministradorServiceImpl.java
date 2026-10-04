@@ -10,7 +10,7 @@ import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.AdministradorRepository;
 
-// Esta clase implementa la interfaz AdministradorService y define la lógica de negocio relacionada con administradores. Es el único punto al que los controladores acceden para obtener datos; a su vez, delega el acceso a datos en la capa repository.
+// Esta clase implementa la interfaz AdministradorService y define la lógica de negocio relacionada con administradores. Es el único punto al que los controladores acceden para obtener datos; a su vez, delega el acceso a datos en la capa repository
 @Service
 public class AdministradorServiceImpl implements AdministradorService {
 
@@ -18,11 +18,13 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Autowired
     private AdministradorRepository administradorRepository;
 
+    // Devuelve todos los administradores registrados
     @Override
     public List<Administrador> listarAdministradores() {
         return administradorRepository.findAll();
     }
 
+    // Busca un administrador por su identificador. Lanza una excepción si el identificador es nulo o si no se encuentra ningún administrador con ese identificador
     @Override
     public Administrador obtenerAdministradorPorId(Long id) {
         if (id == null) {
@@ -35,6 +37,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         return administrador;
     }
 
+    // Guarda un administrador en la base de datos. Lanza una excepción si el administrador es nulo
     @Override
     public void guardar(Administrador administrador) {
         if (administrador == null) {
@@ -43,6 +46,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         administradorRepository.save(administrador);
     }
 
+    // Busca un administrador por su correo y contraseña. Lanza una excepción si el correo o la contraseña son nulos o vacíos
     @Override
     public Administrador obtenerPorCorreoYContrasena(String correo, String contrasena) {
         if (correo == null || correo.isBlank() || contrasena == null || contrasena.isBlank()) {

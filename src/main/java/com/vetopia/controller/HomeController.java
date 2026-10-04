@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vetopia.exception.ParametroInvalidoException;
-import com.vetopia.service.login_temp.LoginService;
-import com.vetopia.service.login_temp.ResultadoLogin;
+import com.vetopia.service.login.LoginService;
+import com.vetopia.service.login.ResultadoLogin;
 
 //Este controller gestiona las landing page y el login 
 @Controller
@@ -55,8 +55,8 @@ public class HomeController {
             case "VETERINARIO":
                 return "redirect:/veterinario/mascotas?veterinarioId=" + resultado.getId();
             case "ADMINISTRADOR":
-                //Este caso no está aún
-                return "redirect:/admin";
+                // Falta
+                return "redirect:";
             case "CLIENTE":
             default:
                 return "redirect:/cliente/mascotas?duenoId=" + resultado.getId();

@@ -49,7 +49,7 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private AdministradorRepository administradorRepository;
 
-    // Semilla fija: la distribución aleatoria es la misma en cada ejecución
+    // Fija la semilla para que los datos aleatorios generados sean consistentes entre ejecuciones
     private final Random random = new Random(42L);
 
     // Cantidad de datos de prueba: 50 clientes y 100 mascotas aleatorias
@@ -62,6 +62,7 @@ public class DataLoader implements CommandLineRunner {
             "Sofía", "Julián", "Paola", "Ricardo", "Daniela", "Felipe", "Natalia", "Óscar", "Lucía", "Gabriel",
             "Isabella", "Mateo", "Elena", "Samuel", "Antonia", "Héctor", "Carolina", "Esteban", "Mariana", "Tomás" };
 
+    // Opciones de apellidos para generar clientes aleatorios con variedad
     private final String[] apellidos = {
             "Rodríguez", "Gómez", "López", "Martínez", "Silva", "García", "Rojas", "Hernández", "Pérez", "Torres",
             "Ramírez", "Vargas", "Castro", "Mora", "Jiménez", "Álvarez", "Ríos", "Quintero", "Salazar", "Navarro",

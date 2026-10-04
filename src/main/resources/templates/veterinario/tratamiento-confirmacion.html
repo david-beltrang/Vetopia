@@ -82,10 +82,10 @@
                         Volver a la Ficha
                         <span class="material-symbols-outlined text-lg">arrow_forward</span>
                     </a>
-                    <button onclick="window.close()" 
+                    <a th:href="@{/veterinario/mascotas(veterinarioId=${veterinarioId})}"
                             class="w-full py-4 px-6 border border-outline text-on-surface font-button text-button uppercase text-center rounded-full hover:bg-surface-container-high transition-colors">
                         Cerrar
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

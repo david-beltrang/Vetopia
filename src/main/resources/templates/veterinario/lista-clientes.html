@@ -19,7 +19,7 @@
                 <a th:href="@{/veterinario/mascotas(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Pacientes</a>
                 <a th:href="@{/veterinario/clientes(veterinarioId=${veterinarioId})}" class="text-primary font-body-md text-body-md font-bold border-b-2 border-primary pb-1 shadow-[0px_2px_4px_rgba(0,0,0,0.30)]">Clientes</a>
                 <a href="#" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Citas</a>
-                <a th:href="@{/veterinario/mascotas/asignar-tratamiento(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Tratamientos</a>
+                <a th:href="@{/veterinario/mascotas/tratamientos(veterinarioId=${veterinarioId})}" class="text-gray-400 hover:text-primary transition-colors font-body-md text-body-md">Tratamientos</a>
             </div>
             <!-- Trailing: notificaciones, usuario, logout -->
             <div class="flex items-center gap-4">
@@ -49,9 +49,9 @@
                     <p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Consulta la información de los clientes registrados en Vetopia</p>
                 </div>
 
-                <!-- Buscador -->
-                <div class="w-full md:max-w-[448px] flex items-center gap-3">
-                    <div class="flex items-center gap-3 px-4 py-2 bg-surface-container-high rounded-full">
+                <!-- Buscador por cédula y botón de crear cliente -->
+                <div class="w-full md:max-w-[560px] flex items-center gap-3">
+                    <div class="flex flex-1 items-center gap-3 px-4 py-2 bg-surface-container-high rounded-full">
                         <span class="material-symbols-outlined text-on-surface-variant">search</span>
                         <input type="text"
                                placeholder="Buscar cliente..."

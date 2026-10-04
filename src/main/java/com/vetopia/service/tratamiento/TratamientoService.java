@@ -7,27 +7,27 @@ import com.vetopia.entities.Tratamiento;
 // Esta interfaz define los métodos que el servicio de tratamientos debe implementar.
 public interface TratamientoService {
 
-    
+    // Lista todos los tratamientos registrados en la base de datos
     List<Tratamiento> listarTratamientos();
 
-    
+    // Obtiene un tratamiento por su identificador
     Tratamiento obtenerTratamientoPorId(Long id);
 
-   
+    // Guarda un tratamiento en la base de datos
     void guardar(Tratamiento tratamiento);
 
-    
+    // Lista los tratamientos asociados a un veterinario específico
     List<Tratamiento> listarTratamientosPorVeterinario(Long veterinarioId);
 
-    
+    // Lista los tratamientos asociados a una mascota específica
     List<Tratamiento> listarTratamientosPorMascota(Long mascotaId);
 
-   
+    // Lista los tratamientos asociados a un veterinario específico, incluyendo el nombre de la droga utilizada
     List<HistorialTratamientoMascota> listarTratamientosPorVeterinarioConDroga(Long veterinarioId);
 
-    
+    // Lista los tratamientos asociados a una mascota específica, incluyendo el nombre de la droga utilizada
     List<HistorialTratamientoMascota> listarHistorialDeMascota(Long mascotaId);
 
-    
+    // Asigna un tratamiento a un veterinario y devuelve un objeto ResultadoTratamiento que contiene información sobre la operación
     ResultadoTratamiento asignarTratamiento(Tratamiento tratamiento, Long veterinarioId);
 }

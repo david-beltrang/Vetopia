@@ -9,23 +9,27 @@ import java.nio.file.StandardCopyOption;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
+/*
  * Implementa el guardado de fotos de mascotas en el directorio
- * src/main/resources/static/images/mascotas.
+ * src/main/resources/static/images/mascotas
  */
 @Service
 public class ImagenServiceImpl implements ImagenService {
 
     private static final String DIRECTORIO_IMAGENES = "src/main/resources/static/images/mascotas";
 
+    // Guarda la foto subida en el directorio de imágenes de mascotas y 
+    // devuelve la ruta pública para servirla. Si no hay foto, devuelve null
     @Override
     public String guardarFoto(MultipartFile foto) {
+        // Validamos que la foto no sea nula ni esté vacía antes de intentar guardarla
         if (foto == null || foto.isEmpty()) {
             return null;
         }
         try {
             String extension = "";
             String nombreOriginal = foto.getOriginalFilename();
+            // Extraemos la extensión del archivo original si existe
             if (nombreOriginal != null && nombreOriginal.contains(".")) {
                 extension = nombreOriginal.substring(nombreOriginal.lastIndexOf('.'));
             }
