@@ -1,10 +1,9 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Mascota } from '../../../../models/mascota.model';
+import { Estado } from '../../../../models/enums/estado.enum';
 
 @Component({
   selector: 'app-estado-paciente',
-  imports: [CommonModule],
   templateUrl: './estado-paciente.component.html'
 })
 export class EstadoPacienteComponent {
@@ -16,12 +15,11 @@ export class EstadoPacienteComponent {
   }
 
   toggleEstado(): void {
-    if (this.mascota()) {
-      const nuevoEstado = this.esActivo ? 'Inactivo' : 'Activo';
-      const mascotaActualizada: Mascota = Object.assign({}, this.mascota()!, {
-        estado: nuevoEstado as 'Activo' | 'Inactivo',
-      });
-      this.estadoCambiado.emit(mascotaActualizada);
-    }
+    const mascota = this.mascota();
+    if (!mascota) return;
+
+    const nuevoEstado: Estado = this.esActivo ? 'Inactivo' : 'Activo';
+    const actualizada: Mascota = Object.assign({}, mascota, { estado: nuevoEstado });
+    this.estadoCambiado.emit(actualizada);
   }
 }

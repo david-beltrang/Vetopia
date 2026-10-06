@@ -1,0 +1,104 @@
+<!-- CONTENIDO PRINCIPAL: listado de clientes -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+<app-header-veterinario [veterinario]="veterinario" seccionActiva="clientes"></app-header-veterinario>
+
+<main class="flex-1">
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Encabezado de la sección: título y buscador -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-stack-lg">
+            <div>
+                <h1 class="text-headline-xl font-headline-xl text-on-surface">Clientes</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Consulta la información de los clientes registrados en Vetopia</p>
+            </div>
+
+            <!-- Buscador por cédula y botón de crear cliente -->
+            <div class="w-full md:max-w-[560px] flex items-center gap-3">
+                <div class="flex flex-1 items-center gap-3 px-4 py-2 bg-surface-container-high rounded-full">
+                    <span class="material-symbols-outlined text-on-surface-variant">search</span>
+                    <input type="text"
+                           placeholder="Buscar cliente..."
+                           class="flex-1 bg-transparent text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none font-body-md text-body-md border-0"/>
+                </div>
+                <!-- Botón: registrar nuevo cliente -->
+                <a class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-container text-on-primary-container font-button text-button uppercase rounded-full hover:bg-primary hover:text-on-primary transition-colors text-nowrap"
+                   (click)="nuevoCliente()">
+                    NUEVO CLIENTE
+                    <span class="material-symbols-outlined text-sm">add</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Tabla de clientes: listado con columnas de información -->
+        <div class="bg-surface-container-lowest rounded-lg shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest overflow-hidden">
+            <!-- Cabecera de la tarjeta: título y contador dinámico -->
+            <div class="flex flex-wrap items-center justify-between gap-4 px-8 py-6 border-b border-surface-container-high">
+                <h2 class="text-headline-lg font-headline-lg text-on-surface">Listado de clientes</h2>
+                <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">{{ textoContador }}</span>
+            </div>
+
+            <!-- Tabla responsive -->
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[720px]">
+                    <!-- Cabecera de la tabla: columnas de datos -->
+                    <thead class="bg-surface-container-low">
+                        <tr>
+                            <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">NOMBRE</th>
+                            <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CÉDULA</th>
+                            <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CORREO</th>
+                            <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">TELÉFONO</th>
+                            <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo de la tabla -->
+                    <tbody>
+                        @if (clientes.length === 0) {
+                            <!-- Estado vacío: no hay clientes registrados -->
+                            <tr>
+                                <td class="px-6 py-16 text-center" colspan="5">
+                                    <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant">person</span>
+                                    <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no hay clientes registrados.</p>
+                                </td>
+                            </tr>
+                        } @else {
+                            <!-- Fila por cada cliente del repositorio -->
+                            @for (cliente of clientes; track cliente.id) {
+                                <tr class="border-b border-surface-container-high hover:bg-surface-container-low transition-colors">
+                                    <!-- Columna: Nombre con avatar e ID -->
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center border border-surface-container-highest">
+                                                <span class="text-on-primary-container font-bold text-body-md">{{ iniciales(cliente) }}</span>
+                                            </div>
+                                            <div>
+                                                <div class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-widest">{{ cliente.nombre }}</div>
+                                                <div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CLIENTE N° {{ cliente.id }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- Columna: Cédula -->
+                                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface">{{ cliente.cedula }}</td>
+                                    <!-- Columna: Correo -->
+                                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{{ cliente.correo }}</td>
+                                    <!-- Columna: Teléfono -->
+                                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface">{{ cliente.celular }}</td>
+                                    <!-- Columna: Botón de ver detalle -->
+                                    <td class="px-6 py-4">
+                                        <a class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-container text-on-primary-container font-button text-button uppercase rounded-full hover:bg-primary/90 transition-colors"
+                                           [attr.aria-label]="'Consultar detalle de ' + cliente.nombre"
+                                           (click)="verDetalle(cliente)">
+                                            VER DETALLE
+                                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<app-footer-portal></app-footer-portal>
+</div>

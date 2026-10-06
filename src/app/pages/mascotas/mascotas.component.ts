@@ -1,24 +1,22 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MascotaService } from '../../service/mascota.service';
 import { Mascota } from '../../models/mascota.model';
 import { Veterinario } from '../../models/veterinario.model';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
-import { FooterComponent } from '../../utils/footer/footer.component';
+import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
 
 @Component({
   selector: 'app-mascotas',
   imports: [
-    CommonModule,
     HeaderVeterinarioComponent,
-    FooterComponent
+    FooterPortalComponent
   ],
   templateUrl: './mascotas.component.html'
 })
 export class MascotasComponent implements OnInit {
   mascotas: Mascota[] = [];
-  veterinario: Veterinario | undefined = undefined;
+  veterinario?: Veterinario;
   private router = inject(Router);
   private mascotaService = inject(MascotaService);
 
@@ -52,8 +50,6 @@ export class MascotasComponent implements OnInit {
   }
 
   verFicha(mascota: Mascota): void {
-    this.router.navigate(['/veterinario/mascotas/ficha'], {
-      queryParams: { id: mascota.id }
-    });
+    this.router.navigate(['/veterinario/mascotas/ficha', mascota.id]);
   }
 }

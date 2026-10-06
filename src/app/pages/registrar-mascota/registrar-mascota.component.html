@@ -1,23 +1,22 @@
 <!-- CONTENIDO PRINCIPAL -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
 <app-header-veterinario [veterinario]="veterinario"></app-header-veterinario>
 
 <main class="flex-1">
-    <div class="max-w-[604px] mx-auto px-gutter py-stack-lg">
-        <!-- Título y subtítulo -->
-        <div class="mb-stack-lg text-left">
-            <h1 class="text-4xl font-bold text-gray-900 mb-1">Registrar Nueva Mascota</h1>
-            <p class="text-base text-gray-600">Completar los detalles de la mascota para el cliente</p>
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Encabezado de la sección -->
+        <div class="mb-stack-lg">
+            <h1 class="text-headline-xl font-headline-xl text-on-surface mb-1">Registrar Nueva Mascota</h1>
+            <p class="text-body-lg font-body-lg text-on-surface-variant">Completar los detalles de la mascota para el cliente</p>
         </div>
 
         <!-- Formulario -->
-        <app-formulario-registro
+        <app-formulario-mascota
             (guardar)="onGuardar($event)"
             (guardarYLimpiar)="onGuardarYLimpiar($event)">
-        </app-formulario-registro>
+        </app-formulario-mascota>
     </div>
-
-    <!-- Gap entre formulario y footer -->
-    <div class="h-16"></div>
 </main>
 
-<app-footer></app-footer>
+<app-footer-portal></app-footer-portal>
+</div>

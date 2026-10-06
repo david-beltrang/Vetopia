@@ -7,8 +7,13 @@
         </a>
         <!-- Navegación del veterinario: enlaces a secciones principales -->
         <div class="hidden md:flex gap-8">
-            <a aria-current="page" class="text-white font-bold border-b-2 border-white pb-1 hover:text-primary transition-colors duration-200" (click)="navigateToMascotas()" style="color: rgb(127, 255, 212); text-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px; border-color: rgb(127, 255, 212);">Pacientes</a>
-            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" (click)="navigateToClientes()">Clientes</a>
+            @if (seccionActiva() === 'clientes') {
+                <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" (click)="navigateToMascotas()">Pacientes</a>
+                <a aria-current="page" class="text-white font-bold border-b-2 border-white pb-1 hover:text-primary transition-colors duration-200" style="color: rgb(127, 255, 212); text-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px; border-color: rgb(127, 255, 212);" (click)="navigateToClientes()">Clientes</a>
+            } @else {
+                <a aria-current="page" class="text-white font-bold border-b-2 border-white pb-1 hover:text-primary transition-colors duration-200" style="color: rgb(127, 255, 212); text-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px; border-color: rgb(127, 255, 212);" (click)="navigateToMascotas()">Pacientes</a>
+                <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" (click)="navigateToClientes()">Clientes</a>
+            }
             <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" href="#">Citas</a>
             <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" (click)="navigateToTratamientos()">Tratamientos</a>
         </div>
@@ -22,7 +27,7 @@
                     <span class="font-label-md text-label-md text-white">{{ veterinario()?.nombre || 'Veterinario' }}</span>
                 </div>
                 <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
-                    {{ veterinario()?.nombre ? (veterinario()!.nombre.slice(0, 2).toUpperCase()) : 'VT' }}
+                    {{ iniciales() }}
                 </div>
             </div>
             <a class="hidden md:inline-flex px-6 py-3 rounded-full border border-gray-600 text-white hover:bg-white/10 transition-colors font-button text-button uppercase tracking-wider items-center gap-2" (click)="navigateToLogin()">

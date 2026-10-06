@@ -1,61 +1,57 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MascotaService } from '../../service/mascota.service';
 import { Mascota } from '../../models/mascota.model';
 import { Veterinario } from '../../models/veterinario.model';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
-import { FormularioMascotaComponent } from './components/formulario-mascota/formulario-mascota.component';
-import { FooterComponent } from '../../utils/footer/footer.component';
+import { FormularioMascotaComponent } from '../../utils/formulario-mascota/formulario-mascota.component';
+import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
 
 @Component({
   selector: 'app-editar-mascota',
   imports: [
-    CommonModule,
     HeaderVeterinarioComponent,
     FormularioMascotaComponent,
-    FooterComponent
+    FooterPortalComponent
   ],
   templateUrl: './editar-mascota.component.html'
 })
 export class EditarMascotaComponent implements OnInit {
-  mascota: Mascota | null = null;
   cargando: boolean = true;
-  veterinario: Veterinario | undefined = undefined;
+  id: number = 0;
+  mascota?: Mascota;
+  veterinario?: Veterinario;
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private mascotaService = inject(MascotaService);
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const id = Number(params['id']);
+    const idParam = this.route.snapshot.params['id'];
 
-      if (id) {
-        this.cargarMascota(id);
-      } else {
-        this.cargando = false;
-      }
-    });
-  }
-
-  private cargarMascota(id: number): void {
-    this.cargando = true;
-    this.mascota = this.mascotaService.getMascotaById(id) || null;
-    this.cargando = false;
-  }
-
-  onGuardar(): void {
-    if (this.mascota) {
-      this.mascotaService.updateMascota(this.mascota.id, this.mascota);
-      this.router.navigate(['/veterinario/mascotas/ficha'], {
-        queryParams: { id: this.mascota.id }
-      });
+    if (idParam) {
+      this.cargarMascota(Number(idParam));
+    } else {
+      this.cargando = false;
     }
   }
 
+  private cargarMascota(id: number): void {
+    this.id = id;
+    const encontrada = this.mascotaService.getMascotaById(id);
+    this.mascota = encontrada;
+    this.cargando = false;
+  }
+
+  onGuardar(mascota: Mascota): void {
+    this.mascotaService.updateMascota(this.id, mascota);
+    this.router.navigate(['/veterinario/mascotas/ficha', this.id]);
+  }
+
   onCancelar(): void {
-    this.router.navigate(['/veterinario/mascotas/ficha'], {
-      queryParams: { id: this.mascota?.id }
-    });
+    if (this.id) {
+      this.router.navigate(['/veterinario/mascotas/ficha', this.id]);
+    } else {
+      this.router.navigate(['/veterinario/mascotas']);
+    }
   }
 }

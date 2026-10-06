@@ -10,7 +10,7 @@ export interface TratamientoDetalle {
 
 export interface FichaClinicaDTO {
   mascota: Mascota;
-  propietario: Dueno | null;
+  propietario?: Dueno;
   historial: TratamientoDetalle[];
   veterinarioId: number;
   veterinario: Veterinario;

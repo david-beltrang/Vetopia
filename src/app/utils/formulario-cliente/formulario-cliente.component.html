@@ -1,0 +1,119 @@
+<form [formGroup]="clienteForm" class="flex flex-col gap-stack-lg" (ngSubmit)="onGuardar()">
+    <!-- Tarjeta del formulario: campos de información del cliente -->
+    <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant">
+        <!-- Encabezado de sección -->
+        <div class="border-b border-surface-container-highest pb-4 mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-4 h-4 bg-primary rounded-full"></div>
+                <h2 class="text-headline-lg font-headline-lg text-on-surface">Información del Cliente</h2>
+            </div>
+        </div>
+
+        <!-- Campos del formulario: cédula, nombre, correo, teléfono y contraseña -->
+        <div class="flex flex-col gap-6">
+            <!-- Campo: Cédula (identificador único) -->
+            <div class="flex flex-col gap-2">
+                <label for="cedula" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Cédula (ID)</label>
+                <input id="cedula" type="text" formControlName="cedula"
+                       class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="e.g. 1234567890"/>
+                @if (clienteForm.get('cedula')?.touched && clienteForm.get('cedula')?.invalid) {
+                    @if (clienteForm.get('cedula')?.hasError('required')) {
+                        <small class="font-label-sm text-sm text-error">La cédula es obligatoria.</small>
+                    }
+                    @if (clienteForm.get('cedula')?.hasError('pattern')) {
+                        <small class="font-label-sm text-sm text-error">La cédula solo debe contener números.</small>
+                    }
+                }
+            </div>
+
+            <!-- Campo: Nombre Completo -->
+            <div class="flex flex-col gap-2">
+                <label for="nombre" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Nombre Completo</label>
+                <input id="nombre" type="text" formControlName="nombre"
+                       class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="e.g. Maria Gonzalez"/>
+                @if (clienteForm.get('nombre')?.touched && clienteForm.get('nombre')?.invalid) {
+                    @if (clienteForm.get('nombre')?.hasError('required')) {
+                        <small class="font-label-sm text-sm text-error">El nombre es obligatorio.</small>
+                    }
+                    @if (clienteForm.get('nombre')?.hasError('minlength')) {
+                        <small class="font-label-sm text-sm text-error">Debe tener mínimo 3 caracteres.</small>
+                    }
+                }
+            </div>
+
+            <!-- Campo: Correo Electrónico -->
+            <div class="flex flex-col gap-2">
+                <label for="correo" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Email</label>
+                <input id="correo" type="email" formControlName="correo"
+                       class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="maria@example.com"/>
+                @if (clienteForm.get('correo')?.touched && clienteForm.get('correo')?.invalid) {
+                    @if (clienteForm.get('correo')?.hasError('required')) {
+                        <small class="font-label-sm text-sm text-error">El correo es obligatorio.</small>
+                    }
+                    @if (clienteForm.get('correo')?.hasError('email')) {
+                        <small class="font-label-sm text-sm text-error">Ingresa un correo válido.</small>
+                    }
+                }
+            </div>
+
+            <!-- Campo: Número de Teléfono -->
+            <div class="flex flex-col gap-2">
+                <label for="celular" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Número de Teléfono</label>
+                <input id="celular" type="tel" formControlName="celular"
+                       class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="+1 (555) 000-0000"/>
+                @if (clienteForm.get('celular')?.touched && clienteForm.get('celular')?.invalid) {
+                    @if (clienteForm.get('celular')?.hasError('required')) {
+                        <small class="font-label-sm text-sm text-error">El número de teléfono es obligatorio.</small>
+                    }
+                }
+            </div>
+
+            <!-- Campo: Contraseña de acceso -->
+            <div class="flex flex-col gap-2">
+                <label for="contrasena" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Contraseña de acceso</label>
+                <input id="contrasena" type="password" formControlName="contrasena"
+                       class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="Mínimo 4 caracteres"/>
+                @if (clienteForm.get('contrasena')?.touched && clienteForm.get('contrasena')?.invalid) {
+                    @if (clienteForm.get('contrasena')?.hasError('required')) {
+                        <small class="font-label-sm text-sm text-error">La contraseña es obligatoria.</small>
+                    }
+                    @if (clienteForm.get('contrasena')?.hasError('minlength')) {
+                        <small class="font-label-sm text-sm text-error">Debe tener mínimo 4 caracteres.</small>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    @if (esEdicion) {
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-outline-variant">
+            <button type="button" (click)="onCancelar()"
+                    class="inline-flex items-center gap-2 rounded-full bg-tertiary px-8 py-3 font-button text-button uppercase tracking-widest text-on-tertiary transition-colors hover:bg-tertiary-container hover:text-on-tertiary-container">
+                Cancelar
+            </button>
+            <button type="submit" [disabled]="clienteForm.invalid"
+                    class="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-button text-button uppercase tracking-widest text-on-primary transition-colors hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50 disabled:cursor-not-allowed">
+                Finalizado
+                <span class="material-symbols-outlined text-lg">check</span>
+            </button>
+        </div>
+    } @else {
+        <div class="flex flex-wrap items-center justify-end gap-4 pt-6 border-t border-outline-variant">
+            <button type="button" (click)="onCancelar()"
+                    class="px-6 py-3 rounded-full border border-outline text-on-surface font-button text-button uppercase hover:bg-surface-container-high transition-colors">
+                Cancelar
+            </button>
+            <button type="submit" [disabled]="clienteForm.invalid"
+                    class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-3 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                Siguiente paso
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </button>
+        </div>
+    }
+</form>

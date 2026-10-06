@@ -1,0 +1,16 @@
+<!-- Subida de foto (solo visual, sin funcionalidad) -->
+<label class="flex flex-col items-center gap-2 p-6 bg-background rounded-xl border-2 border-outline-variant border-dashed cursor-pointer transition hover:border-primary">
+    @if (tieneImagen) {
+    <img
+         [src]="imagen()"
+         [alt]="'Foto de ' + nombre()"
+         class="w-24 h-24 rounded-full object-cover border border-outline"/>
+    } @else {
+    <div class="w-20 h-20 rounded-full bg-secondary-container flex items-center justify-center">
+        <span class="material-symbols-outlined text-4xl text-on-secondary-container">pets</span>
+    </div>
+    }
+    <span class="text-primary font-label-md text-label-md uppercase tracking-widest cursor-pointer hover:underline">Click para subir foto</span>
+    <span class="text-on-surface-variant text-sm">JPG or PNG (Max 5MB)</span>
+    <input type="file" accept="image/png,image/jpeg,image/gif" class="hidden" disabled/>
+</label>

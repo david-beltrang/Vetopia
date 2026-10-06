@@ -5,7 +5,7 @@ import { Droga } from './droga.model';
 export interface Tratamiento {
   id: number;
   fecha: Date;
-  mascota: Mascota;
+  mascota?: Mascota;
   veterinario: Veterinario;
   droga: Droga;
   titulo: string;

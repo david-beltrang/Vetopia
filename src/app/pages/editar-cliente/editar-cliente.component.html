@@ -1,0 +1,42 @@
+<!-- CONTENIDO PRINCIPAL -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+<app-header-veterinario [veterinario]="veterinario" seccionActiva="clientes"></app-header-veterinario>
+
+<main class="flex-1">
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Encabezado de la sección -->
+        <div class="mb-stack-lg">
+            <h1 class="text-headline-xl font-headline-xl text-on-surface mb-1">Editar Cliente</h1>
+            <p class="text-body-lg font-body-lg text-on-surface-variant">Modifica los detalles del cliente</p>
+        </div>
+
+        @if (cargando) {
+            <div class="flex items-center justify-center py-20">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+        } @else if (cliente) {
+            <!-- Formulario de edición -->
+            <app-formulario-cliente
+                [cliente]="cliente"
+                (guardar)="onGuardar($event)"
+                (cancelar)="onCancelar()">
+            </app-formulario-cliente>
+        } @else {
+            <!-- Id no encontrado -->
+            <section class="p-stack-lg text-center">
+                <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant">person_off</span>
+                <h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Cliente no encontrado</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant mb-8">
+                    No encontramos ningún cliente registrado con ese identificador.
+                </p>
+                <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-6 py-3 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
+                   (click)="onCancelar()">
+                    Volver a clientes
+                </a>
+            </section>
+        }
+    </div>
+</main>
+
+<app-footer-portal></app-footer-portal>
+</div>

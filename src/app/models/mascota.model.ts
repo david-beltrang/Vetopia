@@ -15,7 +15,7 @@ export interface Mascota {
   pesoKg: number;
   color: string;
   fechaIngreso: Date;
-  dueno: Dueno;
+  dueno?: Dueno;
   estado: Estado;
   tratamientos: Tratamiento[];
 }

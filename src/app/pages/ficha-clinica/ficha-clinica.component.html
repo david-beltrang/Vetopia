@@ -1,17 +1,23 @@
 <!-- CONTENIDO PRINCIPAL: ficha clínica de la mascota -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
 <app-header-veterinario [veterinario]="veterinario"></app-header-veterinario>
 
-<main class="flex-grow w-full max-w-container-max mx-auto px-gutter pt-20 pb-stack-lg">
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
 
-    <!-- Vista de la ficha clínica: se renderiza solo cuando el Service encontró la mascota -->
-    <section *ngIf="mascotaSeleccionada && !cargando">
+    @if (cargando) {
+    <!-- Loading state -->
+    <div class="flex items-center justify-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    </div>
+    } @else if (mascotaSeleccionada) {
+    <section>
         <!-- Encabezado de la sección: título y panel de estado -->
-        <div class="flex flex-wrap items-center justify-between gap-stack-md mb-12">
+        <div class="flex flex-wrap items-center justify-between gap-stack-md mb-stack-lg">
             <div>
-                <h1 class="text-5xl font-bold text-gray-900 mb-2">
+                <h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">
                     Ficha Clínica: {{ mascotaSeleccionada.nombre }}
                 </h1>
-                <p class="text-lg text-gray-600">
+                <p class="font-body-lg text-body-lg text-on-surface-variant">
                     Registro médico completo y vinculación de propietario.
                 </p>
             </div>
@@ -23,7 +29,7 @@
         </div>
 
         <!-- Tarjetas de información: datos de la mascota y propietario lado a lado -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch mb-stack-lg">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-stack-lg items-stretch mb-stack-lg">
             <!-- Tarjeta de datos de la mascota -->
             <app-datos-mascota
                 [mascota]="mascotaSeleccionada">
@@ -39,27 +45,24 @@
         <app-historial-medico [historial]="historialSeleccionado"></app-historial-medico>
     </section>
 
+    } @else {
     <!-- Panel de error: mascota no encontrada -->
-    <section *ngIf="!mascotaSeleccionada && !cargando"
-             class="bg-white rounded-2xl border border-gray-100 shadow-sm p-stack-lg text-center">
-        <span class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-            <span class="material-symbols-outlined text-[32px] text-gray-400" style="font-variation-settings: 'FILL' 0;">search_off</span>
+    <section class="bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] p-stack-lg text-center">
+        <span class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-high">
+            <span class="material-symbols-outlined text-[32px] text-outline" style="font-variation-settings: 'FILL' 0;">search_off</span>
         </span>
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">Mascota no encontrada</h1>
-        <p class="max-w-xl mx-auto text-lg text-gray-600 mb-8">
+        <h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Mascota no encontrada</h1>
+        <p class="max-w-xl mx-auto font-body-lg text-body-lg text-on-surface-variant mb-8">
             {{ mensajeError || 'No encontramos ninguna mascota registrada.' }}
         </p>
-        <a class="inline-flex items-center gap-2 rounded-full bg-emerald-700 px-6 py-3 font-button text-button uppercase text-white transition-colors hover:bg-emerald-800"
+        <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-6 py-3 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
            (click)="navigateToMascotas()">
             Ver mis mascotas
             <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
         </a>
     </section>
-
-    <!-- Loading state -->
-    <div *ngIf="cargando" class="flex items-center justify-center py-20">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
-    </div>
+}
 </main>
 
-<app-footer></app-footer>
+<app-footer-portal></app-footer-portal>
+</div>

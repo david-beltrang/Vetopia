@@ -1,32 +1,34 @@
 <!-- Panel de estado del paciente: indicador visual y botón de alternar estado -->
-<div class="flex items-center gap-4 p-4 bg-white rounded-3xl border border-gray-200 shadow-sm">
+<div class="flex items-center gap-4 p-4 bg-surface-container-lowest rounded-full border border-surface-container-highest shadow-[0px_1px_2px_rgba(0,0,0,0.05)]">
     <div>
-        <p class="font-label-sm text-label-sm uppercase tracking-widest text-gray-500">Estado del Paciente</p>
-        <!-- Estado activo: indicador verde -->
-        <span *ngIf="esActivo"
-              class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 font-label-sm text-label-sm uppercase tracking-widest text-emerald-700">
-            <span class="inline-block h-2 w-2 rounded-full bg-emerald-600"></span>
-            Activo
-        </span>
-        <!-- Estado inactivo: indicador rojo -->
-        <span *ngIf="!esActivo"
-              class="inline-flex items-center gap-2 rounded-full bg-red-100 px-4 py-1.5 font-label-sm text-label-sm uppercase tracking-widest text-red-700">
-            <span class="inline-block h-2 w-2 rounded-full bg-red-600"></span>
-            Inactivo
-        </span>
+        <p class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Estado del Paciente</p>
+        @if (esActivo) {
+            <!-- Estado activo: indicador verde -->
+            <span class="inline-flex items-center gap-2 rounded-full bg-primary-container/20 px-4 py-1.5 font-label-md text-label-md uppercase tracking-widest text-primary">
+                <span class="inline-block h-2 w-2 rounded-full bg-primary"></span>
+                Activo
+            </span>
+        } @else {
+            <!-- Estado inactivo: indicador rojo -->
+            <span class="inline-flex items-center gap-2 rounded-full bg-error-container/20 px-4 py-1.5 font-label-md text-label-md uppercase tracking-widest text-error">
+                <span class="inline-block h-2 w-2 rounded-full bg-error"></span>
+                Inactivo
+            </span>
+        }
     </div>
     <!-- Botón toggle: alterna entre Activo/Inactivo -->
     <div class="pl-4">
         <button type="button" (click)="toggleEstado()" class="flex items-center gap-2">
-            <span *ngIf="esActivo"
-                  class="relative inline-flex h-[24px] w-[44px] items-center rounded-full bg-gray-900">
-                <span class="absolute right-[2px] inline-block h-5 w-5 rounded-full bg-white shadow"></span>
-            </span>
-            <span *ngIf="!esActivo"
-                  class="relative inline-flex h-[24px] w-[44px] items-center rounded-full bg-gray-700">
-                <span class="absolute left-[2px] inline-block h-5 w-5 rounded-full bg-white shadow"></span>
-            </span>
-            <span class="font-label-sm text-label-sm uppercase tracking-widest text-gray-600">Dar de alta / Reingresar</span>
+            @if (esActivo) {
+                <span class="relative inline-flex h-[24px] w-[44px] items-center rounded-full bg-primary">
+                    <span class="absolute right-[2px] inline-block h-5 w-5 rounded-full bg-white shadow"></span>
+                </span>
+            } @else {
+                <span class="relative inline-flex h-[24px] w-[44px] items-center rounded-full bg-surface-container-high">
+                    <span class="absolute left-[2px] inline-block h-5 w-5 rounded-full bg-on-surface shadow"></span>
+                </span>
+            }
+            <span class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Dar de alta / Reingresar</span>
         </button>
     </div>
 </div>
