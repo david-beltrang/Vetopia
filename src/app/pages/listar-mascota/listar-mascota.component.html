@@ -1,0 +1,17 @@
+<!-- CONTENIDO PRINCIPAL: listado de mascotas del cliente -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+    <app-header-cliente [duenoId]="duenoId"></app-header-cliente>
+
+    <main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Encabezado de la sección: título y descripción -->
+        <app-encabezado-mascotas class="block mb-stack-lg"></app-encabezado-mascotas>
+
+        <!-- Tarjeta contenedora del listado de mascotas -->
+        <app-tabla-mascotas class="block"
+                            [mascotas]="mascotas"
+                            [textoContador]="textoContador"
+                            (verDetalle)="verDetalle($event)"></app-tabla-mascotas>
+    </main>
+
+    <app-footer-portal></app-footer-portal>
+</div>
