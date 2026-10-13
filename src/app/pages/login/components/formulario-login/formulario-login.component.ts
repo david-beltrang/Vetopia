@@ -10,19 +10,19 @@ import { CampoLoginComponent } from '../campo-login/campo-login.component';
 })
 export class FormularioLoginComponent {
   mensajeError = input<string>('');
-  ingresar = output<{ username: string; password: string }>();
+  ingresar = output<{ correo: string; contrasena: string }>();
 
   loginForm = new FormGroup({
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required])
+    correo: new FormControl('', [Validators.required]),
+    contrasena: new FormControl('', [Validators.required])
   });
 
-  get usernameControl(): FormControl {
-    return this.loginForm.get('username') as FormControl;
+  get correoControl(): FormControl {
+    return this.loginForm.get('correo') as FormControl;
   }
 
-  get passwordControl(): FormControl {
-    return this.loginForm.get('password') as FormControl;
+  get contrasenaControl(): FormControl {
+    return this.loginForm.get('contrasena') as FormControl;
   }
 
   onIngresar(): void {
@@ -31,7 +31,7 @@ export class FormularioLoginComponent {
       return;
     }
 
-    const { username, password } = this.loginForm.value;
-    this.ingresar.emit({ username: username ?? '', password: password ?? '' });
+    const { correo, contrasena } = this.loginForm.value;
+    this.ingresar.emit({ correo: correo ?? '', contrasena: contrasena ?? '' });
   }
 }

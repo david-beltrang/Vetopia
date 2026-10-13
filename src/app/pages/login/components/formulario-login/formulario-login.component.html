@@ -24,25 +24,25 @@
 
             <!-- Formulario de login -->
             <form [formGroup]="loginForm" (ngSubmit)="onIngresar()" class="space-y-6">
-                <!-- Campo: Cédula o Correo Electrónico -->
+                <!-- Campo: Correo Electrónico -->
                 <app-campo-login
-                    id="username"
-                    label="Cédula o Correo Electrónico"
-                    placeholder="ejemplo@correo.com o número de documento"
+                    id="correo"
+                    label="Correo Electrónico"
+                    placeholder="ejemplo@correo.com"
                     icono="person"
                     tipo="text"
-                    [control]="usernameControl">
+                    [control]="correoControl">
                 </app-campo-login>
 
                 <!-- Campo: Contraseña -->
                 <div class="space-y-2">
                     <app-campo-login
-                        id="password"
+                        id="contrasena"
                         label="Contraseña"
                         placeholder="••••••••"
                         icono="lock"
                         tipo="password"
-                        [control]="passwordControl">
+                        [control]="contrasenaControl">
                     </app-campo-login>
                     <!-- Enlace: recuperar contraseña -->
                     <div class="text-right pt-1">

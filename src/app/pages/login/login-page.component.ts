@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { DuenoService } from '../../service/dueno.service';
-import { MascotaService } from '../../service/mascota.service';
+import { AuthService } from '../../service/auth.service';
+import { VeterinarioService } from '../../service/veterinario.service';
 import { HeroLoginComponent } from './components/hero-login/hero-login.component';
 import { FormularioLoginComponent } from './components/formulario-login/formulario-login.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
@@ -19,26 +19,49 @@ export class LoginPageComponent {
   mensajeError = signal('');
 
   private router = inject(Router);
-  private duenoService = inject(DuenoService);
-  private mascotaService = inject(MascotaService);
+  private authService = inject(AuthService);
+  private veterinarioService = inject(VeterinarioService);
 
-  onIngresar(credenciales: { username: string; password: string }): void {
-    const { username, password } = credenciales;
-    const usuario = username.trim().toLowerCase();
+  onIngresar(credenciales: { correo: string; contrasena: string }): void {
+    this.authService.login({
+      correo: credenciales.correo.trim(),
+      contrasena: credenciales.contrasena
+    }).subscribe({
+      next: (resultado) => {
+        this.mensajeError.set('');
+        this.ingresarSegunRol(resultado.rol, resultado.id);
+      },
+      error: () => this.mensajeError.set('Credenciales incorrectas.')
+    });
+  }
 
-    const esDuenoValido = this.duenoService.listarDuenos().some((dueno) =>
-      (dueno.cedula === username || dueno.correo.toLowerCase() === usuario) && dueno.contrasena === password
-    );
-
-    const esVeterinarioValido = this.mascotaService.getVeterinarios().some((veterinario) =>
-      (veterinario.cedula === username || veterinario.correo.toLowerCase() === usuario) && veterinario.contrasena === password
-    );
-
-    if (esDuenoValido || esVeterinarioValido) {
-      this.mensajeError.set('');
-      this.router.navigate(['/veterinario/mascotas']);
-    } else {
-      this.mensajeError.set('Credenciales incorrectas.');
+  private ingresarSegunRol(rol: string, id: number): void {
+    if (rol === 'CLIENTE') {
+      this.router.navigate(['/cliente/mascotas'], { queryParams: { duenoId: id } });
+      return;
     }
+
+    if (rol === 'VETERINARIO') {
+      this.router.navigate(['/veterinario/mascotas'], { queryParams: { veterinarioId: id } });
+      return;
+    }
+
+    if (rol === 'ADMINISTRADOR') {
+      // No hay pantalla de administrador: entra al área veterinario con el primer veterinario.
+      this.veterinarioService.listarVeterinarios().subscribe({
+        next: (veterinarios) => {
+          const veterinario = veterinarios[0];
+          if (veterinario?.id != null) {
+            this.router.navigate(['/veterinario/mascotas'], { queryParams: { veterinarioId: veterinario.id } });
+          } else {
+            this.mensajeError.set('No hay veterinarios disponibles.');
+          }
+        },
+        error: () => this.router.navigate(['/error'])
+      });
+      return;
+    }
+
+    this.mensajeError.set('Rol no reconocido.');
   }
 }
