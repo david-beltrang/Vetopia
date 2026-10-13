@@ -1,8 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MascotaService } from '../../service/mascota.service';
+import { VeterinarioService } from '../../service/veterinario.service';
 import { Mascota } from '../../models/mascota.model';
 import { Veterinario } from '../../models/veterinario.model';
+import { ResultadoTratamientoDTO } from '../../models/resultado-tratamiento.model';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
 import { ModalConfirmacionComponent } from './components/modal-confirmacion/modal-confirmacion.component';
@@ -19,50 +21,63 @@ import { ModalConfirmacionComponent } from './components/modal-confirmacion/moda
 export class TratamientoConfirmacionComponent implements OnInit {
   mascota?: Mascota;
   veterinario?: Veterinario;
-  unidadesDescontadas = 2;
+  unidadesDescontadas = 0;
   medicamentoNombre = 'Medicamento';
   stockRestante = 0;
+  veterinarioId = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private mascotaService = inject(MascotaService);
+  private veterinarioService = inject(VeterinarioService);
 
   ngOnInit(): void {
-    this.veterinario = this.mascotaService.getVeterinarios()[0];
+    this.veterinarioId = Number(this.route.snapshot.queryParamMap.get('veterinarioId')) || 0;
+
+    this.veterinarioService.obtenerVeterinarioOpcional(this.veterinarioId).subscribe({
+      next: (veterinario) => { this.veterinario = veterinario; },
+      error: () => this.router.navigate(['/error'])
+    });
 
     const idParam = this.route.snapshot.params['mascotaId'];
     if (idParam) {
-      this.mascota = this.mascotaService.getMascotaById(Number(idParam));
+      this.mascotaService.obtenerMascotaPorId(Number(idParam)).subscribe({
+        next: (mascota) => { this.mascota = mascota; },
+        error: () => this.router.navigate(['/error'])
+      });
     }
 
     // Datos de la confirmación enviados por la pantalla de asignación.
-    const state = (history.state ?? {}) as {
-      unidadesDescontadas?: number;
-      medicamentoNombre?: string;
-      stockRestante?: number;
-    };
-
-    if (typeof state.unidadesDescontadas === 'number') {
-      this.unidadesDescontadas = state.unidadesDescontadas;
-    }
-    if (state.medicamentoNombre) {
-      this.medicamentoNombre = state.medicamentoNombre;
-    }
-    if (typeof state.stockRestante === 'number') {
-      this.stockRestante = state.stockRestante;
+    const state = (history.state ?? {}) as { resultado?: ResultadoTratamientoDTO };
+    const resultado = state.resultado;
+    if (resultado) {
+      this.unidadesDescontadas = resultado.unidadesDescontadas;
+      this.stockRestante = resultado.stockRestante;
+      if (resultado.medicamentoNombre) {
+        this.medicamentoNombre = resultado.medicamentoNombre;
+      }
+      if (resultado.mascota) {
+        this.mascota = resultado.mascota;
+      }
     }
   }
 
   volverFicha(): void {
     const mascota = this.mascota;
-    if (mascota) {
-      this.router.navigate(['/veterinario/mascotas/ficha', mascota.id]);
+    if (mascota?.id) {
+      this.router.navigate(['/veterinario/mascotas/ficha', mascota.id], {
+        queryParams: { veterinarioId: this.veterinarioId }
+      });
     } else {
-      this.router.navigate(['/veterinario/mascotas']);
+      this.router.navigate(['/veterinario/mascotas'], {
+        queryParams: { veterinarioId: this.veterinarioId }
+      });
     }
   }
 
   cerrar(): void {
-    this.router.navigate(['/veterinario/mascotas']);
+    this.router.navigate(['/veterinario/mascotas'], {
+      queryParams: { veterinarioId: this.veterinarioId }
+    });
   }
 }

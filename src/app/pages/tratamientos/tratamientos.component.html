@@ -1,0 +1,36 @@
+<!-- CONTENIDO PRINCIPAL: historial de tratamientos del veterinario -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+    <app-header-veterinario [veterinario]="veterinario" [veterinarioId]="veterinarioId" seccionActiva="tratamientos"></app-header-veterinario>
+
+    <main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Encabezado de la sección -->
+        <div class="flex flex-wrap items-center justify-between gap-stack-md mb-stack-lg">
+            <div>
+                <h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">Tratamientos</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant">
+                    Historial cronológico de los tratamientos asignados por el veterinario.
+                </p>
+            </div>
+        </div>
+
+        <!-- Historial cronológico de tratamientos: línea de tiempo -->
+        <section class="pt-10">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-8">Historial Cronológico de Tratamientos</h2>
+            <div class="border-l-2 border-surface-container-highest flex flex-col gap-8">
+                @for (item of tratamientos; track item.tratamiento.id) {
+                    <app-item-tratamiento-veterinario [item]="item"></app-item-tratamiento-veterinario>
+                } @empty {
+                    <!-- Estado vacío: veterinario sin tratamientos registrados -->
+                    <div class="relative pl-8">
+                        <span class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-surface-container-highest border-4 border-surface-container-lowest"></span>
+                        <div class="p-4 bg-surface-container-lowest rounded-xl border border-surface-container-highest text-on-surface-variant font-body-md text-body-md">
+                            Aún no tienes tratamientos registrados.
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </main>
+
+    <app-footer-portal></app-footer-portal>
+</div>

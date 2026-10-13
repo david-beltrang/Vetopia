@@ -1,12 +1,14 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { MascotaService } from '../../service/mascota.service';
 import { DrogaService } from '../../service/droga.service';
+import { VeterinarioService } from '../../service/veterinario.service';
+import { TratamientoService, TratamientoAsignacion } from '../../service/tratamiento.service';
 import { Mascota } from '../../models/mascota.model';
 import { Dueno } from '../../models/dueno.model';
 import { Veterinario } from '../../models/veterinario.model';
 import { Droga } from '../../models/droga.model';
-import { Tratamiento } from '../../models/tratamiento.model';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
 import { EncabezadoTratamientoComponent } from './components/encabezado-tratamiento/encabezado-tratamiento.component';
@@ -28,15 +30,17 @@ export class AsignarTratamientoComponent implements OnInit {
   veterinario?: Veterinario;
   drogas: Droga[] = [];
   mensajeError = signal('');
+  veterinarioId = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private mascotaService = inject(MascotaService);
   private drogaService = inject(DrogaService);
+  private veterinarioService = inject(VeterinarioService);
+  private tratamientoService = inject(TratamientoService);
 
   ngOnInit(): void {
-    this.drogas = this.drogaService.getDrogas();
-    this.veterinario = this.mascotaService.getVeterinarios()[0];
+    this.veterinarioId = Number(this.route.snapshot.queryParamMap.get('veterinarioId')) || 0;
 
     const idParam = this.route.snapshot.params['id'];
     if (!idParam) {
@@ -44,62 +48,56 @@ export class AsignarTratamientoComponent implements OnInit {
       return;
     }
 
-    const mascota = this.mascotaService.getMascotaById(Number(idParam));
-    if (!mascota) {
-      this.mensajeError.set('No encontramos la mascota seleccionada.');
-      return;
-    }
-
-    this.mascota = mascota;
-    this.dueno = mascota.dueno;
+    forkJoin({
+      mascota: this.mascotaService.obtenerMascotaPorId(Number(idParam)),
+      drogas: this.drogaService.listarDrogas(),
+      veterinario: this.veterinarioService.obtenerVeterinarioOpcional(this.veterinarioId)
+    }).subscribe({
+      next: ({ mascota, drogas, veterinario }) => {
+        this.mascota = mascota;
+        this.dueno = mascota.dueno;
+        this.drogas = drogas;
+        this.veterinario = veterinario;
+      },
+      error: () => this.router.navigate(['/error'])
+    });
   }
 
   onGuardar(valor: TratamientoFormValue): void {
     const mascota = this.mascota;
-    const veterinario = this.veterinario;
-    if (!mascota || !veterinario) return;
+    if (!mascota?.id) return;
 
-    const droga = this.drogaService.getDrogaById(valor.drogaId);
-    if (!droga) {
-      this.mensajeError.set('Selecciona un medicamento válido.');
-      return;
-    }
-
-    const unidadesDescontadas = 2;
-    droga.unidadesDisponibles = Math.max(0, droga.unidadesDisponibles - unidadesDescontadas);
-    droga.unidadesVendidas += unidadesDescontadas;
-
-    const tratamiento: Tratamiento = {
-      id: 0,
-      fecha: new Date(valor.fecha),
-      mascota,
-      veterinario,
-      droga,
+    // El backend solo necesita el id de la mascota y de la droga en el cuerpo.
+    const tratamiento: TratamientoAsignacion = {
+      fecha: valor.fecha,
+      mascota: { id: mascota.id },
+      droga: { id: valor.drogaId },
       titulo: valor.titulo,
       descripcion: valor.descripcion,
       completado: false
     };
 
-    this.mascotaService.updateMascota(mascota.id, {
-      ...mascota,
-      tratamientos: [...mascota.tratamientos, tratamiento]
-    });
-
-    this.router.navigate(['/veterinario/mascotas/tratamiento-confirmacion', mascota.id], {
-      state: {
-        unidadesDescontadas,
-        medicamentoNombre: droga.nombre,
-        stockRestante: droga.unidadesDisponibles
-      }
+    this.tratamientoService.asignarTratamiento(tratamiento, this.veterinarioId).subscribe({
+      next: (resultado) => {
+        this.router.navigate(['/veterinario/mascotas/tratamiento-confirmacion', mascota.id], {
+          queryParams: { veterinarioId: this.veterinarioId },
+          state: { resultado }
+        });
+      },
+      error: () => this.router.navigate(['/error'])
     });
   }
 
   onCancelar(): void {
     const mascota = this.mascota;
-    if (mascota) {
-      this.router.navigate(['/veterinario/mascotas/ficha', mascota.id]);
+    if (mascota?.id) {
+      this.router.navigate(['/veterinario/mascotas/ficha', mascota.id], {
+        queryParams: { veterinarioId: this.veterinarioId }
+      });
     } else {
-      this.router.navigate(['/veterinario/mascotas']);
+      this.router.navigate(['/veterinario/mascotas'], {
+        queryParams: { veterinarioId: this.veterinarioId }
+      });
     }
   }
 }
