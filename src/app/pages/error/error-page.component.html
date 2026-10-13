@@ -1,0 +1,22 @@
+<!-- Página de error del sitio público (tema oscuro de la landing) -->
+<div class="tema-landing flex min-h-screen flex-col bg-background overflow-x-hidden font-body-md text-body-md">
+    <main class="flex-1 flex items-center justify-center px-margin-mobile md:px-margin-desktop py-20">
+        <div class="w-full max-w-xl text-center">
+            <a class="inline-flex justify-center mb-10 cursor-pointer" (click)="volverInicio()">
+                <img alt="Vetopia Logo" class="h-12 md:h-16 w-auto object-contain" src="images/logo_Vetopia.png"/>
+            </a>
+
+            <!-- Título y mensaje del error -->
+            <app-mensaje-error class="block" [mensaje]="mensaje"></app-mensaje-error>
+
+            <!-- Acciones: volver al inicio o regresar -->
+            <app-acciones-error class="block" (volverInicio)="volverInicio()" (regresar)="regresar()"></app-acciones-error>
+
+            <div class="flex justify-center mt-10">
+                <span class="material-symbols-outlined text-mint-accent text-shadow-mint text-[76px] md:text-[120px] leading-none">pets</span>
+            </div>
+        </div>
+    </main>
+
+    <app-footer-error></app-footer-error>
+</div>
