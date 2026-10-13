@@ -73,7 +73,7 @@ export class FormularioMascotaComponent implements OnInit {
         especie: mascota.especie,
         sexo: mascota.sexo,
         color: mascota.color,
-        fechaIngreso: this.aFechaHtml(mascota.fechaIngreso)
+        fechaIngreso: mascota.fechaIngreso
       });
       this.imagen = mascota.imagen ?? '';
     }
@@ -113,22 +113,9 @@ export class FormularioMascotaComponent implements OnInit {
       imagen: this.imagen,
       pesoKg: Number(formVal.pesoKg),
       color: formVal.color ?? '',
-      fechaIngreso: this.aFechaLocal(formVal.fechaIngreso ?? ''),
+      fechaIngreso: formVal.fechaIngreso ?? '',
       dueno: this.original?.dueno,
-      estado: this.original?.estado ?? 'Activo',
-      tratamientos: this.original?.tratamientos ?? []
+      estado: this.original?.estado ?? 'Activo'
     };
-  }
-
-  private aFechaHtml(fecha: Date): string {
-    const d = new Date(fecha);
-    const mes = String(d.getMonth() + 1).padStart(2, '0');
-    const dia = String(d.getDate()).padStart(2, '0');
-    return `${d.getFullYear()}-${mes}-${dia}`;
-  }
-
-  private aFechaLocal(valor: string): Date {
-    const [anio, mes, dia] = valor.split('-').map(Number);
-    return new Date(anio, mes - 1, dia);
   }
 }
