@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
@@ -71,7 +72,10 @@ public class Mascota {
     @Column(nullable = false)
     private LocalDate fechaIngreso;
 
-    // Relación n-1 con Dueno: esta es la parte dueña de la FK
+    // Relación n-1 con Dueno: esta es la parte dueña de la FK.
+    // Se deja visible en el JSON (sin @JsonIgnore) porque el frontend necesita
+    // el dueño al mostrar una mascota; el ciclo no se forma porque Dueno.mascotas
+    // sí está ignorada. @ToString.Exclude solo evita la recursión de Lombok.
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "dueno_id", nullable = false)
@@ -84,6 +88,7 @@ public class Mascota {
     // Relación 1-n con Tratamiento: mappedBy apunta a "mascota" en Tratamiento
     // dueño de la FK. Con cascade, al borrar la mascota se borran sus tratamientos
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL)
     private List<Tratamiento> tratamientos = new ArrayList<>();
 

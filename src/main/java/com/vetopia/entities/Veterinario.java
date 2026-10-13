@@ -18,6 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 
 // Entidad Veterinario. Relación 1-n con Tratamiento: mappedBy apunta al
@@ -61,6 +62,7 @@ public class Veterinario {
 
     // Relación 1-n con Tratamiento: mappedBy apunta al campo "veterinario" de
     // Tratamiento. Con cascade, al borrar el veterinario se borran sus tratamientos
+    @JsonIgnore 
     @ToString.Exclude
     @OneToMany(mappedBy = "veterinario")
     private List<Tratamiento> tratamientos = new ArrayList<>();

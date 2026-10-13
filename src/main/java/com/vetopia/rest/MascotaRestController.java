@@ -1,0 +1,84 @@
+package com.vetopia.rest;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.vetopia.entities.mascota.Mascota;
+import com.vetopia.service.mascota.MascotaService;
+
+/*
+ Controlador REST de mascotas. El dueño llega por parámetro de URL
+ y la mascota por el cuerpo JSON; la foto se maneja como una URL dentro del
+ campo "imagen"
+*/
+@RestController
+@RequestMapping("/mascota")
+@CrossOrigin(origins = "http://localhost:4200")
+public class MascotaRestController {
+
+    @Autowired
+    private MascotaService mascotaService;
+
+    // Lista todas las mascotas
+    @GetMapping("/all")
+    public List<Mascota> listar() {
+        return mascotaService.listarMascotas();
+    }
+
+    // Una mascota concreta por su id
+    @GetMapping("/{id}")
+    public Mascota buscarPorId(@PathVariable Long id) {
+        return mascotaService.obtenerMascotaPorId(id);
+    }
+
+    // Mascotas de un dueño (consulta derivada findByDuenoId)
+    @GetMapping("/dueno/{duenoId}")
+    public List<Mascota> listarPorDueno(@PathVariable Long duenoId) {
+        return mascotaService.listarMascotasDeCliente(duenoId);
+    }
+
+    // Búsqueda por nombre (consulta derivada findByNombreContainingIgnoreCase)
+    @GetMapping("/buscar")
+    public List<Mascota> buscarPorNombre(@RequestParam String nombre) {
+        return mascotaService.buscarPorNombre(nombre);
+    }
+
+    // El service valida el dueño, fija el estado en Activo y conserva la imagen
+    // que venga en el JSON. Se pasa null en el archivo porque no hay subida y se
+    // limpia el id para que la base de datos asigne uno nuevo.
+    @PostMapping("/add")
+    public Mascota agregar(@RequestBody Mascota mascota, @RequestParam Long duenoId) {
+        mascota.setId(null);
+        return mascotaService.registrarMascota(mascota, duenoId, null);
+    }
+
+    // Igual que en el POST, sin foto: se conservan dueño, estado e imagen
+    // cuando no vienen en el JSON.
+    @PutMapping("/update")
+    public Mascota actualizar(@RequestBody Mascota mascota) {
+        return mascotaService.actualizarMascota(mascota, null);
+    }
+
+    // Cambia activo/inactivo. El estado llega por la URL como texto ("Activo").
+    @PutMapping("/{id}/estado")
+    public void cambiarEstado(@PathVariable Long id, @RequestParam String estado) {
+        mascotaService.cambiarEstado(id, estado);
+    }
+
+    // Borra la mascota y, en cascada, sus tratamientos.
+    @DeleteMapping("/delete/{id}")
+    public void eliminar(@PathVariable Long id) {
+        mascotaService.eliminarMascota(id);
+    }
+}

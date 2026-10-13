@@ -3,6 +3,8 @@ package com.vetopia.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,6 +43,7 @@ public class Droga {
 
     // Relación 1-n con Tratamiento: mappedBy apunta a "droga" en Tratamiento
     // dueño de la FK. Con cascade, al borrar la droga se borran sus tratamientos
+    @JsonIgnore 
     @OneToMany(mappedBy = "droga")
     private List<Tratamiento> tratamientos = new ArrayList<>();
 

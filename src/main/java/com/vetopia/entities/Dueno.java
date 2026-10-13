@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vetopia.entities.mascota.Mascota;
 
 /**
@@ -51,6 +52,7 @@ public class Dueno {
 
     // Relación 1-n con Mascota: mappedBy apunta a "dueno" en Mascota
     // dueño de la FK. Con cascade, al borrar el dueño se borran sus mascotas
+    @JsonIgnore 
     @OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL)
     private List<Mascota> mascotas = new ArrayList<>();
 }

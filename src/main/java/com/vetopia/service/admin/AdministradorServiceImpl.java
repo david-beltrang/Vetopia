@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.vetopia.entities.Administrador;
 import com.vetopia.exception.ParametroInvalidoException;
@@ -53,5 +54,13 @@ public class AdministradorServiceImpl implements AdministradorService {
             throw new ParametroInvalidoException("Debe indicar el correo y la contraseña.");
         }
         return administradorRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
+    }
+
+    // Elimina un administrador validando que exista.
+    @Override
+    @Transactional
+    public void eliminarAdministrador(Long id) {
+        obtenerAdministradorPorId(id);
+        administradorRepository.deleteById(id);
     }
 }

@@ -18,4 +18,7 @@ public interface AdministradorService {
 
     // Busca un administrador por su correo y contraseña
     Administrador obtenerPorCorreoYContrasena(String correo, String contrasena);
+
+    // Elimina un administrador por su id
+    void eliminarAdministrador(Long id);
 }

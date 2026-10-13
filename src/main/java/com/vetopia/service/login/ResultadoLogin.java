@@ -1,5 +1,7 @@
 package com.vetopia.service.login;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ResultadoLogin {
     private Long id;
     private String rol;
@@ -39,7 +41,10 @@ public class ResultadoLogin {
         this.correo = correo;
     }
 
-    // Devuelve la contraseña del usuario autenticado
+    // Devuelve la contraseña del usuario autenticado.
+    // @JsonIgnore evita que la contraseña viaje en la respuesta del login REST;
+    // los controladores con vistas siguen usando el getter normalmente.
+    @JsonIgnore
     public String getContrasena() {
         return contrasena;
     }

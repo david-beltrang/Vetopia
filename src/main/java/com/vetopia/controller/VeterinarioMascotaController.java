@@ -19,7 +19,7 @@ import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.service.droga.DrogaService;
 import com.vetopia.service.dueno.DuenoService;
 import com.vetopia.service.mascota.MascotaService;
-import com.vetopia.service.tratamiento.ResultadoTratamiento;
+import com.vetopia.dto.ResultadoTratamientoDTO;
 import com.vetopia.service.tratamiento.TratamientoService;
 import com.vetopia.service.veterinario.VeterinarioService;
 
@@ -172,7 +172,7 @@ public class VeterinarioMascotaController {
                 }
                 tratamiento.setDroga(drogaService.obtenerDrogaPorId(tratamiento.getDroga().getId()));
                 tratamiento.setVeterinario(obtenerVeterinario(veterinarioId));
-                ResultadoTratamiento resultado = tratamientoService.asignarTratamiento(tratamiento, veterinarioId);
+                ResultadoTratamientoDTO resultado = tratamientoService.asignarTratamiento(tratamiento, veterinarioId);
                 model.addAttribute("mascota", resultado.getMascota());
                 model.addAttribute("veterinarioId", veterinarioId);
                 model.addAttribute("veterinario", obtenerVeterinario(veterinarioId));

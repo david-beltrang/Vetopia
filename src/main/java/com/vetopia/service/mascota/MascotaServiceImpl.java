@@ -196,4 +196,13 @@ public class MascotaServiceImpl implements MascotaService {
         }
         return mascotaRepository.findByNombreContainingIgnoreCase(nombre.trim());
     }
+
+    // Elimina una mascota validando primero que exista. La colección de
+    // tratamientos está marcada con cascade ALL, así que se borran con ella.
+    @Override
+    @Transactional
+    public void eliminarMascota(Long id) {
+        obtenerMascotaPorId(id);
+        mascotaRepository.deleteById(id);
+    }
 }

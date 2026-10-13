@@ -6,7 +6,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 // Manejo de excepciones: centraliza en un solo lugar la respuesta para
 // los errores de la aplicación, evitando repetir try/catch en cada controlador.
-@ControllerAdvice
+// Se limita al paquete de los controladores que devuelven vistas (MVC); los
+// controladores REST tienen su propio manejador en RestExceptionHandler, que
+// responde JSON en lugar de una plantilla.
+@ControllerAdvice(basePackages = "com.vetopia.controller")
 public class GlobalExceptionHandler {
 
     // Recurso no encontrado como dueño o mascota con id inexistente

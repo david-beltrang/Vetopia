@@ -18,4 +18,7 @@ public interface DrogaService {
 
     // Descuenta unidades del inventario de la droga
     void descontarUnidades(Long drogaId, Integer cantidad);
+
+    // Elimina una droga por su id
+    void eliminarDroga(Long id);
 }
