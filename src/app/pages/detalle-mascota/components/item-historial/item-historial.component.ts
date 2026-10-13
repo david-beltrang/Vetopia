@@ -15,7 +15,7 @@ export class ItemHistorialComponent {
   fechaFormateada(): string {
     const fecha = this.item()?.tratamiento?.fecha;
     if (!fecha) return '';
-    return new Date(fecha).toLocaleDateString('es-ES', {
+    return new Date(`${fecha}T00:00:00`).toLocaleDateString('es-ES', {
       day: 'numeric',
       month: 'short',
       year: 'numeric'
