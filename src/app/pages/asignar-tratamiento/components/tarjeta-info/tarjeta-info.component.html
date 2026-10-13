@@ -1,0 +1,15 @@
+<!-- Tarjeta de solo lectura reutilizable: etiqueta, valor(es) e ícono -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low border border-surface-container-highest"
+     [class.rounded-full]="forma() === 'pill'"
+     [class.rounded-2xl]="forma() === 'card'">
+    <div>
+        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">{{ etiqueta() }}</span>
+        <p class="font-body-md text-body-md text-on-surface font-semibold">{{ valor() }}</p>
+        @if (detalle()) {
+            <p class="font-body-md text-body-md text-on-surface-variant">{{ detalle() }}</p>
+        }
+    </div>
+    <div class="p-2 bg-primary-container/30 rounded-full">
+        <span class="material-symbols-outlined text-primary text-xl">{{ icono() }}</span>
+    </div>
+</div>
