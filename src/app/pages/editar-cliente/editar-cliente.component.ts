@@ -6,13 +6,19 @@ import { DuenoService } from '../../service/dueno.service';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
 import { FormularioClienteComponent } from '../../utils/formulario-cliente/formulario-cliente.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
+import { EncabezadoEditarClienteComponent } from './components/encabezado-editar-cliente/encabezado-editar-cliente.component';
+import { CargandoClienteComponent } from './components/cargando-cliente/cargando-cliente.component';
+import { ClienteNoEncontradoComponent } from './components/cliente-no-encontrado/cliente-no-encontrado.component';
 
 @Component({
   selector: 'app-editar-cliente',
   imports: [
     HeaderVeterinarioComponent,
     FormularioClienteComponent,
-    FooterPortalComponent
+    FooterPortalComponent,
+    EncabezadoEditarClienteComponent,
+    CargandoClienteComponent,
+    ClienteNoEncontradoComponent
   ],
   templateUrl: './editar-cliente.component.html'
 })
