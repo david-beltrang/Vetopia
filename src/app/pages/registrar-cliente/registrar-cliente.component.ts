@@ -6,13 +6,15 @@ import { DuenoService } from '../../service/dueno.service';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
 import { FormularioClienteComponent } from '../../utils/formulario-cliente/formulario-cliente.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
+import { EncabezadoRegistrarClienteComponent } from './components/encabezado-registrar-cliente/encabezado-registrar-cliente.component';
 
 @Component({
   selector: 'app-registrar-cliente',
   imports: [
     HeaderVeterinarioComponent,
     FormularioClienteComponent,
-    FooterPortalComponent
+    FooterPortalComponent,
+    EncabezadoRegistrarClienteComponent
   ],
   templateUrl: './registrar-cliente.component.html'
 })

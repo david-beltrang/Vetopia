@@ -8,13 +8,15 @@ import { Veterinario } from '../../models/veterinario.model';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
 import { FormularioMascotaComponent } from '../../utils/formulario-mascota/formulario-mascota.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
+import { EncabezadoRegistrarMascotaComponent } from './components/encabezado-registrar-mascota/encabezado-registrar-mascota.component';
 
 @Component({
   selector: 'app-registrar-mascota',
   imports: [
     HeaderVeterinarioComponent,
     FormularioMascotaComponent,
-    FooterPortalComponent
+    FooterPortalComponent,
+    EncabezadoRegistrarMascotaComponent
   ],
   templateUrl: './registrar-mascota.component.html'
 })
