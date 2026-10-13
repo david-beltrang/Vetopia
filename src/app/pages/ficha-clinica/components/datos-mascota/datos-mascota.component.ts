@@ -22,6 +22,9 @@ export class DatosMascotaComponent {
   }
 
   navigateToAsignarTratamiento(): void {
-    this.router.navigate(['/veterinario/mascotas/asignar-tratamiento']);
+    const id = this.mascota()?.id;
+    if (id) {
+      this.router.navigate(['/veterinario/mascotas/asignar-tratamiento', id]);
+    }
   }
 }

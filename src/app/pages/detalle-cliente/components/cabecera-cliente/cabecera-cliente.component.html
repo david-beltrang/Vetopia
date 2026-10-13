@@ -1,0 +1,10 @@
+<!-- Cabecera del cliente: avatar con iniciales, nombre e ID -->
+<div class="flex flex-wrap items-center gap-4 px-8 py-6 border-b border-surface-container-high">
+    <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center border border-surface-container-highest">
+        <span class="text-on-primary-container font-bold text-body-md">{{ iniciales() }}</span>
+    </div>
+    <div class="flex-1">
+        <h1 class="text-headline-lg font-headline-lg text-on-surface">{{ nombre() }}</h1>
+        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CLIENTE N° {{ id() }}</span>
+    </div>
+</div>

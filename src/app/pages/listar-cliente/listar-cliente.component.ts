@@ -5,12 +5,16 @@ import { Veterinario } from '../../models/veterinario.model';
 import { DuenoService } from '../../service/dueno.service';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
+import { EncabezadoClientesComponent } from './components/encabezado-clientes/encabezado-clientes.component';
+import { TablaClientesComponent } from './components/tabla-clientes/tabla-clientes.component';
 
 @Component({
   selector: 'app-listar-cliente',
   imports: [
     HeaderVeterinarioComponent,
-    FooterPortalComponent
+    FooterPortalComponent,
+    EncabezadoClientesComponent,
+    TablaClientesComponent
   ],
   templateUrl: './listar-cliente.component.html'
 })
@@ -30,10 +34,6 @@ export class ListarClienteComponent implements OnInit {
 
   get textoContador(): string {
     return this.totalClientes === 1 ? '1 CLIENTE REGISTRADO' : `${this.totalClientes} CLIENTES REGISTRADOS`;
-  }
-
-  iniciales(cliente: Dueno): string {
-    return cliente.nombre.slice(0, 2).toUpperCase();
   }
 
   verDetalle(cliente: Dueno): void {

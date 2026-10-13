@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap") layer(base);
 @import "tailwindcss";
 
 @theme {
@@ -14,6 +15,7 @@
   --color-outline-variant: #E5E7EB;
   --color-error: #DC2626;
   --color-error-container: #FEE2E2;
+  --color-on-error-container: #93000a;
   --color-success: #059669;
   --color-success-container: #D1FAE5;
   --color-primary-dark: #047857;
@@ -34,9 +36,20 @@
   --font-headline-lg: 'Bricolage Grotesque', sans-serif;
   --font-headline-md: 'Bricolage Grotesque', sans-serif;
   --font-display-xl: 'Bricolage Grotesque', sans-serif;
+  --font-display-lg: 'Hanken Grotesk', sans-serif;
+  --font-headline-xl-mobile: 'Hanken Grotesk', sans-serif;
   --font-body-lg: 'Hanken Grotesque', sans-serif;
   --font-body-md: 'Hanken Grotesque', sans-serif;
   --font-label-sm: 'JetBrains Mono', monospace;
+
+  --text-display-lg: 72px;
+  --text-display-lg--line-height: 1.1;
+  --text-display-lg--letter-spacing: -0.04em;
+  --text-display-lg--font-weight: 800;
+
+  --text-headline-xl-mobile: 36px;
+  --text-headline-xl-mobile--line-height: 1.2;
+  --text-headline-xl-mobile--font-weight: 700;
 
   --text-display-xl: 96px;
   --text-display-xl--line-height: 100px;
@@ -74,6 +87,7 @@
   --color-primary-container: #7fffd4;
   --color-on-primary-container: #00765b;
   --color-on-primary: #ffffff;
+  --color-primary-fixed: #79f9ce;
   --color-secondary: #58605f;
   --color-secondary-container: #d9e1df;
   --color-on-secondary-container: #5c6463;
@@ -186,6 +200,16 @@
   --radius-lg: 2rem;
   --radius-xl: 3rem;
   --radius-2xl: 1rem;
+}
+
+/*
+ * Paginas del sitio publico (tema oscuro). La landing declara sus colores
+ * oscuros en cada seccion; este scope reutiliza ese mismo fondo oscuro y el
+ * texto secundario claro para paginas autonomas como la de error.
+ */
+.tema-landing {
+  --color-background: #0f1512;
+  --color-on-surface-variant: #bccac2;
 }
 
 body {

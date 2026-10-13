@@ -22,90 +22,25 @@
             <section class="flex justify-center">
                 <div class="w-full max-w-5xl rounded-lg bg-surface-container-lowest border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
                     <!-- Cabecera del cliente: avatar, nombre e ID -->
-                    <div class="flex flex-wrap items-center gap-4 px-8 py-6 border-b border-surface-container-high">
-                        <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center border border-surface-container-highest">
-                            <span class="text-on-primary-container font-bold text-body-md">{{ iniciales() }}</span>
-                        </div>
-                        <div class="flex-1">
-                            <h1 class="text-headline-lg font-headline-lg text-on-surface">{{ cliente.nombre }}</h1>
-                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CLIENTE N° {{ cliente.id }}</span>
-                        </div>
-                    </div>
+                    <app-cabecera-cliente [nombre]="cliente.nombre" [id]="cliente.id"></app-cabecera-cliente>
 
                     <!-- Datos del cliente: información de contacto -->
-                    <div class="px-8 py-6">
-                        <h2 class="mb-stack-md text-headline-md font-headline-md text-on-surface">Información de contacto</h2>
-                        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div>
-                                <dt class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-1">Cédula</dt>
-                                <dd class="font-body-lg text-body-lg text-on-surface">{{ cliente.cedula }}</dd>
-                            </div>
-                            <div>
-                                <dt class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-1">Correo</dt>
-                                <dd class="font-body-lg text-body-lg text-on-surface">{{ cliente.correo }}</dd>
-                            </div>
-                            <div>
-                                <dt class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-1">Teléfono</dt>
-                                <dd class="font-body-lg text-body-lg text-on-surface">{{ cliente.celular }}</dd>
-                            </div>
-                        </dl>
-                    </div>
+                    <app-datos-contacto-cliente [cliente]="cliente"></app-datos-contacto-cliente>
 
                     <!-- Mascotas del cliente -->
-                    <div class="px-8 py-6 border-t border-surface-container-high">
-                        <h2 class="mb-stack-md text-headline-md font-headline-md text-on-surface">Mascotas del cliente</h2>
-                        @if (mascotas.length > 0) {
-                            <div class="flex flex-col gap-3">
-                                @for (mascota of mascotas; track mascota.id) {
-                                    <div class="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-surface-container-low px-5 py-3">
-                                        <div>
-                                            <p class="font-body-md text-body-md font-semibold text-on-surface">{{ mascota.nombre }}</p>
-                                            <p class="font-body-md text-body-md text-on-surface-variant">{{ mascota.especie }} / {{ mascota.raza }}</p>
-                                        </div>
-                                        <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
-                                           [attr.aria-label]="'Consultar ficha clínica de ' + mascota.nombre"
-                                           (click)="verFicha(mascota)">
-                                            Ver ficha
-                                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">visibility</span>
-                                        </a>
-                                    </div>
-                                }
-                            </div>
-                        } @else {
-                            <p class="font-body-md text-body-md text-on-surface-variant">Este cliente aún no tiene mascotas registradas.</p>
-                        }
-                    </div>
+                    <app-mascotas-cliente [mascotas]="mascotas" (verFicha)="verFicha($event)"></app-mascotas-cliente>
 
                     <!-- Botones de acción: eliminar, editar y agregar mascota -->
-                    <div class="w-full px-8 py-6 mt-4 border-t border-surface-container-high flex flex-wrap items-center justify-between gap-4">
-                        <!-- Botón de eliminación con confirmación -->
-                        <button type="button" (click)="eliminarCliente()"
-                                class="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 font-button text-button uppercase tracking-widest text-on-primary transition-colors hover:bg-primary-container hover:text-on-primary-container">
-                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">delete</span>
-                            Eliminar
-                        </button>
-                        <!-- Enlace a formulario de edición del cliente -->
-                        <a class="inline-flex items-center justify-center gap-2 rounded-full bg-tertiary px-6 py-2.5 font-button text-button uppercase tracking-widest text-on-tertiary transition-colors hover:bg-tertiary-container hover:text-on-tertiary-container"
-                           (click)="editarCliente()">
-                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">edit</span>
-                            Editar
-                        </a>
-                        <!-- Enlace a formulario de registro de mascota para este cliente -->
-                        <a class="inline-flex items-center justify-center gap-2 rounded-full bg-primary-container px-6 py-2.5 font-button text-button uppercase tracking-widest text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
-                           (click)="agregarMascota()">
-                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">add</span>
-                            Agregar mascota
-                        </a>
-                    </div>
+                    <app-acciones-cliente
+                        (eliminar)="eliminarCliente()"
+                        (editar)="editarCliente()"
+                        (agregarMascota)="agregarMascota()"></app-acciones-cliente>
                 </div>
             </section>
         } @else {
             <!-- Mensaje cuando no se encontró el cliente -->
             <section>
-                <div class="rounded-lg bg-surface-container-lowest border border-surface-container-highest p-stack-lg text-center">
-                    <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant">person_off</span>
-                    <p class="font-body-lg text-body-lg text-on-surface-variant">No se encontró el cliente solicitado.</p>
-                </div>
+                <app-cliente-no-encontrado></app-cliente-no-encontrado>
             </section>
         }
     </div>

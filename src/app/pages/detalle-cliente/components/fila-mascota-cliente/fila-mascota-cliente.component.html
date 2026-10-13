@@ -1,0 +1,13 @@
+<!-- Fila de mascota: datos básicos y acción para ver su ficha clínica -->
+<div class="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-surface-container-low px-5 py-3">
+    <div>
+        <p class="font-body-md text-body-md font-semibold text-on-surface">{{ mascota().nombre }}</p>
+        <p class="font-body-md text-body-md text-on-surface-variant">{{ mascota().especie }} / {{ mascota().raza }}</p>
+    </div>
+    <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary cursor-pointer"
+       [attr.aria-label]="'Consultar ficha clínica de ' + mascota().nombre"
+       (click)="verFicha.emit(mascota())">
+        Ver ficha
+        <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">visibility</span>
+    </a>
+</div>
