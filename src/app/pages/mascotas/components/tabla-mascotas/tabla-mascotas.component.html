@@ -1,0 +1,46 @@
+<!-- Tarjeta contenedora del listado: tabla con mascotas -->
+<section class="bg-surface-container-lowest rounded-DEFAULT border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+    <!-- Cabecera de la tarjeta: título y contador dinámico -->
+    <div class="flex items-center justify-between gap-4 p-stack-lg border-b border-surface-container-high">
+        <h2 class="font-headline-lg text-headline-lg text-on-surface">Listado de mascotas</h2>
+        <span class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">{{ textoContador() }}</span>
+    </div>
+    <!-- Tabla responsive -->
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[720px] text-left">
+            <!-- Cabecera de la tabla: columnas de datos -->
+            <thead>
+            <tr class="bg-surface-container-low uppercase">
+                <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Foto</th>
+                <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Nombre</th>
+                <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Especie</th>
+                <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Raza</th>
+                <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Edad</th>
+                <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Sexo</th>
+                <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Dueño</th>
+                <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Acciones</th>
+            </tr>
+            </thead>
+            <!-- Cuerpo de la tabla -->
+            <tbody>
+            @if (mascotas().length === 0) {
+                <!-- Estado vacío: no hay mascotas registradas -->
+                <tr>
+                    <td class="px-6 py-16 text-center" colspan="8">
+                        <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant" style="font-variation-settings: 'FILL' 0;">pets</span>
+                        <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no tienes mascotas registradas.</p>
+                    </td>
+                </tr>
+            } @else {
+                <!-- Fila por cada mascota del repositorio -->
+                @for (mascota of mascotas(); track mascota.id) {
+                    <tr app-fila-mascota
+                        class="border-b border-surface-container-high transition-colors last:border-0 hover:bg-surface-container-low"
+                        [mascota]="mascota"
+                        (verFicha)="verFicha.emit($event)"></tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</section>
