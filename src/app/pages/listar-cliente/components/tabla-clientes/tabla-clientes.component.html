@@ -1,0 +1,44 @@
+<!-- Tabla de clientes: listado con columnas de información -->
+<div class="bg-surface-container-lowest rounded-lg shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest overflow-hidden">
+    <!-- Cabecera de la tarjeta: título y contador dinámico -->
+    <div class="flex flex-wrap items-center justify-between gap-4 px-8 py-6 border-b border-surface-container-high">
+        <h2 class="text-headline-lg font-headline-lg text-on-surface">Listado de clientes</h2>
+        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">{{ textoContador() }}</span>
+    </div>
+
+    <!-- Tabla responsive -->
+    <div class="overflow-x-auto">
+        <table class="w-full min-w-[720px]">
+            <!-- Cabecera de la tabla: columnas de datos -->
+            <thead class="bg-surface-container-low">
+                <tr>
+                    <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">NOMBRE</th>
+                    <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CÉDULA</th>
+                    <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CORREO</th>
+                    <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">TELÉFONO</th>
+                    <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ACCIONES</th>
+                </tr>
+            </thead>
+            <!-- Cuerpo de la tabla -->
+            <tbody>
+                @if (clientes().length === 0) {
+                    <!-- Estado vacío: no hay clientes registrados -->
+                    <tr>
+                        <td class="px-6 py-16 text-center" colspan="5">
+                            <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant">person</span>
+                            <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no hay clientes registrados.</p>
+                        </td>
+                    </tr>
+                } @else {
+                    <!-- Fila por cada cliente del repositorio -->
+                    @for (cliente of clientes(); track cliente.id) {
+                        <tr app-fila-cliente
+                            class="border-b border-surface-container-high hover:bg-surface-container-low transition-colors"
+                            [cliente]="cliente"
+                            (verDetalle)="verDetalle.emit($event)"></tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
