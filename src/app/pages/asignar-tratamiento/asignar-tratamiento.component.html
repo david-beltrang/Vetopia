@@ -1,0 +1,33 @@
+<!-- CONTENIDO PRINCIPAL: formulario de asignación de tratamiento -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+    <app-header-veterinario [veterinario]="veterinario" seccionActiva="tratamientos"></app-header-veterinario>
+
+    <main class="flex-1">
+        <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+            <div class="max-w-[768px] mx-auto">
+                <!-- Encabezado de la sección -->
+                <app-encabezado-tratamiento></app-encabezado-tratamiento>
+
+                <!-- Mensaje de error -->
+                @if (mensajeError()) {
+                    <div class="mb-stack-md rounded-lg border border-error bg-error-container px-4 py-3 font-body-md text-body-md text-on-error-container">
+                        <p>{{ mensajeError() }}</p>
+                    </div>
+                }
+
+                <!-- Formulario de asignación de tratamiento -->
+                <app-formulario-tratamiento
+                    [veterinario]="veterinario"
+                    [mascota]="mascota"
+                    [dueno]="dueno"
+                    [drogas]="drogas"
+                    (guardar)="onGuardar($event)"
+                    (cancelar)="onCancelar()">
+                </app-formulario-tratamiento>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER: fragmento reutilizable del portal -->
+    <app-footer-portal></app-footer-portal>
+</div>
