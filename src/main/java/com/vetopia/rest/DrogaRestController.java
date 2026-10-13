@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import com.vetopia.entities.Droga;
 import com.vetopia.service.droga.DrogaService;
 
@@ -26,31 +28,37 @@ public class DrogaRestController {
     @Autowired
     private DrogaService drogaService;
 
+    @Operation(summary = "Lista todas las drogas")
     @GetMapping("/all")
     public List<Droga> listar() {
         return drogaService.listarDrogas();
     }
 
+    @Operation(summary = "Obtiene una droga por su id")
     @GetMapping("/{id}")
     public Droga buscarPorId(@PathVariable Long id) {
         return drogaService.obtenerDrogaPorId(id);
     }
 
     // Se limpia el id entrante para que la base de datos asigne uno nuevo.
-    @PostMapping("/add")
+    @Operation(summary = "Registra una nueva droga")
+    @PostMapping
     public Droga agregar(@RequestBody Droga droga) {
         droga.setId(null);
         drogaService.guardar(droga);
         return droga;
     }
 
-    @PutMapping("/update")
-    public Droga actualizar(@RequestBody Droga droga) {
+    @Operation(summary = "Actualiza una droga existente")
+    @PutMapping("/{id}")
+    public Droga actualizar(@PathVariable Long id, @RequestBody Droga droga) {
+        droga.setId(id);
         drogaService.guardar(droga);
         return droga;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Elimina una droga por su id")
+    @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         drogaService.eliminarDroga(id);
     }

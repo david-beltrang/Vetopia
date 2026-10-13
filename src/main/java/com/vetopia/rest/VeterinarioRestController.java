@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import com.vetopia.entities.Veterinario;
 import com.vetopia.service.veterinario.VeterinarioService;
 
@@ -26,11 +28,13 @@ public class VeterinarioRestController {
     @Autowired
     private VeterinarioService veterinarioService;
 
+    @Operation(summary = "Lista todos los veterinarios")
     @GetMapping("/all")
     public List<Veterinario> listar() {
         return veterinarioService.listarVeterinarios();
     }
 
+    @Operation(summary = "Obtiene un veterinario por su id")
     @GetMapping("/{id}")
     public Veterinario buscarPorId(@PathVariable Long id) {
         return veterinarioService.obtenerVeterinarioPorId(id);
@@ -38,20 +42,24 @@ public class VeterinarioRestController {
 
     // El service asigna el id; se devuelve el objeto para reutilizarlo en Angular.
     // Se limpia el id entrante para que siempre sea un alta y no una actualización.
-    @PostMapping("/add")
+    @Operation(summary = "Registra un nuevo veterinario")
+    @PostMapping
     public Veterinario agregar(@RequestBody Veterinario veterinario) {
         veterinario.setId(null);
         veterinarioService.guardar(veterinario);
         return veterinario;
     }
 
-    @PutMapping("/update")
-    public Veterinario actualizar(@RequestBody Veterinario veterinario) {
+    @Operation(summary = "Actualiza un veterinario existente")
+    @PutMapping("/{id}")
+    public Veterinario actualizar(@PathVariable Long id, @RequestBody Veterinario veterinario) {
+        veterinario.setId(id);
         veterinarioService.guardar(veterinario);
         return veterinario;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Elimina un veterinario por su id")
+    @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         veterinarioService.eliminarVeterinario(id);
     }

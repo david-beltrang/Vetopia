@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import com.vetopia.dto.LoginRequestDTO;
 import com.vetopia.service.login.LoginService;
 import com.vetopia.service.login.ResultadoLogin;
@@ -22,6 +24,7 @@ public class LoginRestController {
     @Autowired
     private LoginService loginService;
 
+    @Operation(summary = "Autentica un usuario (veterinario, administrador o cliente)")
     @PostMapping("/login")
     public ResponseEntity<ResultadoLogin> login(@RequestBody LoginRequestDTO credenciales) {
         ResultadoLogin resultado = loginService.autenticar(
