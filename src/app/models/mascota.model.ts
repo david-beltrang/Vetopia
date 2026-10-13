@@ -5,7 +5,7 @@ import { Dueno } from './dueno.model';
 import { Tratamiento } from './tratamiento.model';
 
 export interface Mascota {
-  id: number;
+  id?: number;
   nombre: string;
   especie: Especie;
   raza: string;
@@ -14,8 +14,8 @@ export interface Mascota {
   imagen?: string;
   pesoKg: number;
   color: string;
-  fechaIngreso: Date;
+  fechaIngreso: string;
   dueno?: Dueno;
   estado: Estado;
-  tratamientos: Tratamiento[];
+  tratamientos?: Tratamiento[];
 }

@@ -29,9 +29,14 @@ export class ListarMascotaComponent implements OnInit {
     this.duenoId = Number(this.route.snapshot.queryParamMap.get('duenoId')) || 0;
 
     // Si el cliente está identificado se filtran sus mascotas; si no, se listan todas.
-    this.mascotas = this.duenoId > 0
-      ? this.mascotaService.getMascotasDeDueno(this.duenoId)
-      : this.mascotaService.getMascotas();
+    const peticion = this.duenoId > 0
+      ? this.mascotaService.listarMascotasDeDueno(this.duenoId)
+      : this.mascotaService.listarMascotas();
+
+    peticion.subscribe({
+      next: (mascotas) => { this.mascotas = mascotas; },
+      error: () => this.router.navigate(['/error'])
+    });
   }
 
   get textoContador(): string {

@@ -17,8 +17,10 @@ export class FilaMascotaComponent {
     return mascota.dueno?.nombre || 'No registrado';
   }
 
-  getNumeroPaciente(id: number): string {
-    return `PACIENTE N° ${id.toString().padStart(4, '0')}`;
+  // Muestra el id como número de paciente de 4 dígitos.
+  // padStart(4, '0') rellena con ceros a la izquierda: 7 -> "0007"; el ?? 0 cubre que id sea opcional.
+  getNumeroPaciente(id?: number): string {
+    return `PACIENTE N° ${String(id ?? 0).padStart(4, '0')}`;
   }
 
   onImageError(event: Event): void {

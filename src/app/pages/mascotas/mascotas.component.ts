@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { MascotaService } from '../../service/mascota.service';
+import { VeterinarioService } from '../../service/veterinario.service';
 import { Mascota } from '../../models/mascota.model';
 import { Veterinario } from '../../models/veterinario.model';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
@@ -21,11 +23,26 @@ import { TablaMascotasComponent } from './components/tabla-mascotas/tabla-mascot
 export class MascotasComponent implements OnInit {
   mascotas: Mascota[] = [];
   veterinario?: Veterinario;
+  veterinarioId = 0;
+
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private mascotaService = inject(MascotaService);
+  private veterinarioService = inject(VeterinarioService);
 
   ngOnInit(): void {
-    this.mascotas = this.mascotaService.getMascotas();
+    this.veterinarioId = Number(this.route.snapshot.queryParamMap.get('veterinarioId')) || 0;
+
+    forkJoin({
+      mascotas: this.mascotaService.listarMascotas(),
+      veterinario: this.veterinarioService.obtenerVeterinarioOpcional(this.veterinarioId)
+    }).subscribe({
+      next: ({ mascotas, veterinario }) => {
+        this.mascotas = mascotas;
+        this.veterinario = veterinario;
+      },
+      error: () => this.router.navigate(['/error'])
+    });
   }
 
   get totalMascotas(): number {
@@ -37,6 +54,8 @@ export class MascotasComponent implements OnInit {
   }
 
   verFicha(mascota: Mascota): void {
-    this.router.navigate(['/veterinario/mascotas/ficha', mascota.id]);
+    this.router.navigate(['/veterinario/mascotas/ficha', mascota.id], {
+      queryParams: { veterinarioId: this.veterinarioId }
+    });
   }
 }

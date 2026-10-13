@@ -12,7 +12,12 @@
             </a>
         </div>
 
-        @if (mascota) {
+        @if (cargando) {
+            <!-- Loading state -->
+            <div class="flex items-center justify-center py-20">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+        } @else if (mascota) {
             <!-- Vista de Detalle: se muestra solo si la mascota existe -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5">
                 <!-- Columna izquierda: imagen de la mascota -->
