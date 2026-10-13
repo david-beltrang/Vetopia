@@ -10,6 +10,7 @@ export type SeccionVeterinario = 'pacientes' | 'clientes' | 'tratamientos';
 })
 export class HeaderVeterinarioComponent {
   veterinario = input<Veterinario>();
+  veterinarioId = input<number>(0);
   seccionActiva = input<SeccionVeterinario>('pacientes');
   router = inject(Router);
 
@@ -30,15 +31,15 @@ export class HeaderVeterinarioComponent {
   }
 
   navigateToMascotas(): void {
-    this.router.navigate(['/veterinario/mascotas']);
+    this.router.navigate(['/veterinario/mascotas'], { queryParams: { veterinarioId: this.veterinarioId() } });
   }
 
   navigateToClientes(): void {
-    this.router.navigate(['/veterinario/clientes']);
+    this.router.navigate(['/veterinario/clientes'], { queryParams: { veterinarioId: this.veterinarioId() } });
   }
 
   navigateToTratamientos(): void {
-    this.router.navigate(['/veterinario/mascotas/tratamientos']);
+    this.router.navigate(['/veterinario/mascotas/tratamientos'], { queryParams: { veterinarioId: this.veterinarioId() } });
   }
 
   navigateToLogin(): void {
