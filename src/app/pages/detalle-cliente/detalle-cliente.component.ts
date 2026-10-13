@@ -7,12 +7,22 @@ import { DuenoService } from '../../service/dueno.service';
 import { MascotaService } from '../../service/mascota.service';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
+import { CabeceraClienteComponent } from './components/cabecera-cliente/cabecera-cliente.component';
+import { DatosContactoClienteComponent } from './components/datos-contacto-cliente/datos-contacto-cliente.component';
+import { MascotasClienteComponent } from './components/mascotas-cliente/mascotas-cliente.component';
+import { AccionesClienteComponent } from './components/acciones-cliente/acciones-cliente.component';
+import { ClienteNoEncontradoComponent } from './components/cliente-no-encontrado/cliente-no-encontrado.component';
 
 @Component({
   selector: 'app-detalle-cliente',
   imports: [
     HeaderVeterinarioComponent,
-    FooterPortalComponent
+    FooterPortalComponent,
+    CabeceraClienteComponent,
+    DatosContactoClienteComponent,
+    MascotasClienteComponent,
+    AccionesClienteComponent,
+    ClienteNoEncontradoComponent
   ],
   templateUrl: './detalle-cliente.component.html'
 })
@@ -43,11 +53,6 @@ export class DetalleClienteComponent implements OnInit {
     this.cliente = encontrado;
     this.mascotas = this.mascotaService.getMascotasDeDueno(id);
     this.cargando = false;
-  }
-
-  iniciales(): string {
-    const nombre = this.cliente?.nombre ?? '';
-    return nombre ? nombre.slice(0, 2).toUpperCase() : '';
   }
 
   volverClientes(): void {

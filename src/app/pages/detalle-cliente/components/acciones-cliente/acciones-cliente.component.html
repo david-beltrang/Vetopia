@@ -1,0 +1,21 @@
+<!-- Botones de acción: eliminar, editar y agregar mascota -->
+<div class="w-full px-8 py-6 mt-4 border-t border-surface-container-high flex flex-wrap items-center justify-between gap-4">
+    <!-- Botón de eliminación con confirmación -->
+    <button type="button" (click)="eliminar.emit()"
+            class="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 font-button text-button uppercase tracking-widest text-on-primary transition-colors hover:bg-primary-container hover:text-on-primary-container">
+        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">delete</span>
+        Eliminar
+    </button>
+    <!-- Enlace a formulario de edición del cliente -->
+    <a class="inline-flex items-center justify-center gap-2 rounded-full bg-tertiary px-6 py-2.5 font-button text-button uppercase tracking-widest text-on-tertiary transition-colors hover:bg-tertiary-container hover:text-on-tertiary-container"
+       (click)="editar.emit()">
+        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">edit</span>
+        Editar
+    </a>
+    <!-- Enlace a formulario de registro de mascota para este cliente -->
+    <a class="inline-flex items-center justify-center gap-2 rounded-full bg-primary-container px-6 py-2.5 font-button text-button uppercase tracking-widest text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
+       (click)="agregarMascota.emit()">
+        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">add</span>
+        Agregar mascota
+    </a>
+</div>
