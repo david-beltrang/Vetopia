@@ -1,0 +1,38 @@
+<!-- CONTENIDO PRINCIPAL: detalle de la mascota del cliente -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+    <app-header-cliente [duenoId]="duenoId"></app-header-cliente>
+
+    <main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Navegación de regreso: enlace para volver al listado de mascotas -->
+        <div class="mb-stack-lg">
+            <a class="inline-flex items-center gap-2 font-button text-button uppercase text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+               (click)="volverMascotas()">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+                Volver a Mis Mascotas
+            </a>
+        </div>
+
+        @if (mascota) {
+            <!-- Vista de Detalle: se muestra solo si la mascota existe -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5">
+                <!-- Columna izquierda: imagen de la mascota -->
+                <div class="lg:col-span-5">
+                    <app-panel-foto-mascota [mascota]="mascota"></app-panel-foto-mascota>
+                </div>
+
+                <!-- Columna derecha: información detallada de la mascota -->
+                <div class="lg:col-span-7">
+                    <app-datos-mascota-cliente [mascota]="mascota"></app-datos-mascota-cliente>
+                </div>
+
+                <!-- Historial de tratamientos -->
+                <app-historial-mascota class="pt-10 lg:col-span-12" [historial]="historial"></app-historial-mascota>
+            </div>
+        } @else {
+            <!-- Panel de mascota no encontrada -->
+            <app-mascota-no-encontrada [mensaje]="mensajeError" (verMascotas)="volverMascotas()"></app-mascota-no-encontrada>
+        }
+    </main>
+
+    <app-footer-portal></app-footer-portal>
+</div>
