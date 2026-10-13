@@ -5,15 +5,10 @@
 <main class="flex-1">
     <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
         <!-- Título y subtítulo -->
-        <div class="mb-stack-lg">
-            <h1 class="text-headline-xl font-headline-xl text-on-surface mb-1">Editar Mascota</h1>
-            <p class="text-body-lg font-body-lg text-on-surface-variant">Modifica los detalles de la mascota</p>
-        </div>
+        <app-encabezado-editar-mascota></app-encabezado-editar-mascota>
 
         @if (cargando) {
-            <div class="flex items-center justify-center py-20">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            </div>
+            <app-cargando-mascota></app-cargando-mascota>
         } @else if (mascota) {
             <app-formulario-mascota
                 [mascota]="mascota"
@@ -22,16 +17,7 @@
             </app-formulario-mascota>
         } @else {
             <!-- Id no encontrado -->
-            <section class="p-stack-lg text-center">
-                <h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Mascota no encontrada</h1>
-                <p class="font-body-lg text-body-lg text-on-surface-variant mb-8">
-                    No encontramos ninguna mascota registrada con ese identificador.
-                </p>
-                <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-6 py-3 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
-                   (click)="onCancelar()">
-                    Volver a mis mascotas
-                </a>
-            </section>
+            <app-mascota-no-encontrada (volver)="onCancelar()"></app-mascota-no-encontrada>
         }
     </div>
 </main>

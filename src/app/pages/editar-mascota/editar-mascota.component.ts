@@ -6,13 +6,19 @@ import { Veterinario } from '../../models/veterinario.model';
 import { HeaderVeterinarioComponent } from '../ficha-clinica/components/header-veterinario/header-veterinario.component';
 import { FormularioMascotaComponent } from '../../utils/formulario-mascota/formulario-mascota.component';
 import { FooterPortalComponent } from '../../utils/footer-portal/footer-portal.component';
+import { EncabezadoEditarMascotaComponent } from './components/encabezado-editar-mascota/encabezado-editar-mascota.component';
+import { CargandoMascotaComponent } from './components/cargando-mascota/cargando-mascota.component';
+import { MascotaNoEncontradaComponent } from './components/mascota-no-encontrada/mascota-no-encontrada.component';
 
 @Component({
   selector: 'app-editar-mascota',
   imports: [
     HeaderVeterinarioComponent,
     FormularioMascotaComponent,
-    FooterPortalComponent
+    FooterPortalComponent,
+    EncabezadoEditarMascotaComponent,
+    CargandoMascotaComponent,
+    MascotaNoEncontradaComponent
   ],
   templateUrl: './editar-mascota.component.html'
 })
