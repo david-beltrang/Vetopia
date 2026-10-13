@@ -1,0 +1,18 @@
+<!-- CONTENIDO PRINCIPAL: modal de confirmación de tratamiento -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+    <app-header-veterinario [veterinario]="veterinario" seccionActiva="tratamientos"></app-header-veterinario>
+
+    <main class="flex-1 flex items-center justify-center p-4 bg-background/40 backdrop-blur-sm">
+        <app-modal-confirmacion
+            [mascota]="mascota"
+            [unidadesDescontadas]="unidadesDescontadas"
+            [medicamentoNombre]="medicamentoNombre"
+            [stockRestante]="stockRestante"
+            (volverFicha)="volverFicha()"
+            (cerrar)="cerrar()">
+        </app-modal-confirmacion>
+    </main>
+
+    <!-- FOOTER: oculto en vista de modal -->
+    <app-footer-portal class="hidden"></app-footer-portal>
+</div>
