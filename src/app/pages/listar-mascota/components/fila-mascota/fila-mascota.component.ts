@@ -18,4 +18,9 @@ export class FilaMascotaComponent {
   edad(): string {
     return `${this.mascota().edad} años`;
   }
+
+  // true cuando la mascota está activa; cualquier otro valor se muestra como inactiva
+  esActiva(): boolean {
+    return this.mascota().estado === 'Activo';
+  }
 }

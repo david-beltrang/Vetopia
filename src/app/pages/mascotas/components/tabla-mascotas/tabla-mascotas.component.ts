@@ -10,5 +10,6 @@ import { FilaMascotaComponent } from '../fila-mascota/fila-mascota.component';
 export class TablaMascotasComponent {
   mascotas = input<Mascota[]>([]);
   textoContador = input('');
+  duenosPorId = input<Map<number, string>>(new Map());
   verFicha = output<Mascota>();
 }

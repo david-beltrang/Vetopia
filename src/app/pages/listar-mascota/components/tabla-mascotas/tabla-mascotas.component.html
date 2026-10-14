@@ -17,6 +17,7 @@
                     <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Raza</th>
                     <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Edad</th>
                     <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Sexo</th>
+                    <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Estado</th>
                     <th class="px-6 py-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant" scope="col">Acciones</th>
                 </tr>
             </thead>
@@ -24,7 +25,7 @@
                 @if (mascotas().length === 0) {
                     <!-- Estado vacío: se muestra cuando no hay mascotas registradas -->
                     <tr>
-                        <td class="px-6 py-16 text-center" colspan="7">
+                        <td class="px-6 py-16 text-center" colspan="8">
                             <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant" style="font-variation-settings: 'FILL' 0;">pets</span>
                             <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no tienes mascotas registradas.</p>
                         </td>
