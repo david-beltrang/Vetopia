@@ -86,12 +86,24 @@ public class TratamientoServiceImpl implements TratamientoService {
         return "Medicamento";
     }
 
+    // El nombre del cliente se navega con la relación de la mascota
+    // (tratamiento -> mascota -> dueno). Alimenta el DTO del listado del
+    // veterinario para no duplicar la entidad Dueno completa en el JSON.
+    private String resolverNombreCliente(Tratamiento tratamiento) {
+        Mascota mascota = tratamiento.getMascota();
+        if (mascota != null && mascota.getDueno() != null && mascota.getDueno().getNombre() != null) {
+            return mascota.getDueno().getNombre();
+        }
+        return "No registrado";
+    }
+
     // Lista los tratamientos asociados a un veterinario específico, incluyendo el nombre de la droga utilizada
     @Override
     public List<HistorialTratamientoDTO> listarTratamientosPorVeterinarioConDroga(Long veterinarioId) {
         List<HistorialTratamientoDTO> items = new ArrayList<>();
         for (Tratamiento tratamiento : listarTratamientosPorVeterinario(veterinarioId)) {
-            items.add(new HistorialTratamientoDTO(tratamiento, resolverNombreDroga(tratamiento)));
+            items.add(new HistorialTratamientoDTO(tratamiento, resolverNombreDroga(tratamiento),
+                    resolverNombreCliente(tratamiento)));
         }
         return items;
     }
@@ -101,7 +113,8 @@ public class TratamientoServiceImpl implements TratamientoService {
     public List<HistorialTratamientoDTO> listarHistorialDeMascota(Long mascotaId) {
         List<HistorialTratamientoDTO> historial = new ArrayList<>();
         for (Tratamiento tratamiento : listarTratamientosPorMascota(mascotaId)) {
-            historial.add(new HistorialTratamientoDTO(tratamiento, resolverNombreDroga(tratamiento)));
+            historial.add(new HistorialTratamientoDTO(tratamiento, resolverNombreDroga(tratamiento),
+                    resolverNombreCliente(tratamiento)));
         }
         return historial;
     }
