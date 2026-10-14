@@ -114,7 +114,6 @@ export class FormularioMascotaComponent implements OnInit {
       pesoKg: Number(formVal.pesoKg),
       color: formVal.color ?? '',
       fechaIngreso: formVal.fechaIngreso ?? '',
-      dueno: this.original?.dueno,
       estado: this.original?.estado ?? 'Activo'
     };
   }

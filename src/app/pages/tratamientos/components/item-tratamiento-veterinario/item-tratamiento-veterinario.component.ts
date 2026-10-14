@@ -29,8 +29,7 @@ export class ItemTratamientoVeterinarioComponent {
   }
 
   nombreCliente(): string {
-    const nombre = this.item().tratamiento?.mascota?.dueno?.nombre;
-    return nombre || 'No registrado';
+    return this.item().clienteNombre || 'No registrado';
   }
 
   nombrePaciente(): string {
