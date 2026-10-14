@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, map, mergeMap } from 'rxjs';
+import { combineLatest, map, mergeMap } from 'rxjs';
 import { Dueno } from '../../models/dueno.model';
 import { Mascota } from '../../models/mascota.model';
 import { Veterinario } from '../../models/veterinario.model';
@@ -55,7 +55,8 @@ export class DetalleClienteComponent implements OnInit {
   }
 
   private cargarCliente(id: number): void {
-    forkJoin({
+    // Espera los datos del cliente y veterinario antes de cargar sus mascotas.
+    combineLatest({
       cliente: this.duenoService.obtenerDuenoPorId(id),
       veterinario: this.veterinarioService.obtenerVeterinarioOpcional(this.veterinarioId)
     }).pipe(

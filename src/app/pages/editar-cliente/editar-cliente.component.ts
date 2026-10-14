@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { Dueno } from '../../models/dueno.model';
 import { Veterinario } from '../../models/veterinario.model';
 import { DuenoService } from '../../service/dueno.service';
@@ -49,7 +49,8 @@ export class EditarClienteComponent implements OnInit {
 
   private cargarCliente(id: number): void {
     this.id = id;
-    forkJoin({
+    // Espera las respuestas de ambas peticiones independientes.
+    combineLatest({
       cliente: this.duenoService.obtenerDuenoPorId(id),
       veterinario: this.veterinarioService.obtenerVeterinarioOpcional(this.veterinarioId)
     }).subscribe({

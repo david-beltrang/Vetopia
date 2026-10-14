@@ -1,7 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, map, mergeMap } from 'rxjs';
+import { combineLatest, map, mergeMap, of } from 'rxjs';
 import { MascotaService } from '../../service/mascota.service';
+import { DuenoService } from '../../service/dueno.service';
 import { VeterinarioService } from '../../service/veterinario.service';
 import { TratamientoService } from '../../service/tratamiento.service';
 import { Mascota } from '../../models/mascota.model';
@@ -40,6 +41,7 @@ export class FichaClinicaComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private mascotaService = inject(MascotaService);
+  private duenoService = inject(DuenoService);
   private veterinarioService = inject(VeterinarioService);
   private tratamientoService = inject(TratamientoService);
 
@@ -56,20 +58,27 @@ export class FichaClinicaComponent implements OnInit {
   }
 
   private cargarFicha(id: number): void {
-    forkJoin({
+    // Espera los datos de la mascota y veterinario antes de cargar el historial.
+    // El dueño ya no viene dentro de la mascota, así que se consulta por su id.
+    combineLatest({
       mascota: this.mascotaService.obtenerMascotaPorId(id),
       veterinario: this.veterinarioService.obtenerVeterinarioOpcional(this.veterinarioId)
     }).pipe(
       mergeMap(({ mascota, veterinario }) =>
-        this.tratamientoService.listarHistorialDeMascota(id).pipe(
-          map(historial => ({ mascota, veterinario, historial }))
+        combineLatest({
+          historial: this.tratamientoService.listarHistorialDeMascota(id),
+          propietario: mascota.duenoId != null
+            ? this.duenoService.obtenerDuenoPorId(mascota.duenoId)
+            : of<Dueno | undefined>(undefined)
+        }).pipe(
+          map(({ historial, propietario }) => ({ mascota, veterinario, historial, propietario }))
         )
       )
     ).subscribe({
-      next: ({ mascota, veterinario, historial }) => {
+      next: ({ mascota, veterinario, historial, propietario }) => {
         this.mascotaSeleccionada = mascota;
         this.veterinario = veterinario;
-        this.propietarioSeleccionado = mascota.dueno;
+        this.propietarioSeleccionado = propietario;
         this.historialSeleccionado = historial;
         this.cargando = false;
       },

@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { combineLatest, map, mergeMap, of } from 'rxjs';
 import { MascotaService } from '../../service/mascota.service';
 import { DrogaService } from '../../service/droga.service';
+import { DuenoService } from '../../service/dueno.service';
 import { VeterinarioService } from '../../service/veterinario.service';
 import { TratamientoService, TratamientoAsignacion } from '../../service/tratamiento.service';
 import { Mascota } from '../../models/mascota.model';
@@ -36,6 +37,7 @@ export class AsignarTratamientoComponent implements OnInit {
   private router = inject(Router);
   private mascotaService = inject(MascotaService);
   private drogaService = inject(DrogaService);
+  private duenoService = inject(DuenoService);
   private veterinarioService = inject(VeterinarioService);
   private tratamientoService = inject(TratamientoService);
 
@@ -48,14 +50,23 @@ export class AsignarTratamientoComponent implements OnInit {
       return;
     }
 
-    forkJoin({
+    // Espera las respuestas de las peticiones independientes. El dueño ya no
+    // viene dentro de la mascota, así que se consulta por su id.
+    combineLatest({
       mascota: this.mascotaService.obtenerMascotaPorId(Number(idParam)),
       drogas: this.drogaService.listarDrogas(),
       veterinario: this.veterinarioService.obtenerVeterinarioOpcional(this.veterinarioId)
-    }).subscribe({
-      next: ({ mascota, drogas, veterinario }) => {
+    }).pipe(
+      mergeMap(({ mascota, drogas, veterinario }) => {
+        const dueno$ = mascota.duenoId != null
+          ? this.duenoService.obtenerDuenoPorId(mascota.duenoId)
+          : of<Dueno | undefined>(undefined);
+        return dueno$.pipe(map(dueno => ({ mascota, drogas, veterinario, dueno })));
+      })
+    ).subscribe({
+      next: ({ mascota, drogas, veterinario, dueno }) => {
         this.mascota = mascota;
-        this.dueno = mascota.dueno;
+        this.dueno = dueno;
         this.drogas = drogas;
         this.veterinario = veterinario;
       },
