@@ -28,19 +28,21 @@ public class VeterinarioRestController {
     @Autowired
     private VeterinarioService veterinarioService;
 
+    // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Lista todos los veterinarios")
     @GetMapping("/all")
     public List<Veterinario> listar() {
         return veterinarioService.listarVeterinarios();
     }
 
+    // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Obtiene un veterinario por su id")
     @GetMapping("/{id}")
     public Veterinario buscarPorId(@PathVariable Long id) {
         return veterinarioService.obtenerVeterinarioPorId(id);
     }
 
-    // El service asigna el id; se devuelve el objeto para reutilizarlo en Angular.
+    // El service asigna el id, se devuelve el objeto para reutilizarlo en Angular.
     // Se limpia el id entrante para que siempre sea un alta y no una actualización.
     @Operation(summary = "Registra un nuevo veterinario")
     @PostMapping
@@ -50,6 +52,7 @@ public class VeterinarioRestController {
         return veterinario;
     }
 
+    // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Actualiza un veterinario existente")
     @PutMapping("/{id}")
     public Veterinario actualizar(@PathVariable Long id, @RequestBody Veterinario veterinario) {
@@ -58,6 +61,7 @@ public class VeterinarioRestController {
         return veterinario;
     }
 
+    // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Elimina un veterinario por su id")
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {

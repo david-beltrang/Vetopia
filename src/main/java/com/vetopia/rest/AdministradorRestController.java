@@ -27,19 +27,21 @@ public class AdministradorRestController {
     @Autowired
     private AdministradorService administradorService;
 
+    // Se listan todos los administradores disponibles en la base de datos.
     @Operation(summary = "Lista todos los administradores")
     @GetMapping("/all")
     public List<Administrador> listar() {
         return administradorService.listarAdministradores();
     }
 
+    // Se obtiene un administrador por su id, si no se encuentra, se lanza una excepción
     @Operation(summary = "Obtiene un administrador por su id")
     @GetMapping("/{id}")
     public Administrador buscarPorId(@PathVariable Long id) {
         return administradorService.obtenerAdministradorPorId(id);
     }
 
-    // Se limpia el id entrante para que la base de datos asigne uno nuevo.
+    // Se limpia el id entrante para que la base de datos asigne uno nuevo
     @Operation(summary = "Registra un nuevo administrador")
     @PostMapping
     public Administrador agregar(@RequestBody Administrador administrador) {
@@ -48,6 +50,7 @@ public class AdministradorRestController {
         return administrador;
     }
 
+    // Se actualiza un administrador existente, si no se encuentra, se lanza una excepción
     @Operation(summary = "Actualiza un administrador existente")
     @PutMapping("/{id}")
     public Administrador actualizar(@PathVariable Long id, @RequestBody Administrador administrador) {
@@ -56,6 +59,7 @@ public class AdministradorRestController {
         return administrador;
     }
 
+    // Se elimina un administrador por su id, si no se encuentra, se lanza una excepción
     @Operation(summary = "Elimina un administrador por su id")
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {

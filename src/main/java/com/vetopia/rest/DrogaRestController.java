@@ -19,7 +19,7 @@ import com.vetopia.entities.Droga;
 import com.vetopia.service.droga.DrogaService;
 
 // Controlador REST del inventario de medicamentos. El frontend lo necesita
-// para llenar el selector al asignar un tratamiento.
+// para llenar el selector al asignar un tratamiento
 @RestController
 @RequestMapping("/droga")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -28,12 +28,14 @@ public class DrogaRestController {
     @Autowired
     private DrogaService drogaService;
 
+    // Se listan todas las drogas disponibles en la base de datos
     @Operation(summary = "Lista todas las drogas")
     @GetMapping("/all")
     public List<Droga> listar() {
         return drogaService.listarDrogas();
     }
 
+    // Se obtiene una droga por su id, si no se encuentra, se lanza una excepción
     @Operation(summary = "Obtiene una droga por su id")
     @GetMapping("/{id}")
     public Droga buscarPorId(@PathVariable Long id) {
@@ -49,6 +51,7 @@ public class DrogaRestController {
         return droga;
     }
 
+    // Se actualiza una droga existente, si no se encuentra, se lanza una excepción
     @Operation(summary = "Actualiza una droga existente")
     @PutMapping("/{id}")
     public Droga actualizar(@PathVariable Long id, @RequestBody Droga droga) {
@@ -57,6 +60,7 @@ public class DrogaRestController {
         return droga;
     }
 
+    // Se elimina una droga por su id, si no se encuentra, se lanza una excepción
     @Operation(summary = "Elimina una droga por su id")
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {

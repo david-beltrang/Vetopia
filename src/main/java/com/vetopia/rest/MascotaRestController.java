@@ -61,8 +61,7 @@ public class MascotaRestController {
     }
 
     // El service valida el dueño, fija el estado en Activo y conserva la imagen
-    // que venga en el JSON. Se pasa null en el archivo porque no hay subida y se
-    // limpia el id para que la base de datos asigne uno nuevo.
+    // que venga en el JSON. Se retorna null en el archivo porque no hay subida de imagen
     @Operation(summary = "Registra una nueva mascota")
     @PostMapping
     public Mascota agregar(@RequestBody Mascota mascota, @RequestParam Long duenoId) {
@@ -71,7 +70,7 @@ public class MascotaRestController {
     }
 
     // Igual que en el POST, sin foto: se conservan dueño, estado e imagen
-    // cuando no vienen en el JSON.
+    // cuando no vienen en el JSON
     @Operation(summary = "Actualiza una mascota existente")
     @PutMapping("/{id}")
     public Mascota actualizar(@PathVariable Long id, @RequestBody Mascota mascota) {
@@ -79,7 +78,8 @@ public class MascotaRestController {
         return mascotaService.actualizarMascota(mascota, null);
     }
 
-    // Cambia activo/inactivo. El estado llega por la URL como texto ("Activo").
+    // Cambia el estado de la mascota de activo a inactivo o al reves.
+    // El estado llega por la URL como texto ("Activo")
     @Operation(summary = "Cambia el estado (activo/inactivo) de una mascota")
     @PutMapping("/{id}/estado")
     public void cambiarEstado(@PathVariable Long id, @RequestParam String estado) {

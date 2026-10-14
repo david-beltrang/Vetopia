@@ -24,6 +24,8 @@ public class LoginRestController {
     @Autowired
     private LoginService loginService;
 
+    // Autentica un usuario (veterinario, administrador o cliente) y 
+    // devuelve un objeto ResultadoLogin con la información del usuario y su rol
     @Operation(summary = "Autentica un usuario (veterinario, administrador o cliente)")
     @PostMapping("/login")
     public ResponseEntity<ResultadoLogin> login(@RequestBody LoginRequestDTO credenciales) {
@@ -31,7 +33,7 @@ public class LoginRestController {
                 credenciales.getCorreo(), credenciales.getContrasena());
 
         // Si no coincide con ningún veterinario, administrador ni cliente, se
-        // responde 401 en lugar de un 200 con cuerpo vacío.
+        // responde 401 en lugar de un 200 con cuerpo vacío
         if (resultado == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

@@ -50,9 +50,8 @@ public class DuenoRestController {
         return duenoService.obtenerDuenoPorId(id);
     }
 
-    // Mascotas de un cliente. Usa la consulta derivada findByDuenoId del
-    // repositorio a través del service. Va antes de validar el dueño para
-    // devolver 404 si el id no existe.
+    // Mascotas de un cliente, usa la consulta del findByDuenoIdmediante el service
+    // Valida el dueño para devolver 404 si el id no existe
     @Operation(summary = "Lista las mascotas de un cliente")
     @GetMapping("/{id}/mascotas")
     public List<Mascota> listarMascotas(@PathVariable Long id) {
@@ -61,9 +60,7 @@ public class DuenoRestController {
     }
 
     // Devuelve el cliente con el id ya asignado por la base de datos, porque
-    // el frontend lo necesita para registrar sus mascotas justo después.
-    // Se borra el id que venga en el JSON: si el cliente lo envía, JPA
-    // entendería que es una actualización y no un alta.
+    // el frontend lo necesita para registrar sus mascotas justo después
     @Operation(summary = "Registra un nuevo cliente")
     @PostMapping
     public Dueno agregar(@RequestBody Dueno dueno) {
@@ -71,7 +68,7 @@ public class DuenoRestController {
         return duenoService.registrarClienteActivo(dueno);
     }
 
-    // El id viaja en la URL, así que JPA actualiza el registro existente.
+    // El id viaja en la URL, así que JPA actualiza el registro existente
     @Operation(summary = "Actualiza un cliente existente")
     @PutMapping("/{id}")
     public Dueno actualizar(@PathVariable Long id, @RequestBody Dueno dueno) {
@@ -80,7 +77,7 @@ public class DuenoRestController {
         return dueno;
     }
 
-    // Borra el cliente y, en cascada, sus mascotas y tratamientos.
+    // Borra el cliente y, en cascada, sus mascotas y tratamientos
     @Operation(summary = "Elimina un cliente por su id")
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
