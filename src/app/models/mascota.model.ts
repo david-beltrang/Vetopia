@@ -1,7 +1,6 @@
 import { Especie } from './enums/especie.enum';
 import { Estado } from './enums/estado.enum';
 import { Sexo } from './enums/sexo.enum';
-import { Dueno } from './dueno.model';
 import { Tratamiento } from './tratamiento.model';
 
 export interface Mascota {
@@ -15,7 +14,7 @@ export interface Mascota {
   pesoKg: number;
   color: string;
   fechaIngreso: string;
-  dueno?: Dueno;
+  duenoId?: number;
   estado: Estado;
   tratamientos?: Tratamiento[];
 }

@@ -15,6 +15,7 @@
   --color-outline-variant: #E5E7EB;
   --color-error: #DC2626;
   --color-error-container: #FEE2E2;
+  --color-error-container-dark: #FCA5A5;
   --color-on-error-container: #93000a;
   --color-success: #059669;
   --color-success-container: #D1FAE5;
@@ -156,6 +157,7 @@
   --color-background: #f7f9fb;
   --color-error: #ba1a1a;
   --color-error-container: #ffdad6;
+  --color-error-container-dark: #FCA5A5;
   --color-surface: #f7f9fb;
 
   /* Medidas del portal: mas estrechas que las de la landing. Sin esto los
