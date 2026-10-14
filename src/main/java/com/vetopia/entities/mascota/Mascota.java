@@ -73,9 +73,10 @@ public class Mascota {
     private LocalDate fechaIngreso;
 
     // Relación n-1 con Dueno: esta es la parte dueña de la FK.
-    // Se deja visible en el JSON (sin @JsonIgnore) porque el frontend necesita
-    // el dueño al mostrar una mascota; el ciclo no se forma porque Dueno.mascotas
-    // sí está ignorada. @ToString.Exclude solo evita la recursión de Lombok.
+    // Con @JsonIgnore el dueño no se duplica dentro del JSON de la mascota y,
+    // junto con Dueno.mascotas (también ignorada), se corta la recursión.
+    // @ToString.Exclude solo evita la recursión de Lombok.
+    @JsonIgnore
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "dueno_id", nullable = false)
@@ -91,6 +92,13 @@ public class Mascota {
     @JsonIgnore
     @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL)
     private List<Tratamiento> tratamientos = new ArrayList<>();
+
+    // Se expone únicamente el id del dueño: el objeto completo no viaja en el
+    // JSON de la mascota (@JsonIgnore arriba), pero el frontend lo necesita
+    // para consultar el dueño por su propio endpoint /dueno/{id}.
+    public Long getDuenoId() {
+        return dueno != null ? dueno.getId() : null;
+    }
 
     // Método para verificar si la mascota tiene una imagen asociada
     public boolean tieneImagen() {
