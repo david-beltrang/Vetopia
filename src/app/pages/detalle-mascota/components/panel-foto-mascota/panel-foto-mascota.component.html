@@ -1,0 +1,12 @@
+<!-- Columna izquierda: imagen de la mascota -->
+<div class="h-full bg-surface-container-lowest rounded-DEFAULT border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] p-3">
+    <div class="flex h-full items-center justify-center overflow-hidden rounded-DEFAULT bg-surface-container-high">
+        <!-- Imagen real de la mascota si tiene imagen cargada -->
+        @if (mascota().imagen) {
+            <img [src]="mascota().imagen" [alt]="'Foto de ' + mascota().nombre" class="h-full w-full object-cover"/>
+        } @else {
+            <!-- Icono por defecto si no tiene imagen -->
+            <span class="material-symbols-outlined text-6xl text-outline" style="font-variation-settings: 'FILL' 0;">pets</span>
+        }
+    </div>
+</div>

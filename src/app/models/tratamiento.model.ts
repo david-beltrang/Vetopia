@@ -3,11 +3,11 @@ import { Veterinario } from './veterinario.model';
 import { Droga } from './droga.model';
 
 export interface Tratamiento {
-  id: number;
-  fecha: Date;
+  id?: number;
+  fecha: string;
   mascota?: Mascota;
-  veterinario: Veterinario;
-  droga: Droga;
+  veterinario?: Veterinario;
+  droga?: Droga;
   titulo: string;
   descripcion?: string;
   completado: boolean;

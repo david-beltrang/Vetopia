@@ -72,8 +72,7 @@ export class FormularioClienteComponent implements OnInit {
       nombre: formVal.nombre ?? '',
       correo: formVal.correo ?? '',
       celular: formVal.celular ?? '',
-      contrasena: formVal.contrasena ?? '',
-      mascotas: this.original?.mascotas ?? []
+      contrasena: formVal.contrasena ?? ''
     };
 
     this.guardar.emit(dueno);

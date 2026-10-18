@@ -2,7 +2,7 @@ import { Estado } from './enums/estado.enum';
 import { Tratamiento } from './tratamiento.model';
 
 export interface Veterinario {
-  id: number;
+  id?: number;
   cedula: string;
   contrasena: string;
   correo: string;
@@ -11,5 +11,5 @@ export interface Veterinario {
   nombre: string;
   estado: Estado;
   urlFoto?: string;
-  tratamientos: Tratamiento[];
+  tratamientos?: Tratamiento[];
 }

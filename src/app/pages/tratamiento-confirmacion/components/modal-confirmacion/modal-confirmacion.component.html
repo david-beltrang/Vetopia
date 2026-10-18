@@ -1,0 +1,38 @@
+<!-- Modal: tarjeta de confirmación -->
+<div class="w-full max-w-md bg-surface-container-lowest rounded-xl shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] border border-outline-variant/20 overflow-hidden">
+    <div class="p-8 flex flex-col items-center">
+        <!-- Foto de la mascota con indicador de completado -->
+        <app-avatar-mascota [mascota]="mascota()"></app-avatar-mascota>
+
+        <!-- Título y nombre de la mascota -->
+        <h2 class="text-headline-xl-mobile font-headline-xl-mobile text-on-surface text-center mb-4">
+            Tratamiento Aplicado
+        </h2>
+        @if (mascota()) {
+            <p class="text-body-lg font-body-lg text-on-surface font-semibold text-center mb-4">{{ mascota()!.nombre }}</p>
+        }
+
+        <!-- Mensaje de confirmación: unidades descontadas y stock restante -->
+        <div class="text-center mb-8">
+            <p class="text-body-lg font-body-lg text-on-surface-variant">
+                Se han descontado <span class="font-semibold text-on-surface">{{ unidadesDescontadas() }}</span> unidades de <span class="font-semibold text-on-surface">{{ medicamentoNombre() }}</span>.
+            </p>
+            <p class="text-body-lg font-body-lg text-on-surface font-semibold mt-1">
+                Stock restante: <span>{{ stockRestante() }}</span> unidades.
+            </p>
+        </div>
+
+        <!-- Botones de acción: volver a ficha o cerrar ventana -->
+        <div class="w-full max-w-sm flex flex-col gap-2">
+            <button type="button" (click)="volverFicha.emit()"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-container px-6 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary">
+                Volver a la Ficha
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </button>
+            <button type="button" (click)="cerrar.emit()"
+                    class="w-full py-4 px-6 border border-outline text-on-surface font-button text-button uppercase text-center rounded-full hover:bg-surface-container-high transition-colors">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>

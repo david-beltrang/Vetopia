@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import com.vetopia.dto.HistorialTratamientoDTO;
 import com.vetopia.dto.ResultadoTratamientoDTO;
 import com.vetopia.entities.Tratamiento;
@@ -32,59 +34,71 @@ public class TratamientoRestController {
     @Autowired
     private TratamientoService tratamientoService;
 
+    // Lista todos los tratamientos
+    @Operation(summary = "Lista todos los tratamientos")
     @GetMapping("/all")
     public List<Tratamiento> listar() {
         return tratamientoService.listarTratamientos();
     }
 
+    // Una tratamiento concreto por su id
+    @Operation(summary = "Obtiene un tratamiento por su id")
     @GetMapping("/{id}")
     public Tratamiento buscarPorId(@PathVariable Long id) {
         return tratamientoService.obtenerTratamientoPorId(id);
     }
 
     // Tratamientos de una mascota (consulta derivada findByMascotaId)
+    @Operation(summary = "Lista los tratamientos de una mascota")
     @GetMapping("/mascota/{mascotaId}")
     public List<Tratamiento> listarPorMascota(@PathVariable Long mascotaId) {
         return tratamientoService.listarTratamientosPorMascota(mascotaId);
     }
 
-    // Historial de una mascota con el nombre de la droga, es lo que pinta la
-    // ficha clínica. Se devuelve el DTO y no la entidad para que el frontend
-    // reciba el nombre del medicamento ya resuelto.
+    // Historial de una mascota con el nombre de la droga, se devuelve el DTO 
+    // y no la entidad para que el frontend reciba el nombre del medicamento ya resuelto
+    @Operation(summary = "Historial de tratamientos de una mascota (con nombre de droga)")
     @GetMapping("/mascota/{mascotaId}/historial")
     public List<HistorialTratamientoDTO> historialDeMascota(@PathVariable Long mascotaId) {
         return tratamientoService.listarHistorialDeMascota(mascotaId);
     }
 
     // Tratamientos de un veterinario (consulta derivada findByVeterinarioId)
+    @Operation(summary = "Lista los tratamientos de un veterinario")
     @GetMapping("/veterinario/{veterinarioId}")
     public List<Tratamiento> listarPorVeterinario(@PathVariable Long veterinarioId) {
         return tratamientoService.listarTratamientosPorVeterinario(veterinarioId);
     }
 
+    // Historial de un veterinario con el nombre de la droga, se devuelve el DTO
+    @Operation(summary = "Historial de tratamientos de un veterinario (con nombre de droga)")
     @GetMapping("/veterinario/{veterinarioId}/historial")
     public List<HistorialTratamientoDTO> historialDeVeterinario(@PathVariable Long veterinarioId) {
         return tratamientoService.listarTratamientosPorVeterinarioConDroga(veterinarioId);
     }
 
-    // Alta simple: guarda el tratamiento tal cual llega, sin descontar stock.
-    // Se limpia el id para que la base de datos asigne uno nuevo.
-    @PostMapping("/add")
+    // Guarda el tratamiento tal cual llega, sin descontar stock.
+    // Se limpia el id para que la base de datos asigne uno nuevo
+    @Operation(summary = "Registra un nuevo tratamiento")
+    @PostMapping
     public Tratamiento agregar(@RequestBody Tratamiento tratamiento) {
         tratamiento.setId(null);
         tratamientoService.guardar(tratamiento);
         return tratamiento;
     }
 
-    @PutMapping("/update")
-    public Tratamiento actualizar(@RequestBody Tratamiento tratamiento) {
+    // Guarda el tratamiento tal cual llega, sin descontar stock
+    @Operation(summary = "Actualiza un tratamiento existente")
+    @PutMapping("/{id}")
+    public Tratamiento actualizar(@PathVariable Long id, @RequestBody Tratamiento tratamiento) {
+        tratamiento.setId(id);
         tratamientoService.guardar(tratamiento);
         return tratamiento;
     }
 
     // Asignar un tratamiento a una mascota. En el JSON llegan la mascota y la
-    // droga con su id; el veterinario viene por la URL. Se limpia el id para
-    // que sea siempre un alta y no una actualización accidental.
+    // droga con su id; el veterinario viene por la URL
+    @Operation(summary = "Asigna un tratamiento a una mascota y descuenta inventario")
     @PostMapping("/asignar")
     public ResultadoTratamientoDTO asignar(@RequestBody Tratamiento tratamiento,
             @RequestParam Long veterinarioId) {
@@ -92,7 +106,9 @@ public class TratamientoRestController {
         return tratamientoService.asignarTratamiento(tratamiento, veterinarioId);
     }
 
-    @DeleteMapping("/delete/{id}")
+    // Elimina un tratamiento por su id. No se descuenta inventario porque ya se descontó al asignar
+    @Operation(summary = "Elimina un tratamiento por su id")
+    @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         tratamientoService.eliminarTratamiento(id);
     }

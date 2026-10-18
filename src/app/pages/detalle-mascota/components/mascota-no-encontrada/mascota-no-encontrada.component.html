@@ -1,0 +1,14 @@
+<!-- Panel de mascota no encontrada: se muestra cuando mascota es null -->
+<div class="bg-surface-container-lowest rounded-DEFAULT border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] p-4 md:p-5 text-center">
+    <span class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-high">
+        <span class="material-symbols-outlined text-3xl text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">search_off</span>
+    </span>
+    <h1 class="mb-2 font-headline-lg text-headline-lg text-on-surface">Mascota no encontrada</h1>
+    <!-- Mensaje dinámico: error del backend o mensaje por defecto -->
+    <p class="mx-auto mb-4 max-w-[600px] font-body-lg text-body-lg text-on-surface-variant">{{ mensaje() }}</p>
+    <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary cursor-pointer"
+       (click)="verMascotas.emit()">
+        Ver mis mascotas
+        <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
+    </a>
+</div>

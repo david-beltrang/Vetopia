@@ -148,7 +148,7 @@ public class MascotaServiceImpl implements MascotaService {
         if (duenoId == null) {
             throw new ParametroInvalidoException("No se especificó el identificador del dueño.");
         }
-        return mascotaRepository.findByDuenoId(duenoId);
+        return mascotaRepository.findByDueno_Id(duenoId);
     }
 
     // Orquestación en la capa SERVICE: consulta los tratamientos del veterinario

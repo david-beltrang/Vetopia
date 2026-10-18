@@ -1,14 +1,11 @@
 <!-- CONTENIDO PRINCIPAL -->
 <div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
-<app-header-veterinario [veterinario]="veterinario"></app-header-veterinario>
+<app-header-veterinario [veterinario]="veterinario" [veterinarioId]="veterinarioId"></app-header-veterinario>
 
 <main class="flex-1">
     <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
         <!-- Encabezado de la sección -->
-        <div class="mb-stack-lg">
-            <h1 class="text-headline-xl font-headline-xl text-on-surface mb-1">Registrar Nueva Mascota</h1>
-            <p class="text-body-lg font-body-lg text-on-surface-variant">Completar los detalles de la mascota para el cliente</p>
-        </div>
+        <app-encabezado-registrar-mascota></app-encabezado-registrar-mascota>
 
         <!-- Formulario -->
         <app-formulario-mascota

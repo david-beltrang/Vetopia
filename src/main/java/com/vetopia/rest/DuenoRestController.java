@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import com.vetopia.entities.Dueno;
 import com.vetopia.entities.mascota.Mascota;
 import com.vetopia.service.dueno.DuenoService;
@@ -35,20 +37,22 @@ public class DuenoRestController {
     private MascotaService mascotaService;
 
     // Lista todos los clientes registrados
+    @Operation(summary = "Lista todos los clientes")
     @GetMapping("/all")
     public List<Dueno> listar() {
         return duenoService.listarDuenos();
     }
 
     // Un cliente concreto por su id
+    @Operation(summary = "Obtiene un cliente por su id")
     @GetMapping("/{id}")
     public Dueno buscarPorId(@PathVariable Long id) {
         return duenoService.obtenerDuenoPorId(id);
     }
 
-    // Mascotas de un cliente. Usa la consulta derivada findByDuenoId del
-    // repositorio a través del service. Va antes de validar el dueño para
-    // devolver 404 si el id no existe.
+    // Mascotas de un cliente, usa la consulta del findByDuenoIdmediante el service
+    // Valida el dueño para devolver 404 si el id no existe
+    @Operation(summary = "Lista las mascotas de un cliente")
     @GetMapping("/{id}/mascotas")
     public List<Mascota> listarMascotas(@PathVariable Long id) {
         duenoService.obtenerDuenoPorId(id);
@@ -56,24 +60,26 @@ public class DuenoRestController {
     }
 
     // Devuelve el cliente con el id ya asignado por la base de datos, porque
-    // el frontend lo necesita para registrar sus mascotas justo después.
-    // Se borra el id que venga en el JSON: si el cliente lo envía, JPA
-    // entendería que es una actualización y no un alta.
-    @PostMapping("/add")
+    // el frontend lo necesita para registrar sus mascotas justo después
+    @Operation(summary = "Registra un nuevo cliente")
+    @PostMapping
     public Dueno agregar(@RequestBody Dueno dueno) {
         dueno.setId(null);
         return duenoService.registrarClienteActivo(dueno);
     }
 
-    // El id viaja dentro del JSON, así que JPA actualiza el registro existente.
-    @PutMapping("/update")
-    public Dueno actualizar(@RequestBody Dueno dueno) {
+    // El id viaja en la URL, así que JPA actualiza el registro existente
+    @Operation(summary = "Actualiza un cliente existente")
+    @PutMapping("/{id}")
+    public Dueno actualizar(@PathVariable Long id, @RequestBody Dueno dueno) {
+        dueno.setId(id);
         duenoService.guardar(dueno);
         return dueno;
     }
 
-    // Borra el cliente y, en cascada, sus mascotas y tratamientos.
-    @DeleteMapping("/delete/{id}")
+    // Borra el cliente y, en cascada, sus mascotas y tratamientos
+    @Operation(summary = "Elimina un cliente por su id")
+    @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         duenoService.eliminarCliente(id);
     }
