@@ -78,6 +78,8 @@ export class AsignarTratamientoComponent implements OnInit {
     const mascota = this.mascota;
     if (!mascota?.id) return;
 
+    this.mensajeError.set('');
+
     // El backend solo necesita el id de la mascota y de la droga en el cuerpo.
     const tratamiento: TratamientoAsignacion = {
       fecha: valor.fecha,
@@ -95,7 +97,16 @@ export class AsignarTratamientoComponent implements OnInit {
           state: { resultado }
         });
       },
-      error: () => this.router.navigate(['/error'])
+      // Errores de negocio (p. ej. medicamento sin stock) se muestran en la
+      // propia pantalla; solo se cae a la página de error si no hay mensaje.
+      error: (err) => {
+        const mensaje = err?.error?.message;
+        if (mensaje) {
+          this.mensajeError.set(mensaje);
+        } else {
+          this.router.navigate(['/error']);
+        }
+      }
     });
   }
 

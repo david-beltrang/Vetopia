@@ -174,6 +174,23 @@ public class TratamientoServiceImpl implements TratamientoService {
         return new ResultadoTratamientoDTO(tratamiento, mascota, droga, 1);
     }
 
+    @Override
+    @Transactional
+    public void marcarTratamientoComoCompletado(Long id) {
+        actualizarEstado(id, true);
+    }
+
+    // Alterna el estado del tratamiento: el veterinario puede marcarlo como
+    // completado y también devolverlo a pendiente.
+    @Override
+    @Transactional
+    public Tratamiento actualizarEstado(Long id, boolean completado) {
+        Tratamiento tratamiento = obtenerTratamientoPorId(id);
+        tratamiento.setCompletado(completado);
+        return tratamientoRepository.save(tratamiento);
+    }
+
+
     // Elimina un tratamiento validando que exista.
     @Override
     @Transactional

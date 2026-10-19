@@ -1,5 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { TratamientoDetalle } from '../../../../models/ficha-clinica.model';
+
+export interface CambioEstadoTratamiento {
+  tratamientoId: number;
+  completado: boolean;
+}
 
 @Component({
   selector: 'app-item-tratamiento-veterinario',
@@ -7,9 +12,24 @@ import { TratamientoDetalle } from '../../../../models/ficha-clinica.model';
 })
 export class ItemTratamientoVeterinarioComponent {
   item = input.required<TratamientoDetalle>();
+  guardando = input(false);
+  mensajeError = input('');
+
+  // El componente solo avisa; la page es quien llama al service.
+  estadoCambiado = output<CambioEstadoTratamiento>();
 
   esCompletado(): boolean {
     return this.item().tratamiento?.completado ?? false;
+  }
+
+  alternarEstado(): void {
+    const id = this.item().tratamiento?.id;
+    if (!id || this.guardando()) return;
+
+    this.estadoCambiado.emit({
+      tratamientoId: id,
+      completado: !this.esCompletado()
+    });
   }
 
   // Se le añade la hora local para que la fecha no se corra un día.

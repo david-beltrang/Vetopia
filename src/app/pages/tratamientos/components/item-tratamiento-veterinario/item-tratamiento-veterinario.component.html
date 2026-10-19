@@ -6,10 +6,19 @@
     <div class="p-4 bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-[0px_1px_2px_rgba(0,0,0,0.05)]">
         <!-- Cabecera del tratamiento: estado y fecha -->
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-            <span class="rounded-full px-3 py-1 font-label-md text-label-md uppercase tracking-widest"
-                  [class]="esCompletado() ? 'bg-primary/10 text-primary' : 'bg-surface-container-high text-on-surface-variant'">
-                {{ esCompletado() ? 'Completado' : 'Pendiente' }}
-            </span>
+            <div class="flex flex-col gap-1">
+                <!-- El estado es un botón: alterna entre completado y pendiente -->
+                <button type="button" (click)="alternarEstado()" [disabled]="guardando()"
+                        [title]="esCompletado() ? 'Marcar como pendiente' : 'Marcar como completado'"
+                        class="inline-flex items-center gap-1 rounded-full px-3 py-1 font-label-md text-label-md uppercase tracking-widest transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        [class]="esCompletado() ? 'bg-primary/10 text-primary hover:bg-primary/20' : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'">
+                    <span class="material-symbols-outlined text-base">{{ esCompletado() ? 'check_circle' : 'schedule' }}</span>
+                    {{ esCompletado() ? 'Completado' : 'Pendiente' }}
+                </button>
+                @if (mensajeError()) {
+                    <span role="alert" class="font-body-sm text-body-sm text-error">{{ mensajeError() }}</span>
+                }
+            </div>
             <span class="font-body-md text-body-md text-on-surface-variant">
                 Fecha: {{ fechaFormateada() }}
             </span>

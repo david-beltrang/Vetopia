@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { API_URL } from '../config/api.config';
 import { TratamientoDetalle } from '../models/ficha-clinica.model';
 import { ResultadoTratamientoDTO } from '../models/resultado-tratamiento.model';
+import { Tratamiento } from '../models/tratamiento.model';
 
 // Cuerpo mínimo que espera POST /tratamiento/asignar: solo los ids de la
 // mascota y la droga (el veterinario va por la URL).
@@ -34,5 +35,10 @@ export class TratamientoService {
 
   asignarTratamiento(tratamiento: TratamientoAsignacion, veterinarioId: number): Observable<ResultadoTratamientoDTO> {
     return this.http.post<ResultadoTratamientoDTO>(`${this.url}/asignar`, tratamiento, { params: { veterinarioId } });
+  }
+
+  // Cambia el estado del tratamiento entre completado y pendiente.
+  actualizarEstado(id: number, completado: boolean): Observable<Tratamiento> {
+    return this.http.put<Tratamiento>(`${this.url}/${id}/estado`, null, { params: { completado } });
   }
 }

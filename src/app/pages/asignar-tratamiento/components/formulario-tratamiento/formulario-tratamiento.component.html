@@ -45,13 +45,29 @@
                         class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded-DEFAULT focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
                     <option value="">Seleccionar medicamento...</option>
                     @for (droga of drogas(); track droga.id) {
-                        <option [value]="droga.id">{{ droga.nombre }}</option>
+                        <option [value]="droga.id" [disabled]="!droga.unidadesDisponibles || droga.unidadesDisponibles <= 0">
+                            {{ droga.nombre }} — {{ droga.unidadesDisponibles > 0 ? droga.unidadesDisponibles + ' disponibles' : 'Agotado' }}
+                        </option>
                     }
                 </select>
                 <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
                     <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
                 </div>
             </div>
+            <!-- Indicador de stock de la droga seleccionada -->
+            @if (drogaSeleccionada(); as droga) {
+                @if (unidadesDisponibles() > 0) {
+                    <p class="flex items-center gap-1 font-body-sm text-body-sm text-primary">
+                        <span class="material-symbols-outlined text-base">check_circle</span>
+                        Quedan {{ unidadesDisponibles() }} unidades disponibles.
+                    </p>
+                } @else {
+                    <p role="alert" class="flex items-center gap-1 font-body-sm text-body-sm text-error">
+                        <span class="material-symbols-outlined text-base">error</span>
+                        Este medicamento no tiene unidades disponibles.
+                    </p>
+                }
+            }
         </div>
 
         <!-- Campo: Título del tratamiento -->

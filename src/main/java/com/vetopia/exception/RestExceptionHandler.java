@@ -41,6 +41,13 @@ public class RestExceptionHandler {
         return construir(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
 
+    // 401 Unauthorized: el login no coincide con ningún usuario.
+    @ExceptionHandler(CredencialesInvalidasException.class)
+    public ResponseEntity<ErrorResponse> manejarCredencialesInvalidas(CredencialesInvalidasException ex,
+            HttpServletRequest request) {
+        return construir(HttpStatus.UNAUTHORIZED, ex.getMessage(), request);
+    }
+
     // 500: red de seguridad para lo que no anticipamos, de modo que el cliente
     // reciba siempre el mismo formato de error.
     @ExceptionHandler(Exception.class)

@@ -19,6 +19,16 @@ function fechaHoy(): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+// Impide guardar con una droga agotada, aunque el select la deshabilite.
+function stockDisponibleValidator(drogas: () => Droga[]) {
+  return (control: { value: unknown }) => {
+    const id = Number(control.value);
+    if (!id) return null;
+    const droga = drogas().find(d => d.id === id);
+    return droga && droga.unidadesDisponibles > 0 ? null : { sinStock: true };
+  };
+}
+
 @Component({
   selector: 'app-formulario-tratamiento',
   imports: [ReactiveFormsModule, TarjetaInfoComponent],
@@ -35,10 +45,25 @@ export class FormularioTratamientoComponent {
 
   form = new FormGroup({
     fecha: new FormControl(fechaHoy(), { nonNullable: true, validators: [Validators.required] }),
-    drogaId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    drogaId: new FormControl('', { nonNullable: true, validators: [Validators.required, stockDisponibleValidator(this.drogas)] }),
     titulo: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     descripcion: new FormControl('', { nonNullable: true, validators: [Validators.required] })
   });
+
+  // Resuelve la droga elegida en el selector para mostrar su stock.
+  drogaSeleccionada(): Droga | undefined {
+    const id = Number(this.form.controls.drogaId.value);
+    return this.drogas().find(droga => droga.id === id);
+  }
+
+  unidadesDisponibles(): number {
+    const droga = this.drogaSeleccionada();
+    return droga && droga.unidadesDisponibles > 0 ? droga.unidadesDisponibles : 0;
+  }
+
+  sinStock(): boolean {
+    return this.form.controls.drogaId.value !== '' && this.unidadesDisponibles() <= 0;
+  }
 
   detalleMascota(): string {
     const mascota = this.mascota();

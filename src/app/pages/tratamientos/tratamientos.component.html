@@ -18,7 +18,12 @@
             <h2 class="font-headline-lg text-headline-lg text-on-surface mb-8">Historial Cronológico de Tratamientos</h2>
             <div class="border-l-2 border-surface-container-highest flex flex-col gap-8">
                 @for (item of tratamientos; track item.tratamiento.id) {
-                    <app-item-tratamiento-veterinario [item]="item"></app-item-tratamiento-veterinario>
+                    <app-item-tratamiento-veterinario
+                        [item]="item"
+                        [guardando]="guardandoId() === item.tratamiento.id"
+                        [mensajeError]="mensajeErrorDe(item.tratamiento.id)"
+                        (estadoCambiado)="onEstadoCambiado($event)">
+                    </app-item-tratamiento-veterinario>
                 } @empty {
                     <!-- Estado vacío: veterinario sin tratamientos registrados -->
                     <div class="relative pl-8">

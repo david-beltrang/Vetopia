@@ -106,6 +106,13 @@ public class TratamientoRestController {
         return tratamientoService.asignarTratamiento(tratamiento, veterinarioId);
     }
 
+    // Cambia el estado de un tratamiento entre completado y pendiente
+    @Operation(summary = "Cambia el estado de un tratamiento (completado/pendiente)")
+    @PutMapping("/{id}/estado")
+    public Tratamiento actualizarEstado(@PathVariable Long id, @RequestParam boolean completado) {
+        return tratamientoService.actualizarEstado(id, completado);
+    }
+
     // Elimina un tratamiento por su id. No se descuenta inventario porque ya se descontó al asignar
     @Operation(summary = "Elimina un tratamiento por su id")
     @DeleteMapping("/{id}")

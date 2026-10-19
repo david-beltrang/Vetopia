@@ -35,4 +35,9 @@ public interface TratamientoService {
 
     // Elimina un tratamiento por su id
     void eliminarTratamiento(Long id);
+
+    void marcarTratamientoComoCompletado(Long id);
+
+    // Cambia el estado (completado/pendiente) de un tratamiento y lo devuelve
+    Tratamiento actualizarEstado(Long id, boolean completado);
 }
