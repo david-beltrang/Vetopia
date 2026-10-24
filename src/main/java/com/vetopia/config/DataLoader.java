@@ -26,6 +26,7 @@ import com.vetopia.repository.DuenoRepository;
 import com.vetopia.repository.MascotaRepository;
 import com.vetopia.repository.TratamientoRepository;
 import com.vetopia.repository.VeterinarioRepository;
+import com.vetopia.config.DataDrogasLoader;
 
 // Script inicializador de datos para poblar la BD
 @Component
@@ -55,6 +56,7 @@ public class DataLoader implements CommandLineRunner {
     // Cantidad de datos de prueba: 50 clientes y 100 mascotas aleatorias
     private static final int CANTIDAD_DUENOS = 50;
     private static final int CANTIDAD_MASCOTAS = 100;
+    private String rutaDrogasExcel = "drogasVetopia.xlsx";
 
     // Opciones de nombres para generar clientes aleatorios con variedad
     private final String[] nombresPila = {
@@ -168,20 +170,21 @@ public class DataLoader implements CommandLineRunner {
 
     // Crea el inventario inicial de drogas con datos fijos. Las unidades vendidas
     private void poblarDrogas() {
-        String[][] datos = {
-                { "Amoxicilina", "8000", "15000", "100" },
-                { "Ivermectina", "12000", "22000", "50" },
-                { "Metronidazol", "6000", "11000", "75" },
-                { "Carprofeno", "18000", "32000", "40" },
-                { "Meloxicam", "15000", "28000", "60" } };
-        // Crea las drogas con datos fijos y asigna un número aleatorio de unidades vendidas
+        DataDrogasLoader drogasLoader = new DataDrogasLoader();
+        drogasLoader.poblarMatrizDesdeExcel(rutaDrogasExcel);
+        String[][] datos = drogasLoader.getMatrizDatos();
+        
         for (String[] d : datos) {
+            // Omite filas vacías o incompletas del Excel
+            if (d[0] == null || d[0].isBlank() || d[1] == null || d[1].isBlank()) {
+                continue;
+            }
             drogaRepository.save(Droga.builder()
                     .nombre(d[0])
-                    .precioCompra(Double.parseDouble(d[1]))
-                    .precioVenta(Double.parseDouble(d[2]))
-                    .unidadesDisponibles(Integer.parseInt(d[3]))
-                    .unidadesVendidas(random.nextInt(20))
+                    .precioCompra(Double.parseDouble(d[1].trim()))
+                    .precioVenta(Double.parseDouble(d[2].trim()))
+                    .unidadesDisponibles(Integer.parseInt(d[3].trim()))
+                    .unidadesVendidas(Integer.parseInt(d[4].trim()))
                     .build());
         }
     }

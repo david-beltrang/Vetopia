@@ -2,6 +2,7 @@ package com.vetopia.entities;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Column;
@@ -17,7 +18,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.OnDelete;
 
 import com.vetopia.entities.mascota.Mascota;
 
@@ -40,22 +40,23 @@ public class Tratamiento {
     @Column(nullable = false)
     private LocalDate fecha;
 
-    // Relación n-1 con Mascota: esta es la parte dueña de la FK
+    // Relación n-1 con Mascota: esta es la parte dueña de la FK.
+    // Queda visible en el JSON para que el frontend muestre el paciente del
+    // tratamiento; no hay recursión porque Mascota.tratamientos está ignorada.
     @ToString.Exclude
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "mascota_id", nullable = false)
     private Mascota mascota;
 
-    // Relación n-1 con Veterinario: esta es la parte dueña de la FK
+    // Relación n-1 con Veterinario: esta es la parte dueña de la FK.
     @ToString.Exclude
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "veterinario_id", nullable = false)
     private Veterinario veterinario;
 
-    // Relación n-1 con Droga: esta es la parte dueña de la FK
-    @ToString.Exclude
+    // Relación n-1 con Droga: esta es la parte dueña de la FK.
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "droga_id", nullable = false)

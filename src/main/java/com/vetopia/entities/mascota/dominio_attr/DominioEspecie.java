@@ -1,5 +1,7 @@
 package com.vetopia.entities.mascota.dominio_attr;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.vetopia.exception.ParametroInvalidoException;
 
 // Enum que representa las especies de mascotas disponibles en Vetopia
@@ -14,6 +16,9 @@ public enum DominioEspecie {
         this.valor = valor;
     }
 
+    // El JSON debe mostrar "Perro" y no "PERRO"; @JsonValue fuerza a Jackson a
+    // serializar con este getter en vez del nombre del enum.
+    @JsonValue
     public String getValor() {
         return valor;
     }
@@ -23,6 +28,9 @@ public enum DominioEspecie {
         return valor;
     }
 
+    // @JsonCreator hace que al deserializar se acepte "Perro"/"Gato"/"Otro"
+    // en lugar del nombre en mayúsculas del enum.
+    @JsonCreator
     public static DominioEspecie fromValor(String valor) {
         for (DominioEspecie e : values()) {
             if (e.valor.equalsIgnoreCase(valor)) {

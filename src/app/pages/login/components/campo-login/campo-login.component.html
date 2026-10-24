@@ -1,0 +1,25 @@
+<!-- Campo de entrada reutilizable: ícono a la izquierda y toggle opcional para contraseña -->
+<div class="space-y-2">
+    <label [for]="id()" class="font-label-md text-label-md text-on-surface uppercase tracking-widest">{{ label() }}</label>
+    <div class="relative">
+        <!-- Ícono descriptivo del campo -->
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-on-surface-variant">{{ icono() }}</span>
+        </div>
+        <input [id]="id()"
+               [type]="tipoFinal()"
+               [formControl]="control()"
+               [placeholder]="placeholder()"
+               class="w-full pl-12 py-3 bg-surface-container-lowest text-on-surface border border-outline rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-on-surface-variant/40"
+               [class.pr-12]="tipo() === 'password'"
+               [class.pr-4]="tipo() !== 'password'"/>
+        <!-- Botón para mostrar/ocultar contraseña -->
+        @if (tipo() === 'password') {
+            <button type="button"
+                    (click)="toggleMostrar()"
+                    class="absolute inset-y-0 right-4 flex items-center text-on-surface-variant hover:text-primary transition-colors">
+                <span class="material-symbols-outlined">{{ mostrar ? 'visibility_off' : 'visibility' }}</span>
+            </button>
+        }
+    </div>
+</div>

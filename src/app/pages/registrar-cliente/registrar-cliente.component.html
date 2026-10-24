@@ -1,0 +1,19 @@
+<!-- CONTENIDO PRINCIPAL -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+<app-header-veterinario [veterinario]="veterinario" [veterinarioId]="veterinarioId" seccionActiva="clientes"></app-header-veterinario>
+
+<main class="flex-1">
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Encabezado de la sección -->
+        <app-encabezado-registrar-cliente></app-encabezado-registrar-cliente>
+
+        <!-- Formulario de registro de cliente -->
+        <app-formulario-cliente
+            (guardar)="onGuardar($event)"
+            (cancelar)="onCancelar()">
+        </app-formulario-cliente>
+    </div>
+</main>
+
+<app-footer-portal></app-footer-portal>
+</div>

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap") layer(base);
 @import "tailwindcss";
 
 @theme {
@@ -14,6 +15,8 @@
   --color-outline-variant: #E5E7EB;
   --color-error: #DC2626;
   --color-error-container: #FEE2E2;
+  --color-error-container-dark: #FCA5A5;
+  --color-on-error-container: #93000a;
   --color-success: #059669;
   --color-success-container: #D1FAE5;
   --color-primary-dark: #047857;
@@ -26,13 +29,28 @@
   --spacing-container-max: 1440px;
   --spacing-section-gap: 160px;
   --spacing-margin-desktop: 80px;
+  --spacing-stack-sm: 8px;
+  --spacing-stack-md: 16px;
+  --spacing-stack-lg: 32px;
+  --spacing-section-padding: 120px;
 
   --font-headline-lg: 'Bricolage Grotesque', sans-serif;
   --font-headline-md: 'Bricolage Grotesque', sans-serif;
   --font-display-xl: 'Bricolage Grotesque', sans-serif;
+  --font-display-lg: 'Hanken Grotesk', sans-serif;
+  --font-headline-xl-mobile: 'Hanken Grotesk', sans-serif;
   --font-body-lg: 'Hanken Grotesque', sans-serif;
   --font-body-md: 'Hanken Grotesque', sans-serif;
   --font-label-sm: 'JetBrains Mono', monospace;
+
+  --text-display-lg: 72px;
+  --text-display-lg--line-height: 1.1;
+  --text-display-lg--letter-spacing: -0.04em;
+  --text-display-lg--font-weight: 800;
+
+  --text-headline-xl-mobile: 36px;
+  --text-headline-xl-mobile--line-height: 1.2;
+  --text-headline-xl-mobile--font-weight: 700;
 
   --text-display-xl: 96px;
   --text-display-xl--line-height: 100px;
@@ -62,9 +80,138 @@
   --text-label-sm--font-weight: 500;
 
   --radius-default: 0.25rem;
+  --radius-DEFAULT: 0.25rem;
   --radius-xl: 0.75rem;
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
+
+  --color-primary-container: #7fffd4;
+  --color-on-primary-container: #00765b;
+  --color-on-primary: #ffffff;
+  --color-primary-fixed: #79f9ce;
+  --color-secondary: #58605f;
+  --color-secondary-container: #d9e1df;
+  --color-on-secondary-container: #5c6463;
+  --color-tertiary: #5d5f5f;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #e8e8e8;
+  --color-on-tertiary-container: #666868;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #e0e3e5;
+  --color-surface-container: #eceef0;
+  --color-surface: #f7f9fb;
+  --color-on-background: #191c1e;
+
+  --font-button: 'Hanken Grotesk', sans-serif;
+  --font-label-md: 'Hanken Grotesk', sans-serif;
+  --font-headline-xl: 'Hanken Grotesk', sans-serif;
+
+  --text-headline-xl: 48px;
+  --text-headline-xl--line-height: 1.2;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 700;
+
+  --text-button: 13px;
+  --text-button--line-height: 1;
+  --text-button--letter-spacing: 0.05em;
+  --text-button--font-weight: 700;
+
+  --text-label-md: 14px;
+  --text-label-md--line-height: 1.4;
+  --text-label-md--letter-spacing: 0.1em;
+  --text-label-md--font-weight: 600;
+}
+
+/*
+ * Portal del veterinario (tema Material 3 claro).
+ *
+ * La landing se dibuja con el tema dark declarado arriba, donde `primary` es un
+ * menta casi blanco pensado para textos sobre fondo oscuro. El portal lo usa
+ * como verde de marca sobre superficies claras, igual que en las plantillas
+ * Thymeleaf. En lugar de renombrar clases en los componentes, se re-declaran
+ * los tokens dentro de `.tema-portal`: las utilidades Tailwind leen estas
+ * variables, asi que el cambio queda acotado al portal y la landing no se
+ * altera. Los tokens que no colisionan estan declarados en @theme.
+ */
+.tema-portal {
+  --color-primary: #006c52;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #7fffd4;
+  --color-on-primary-container: #00765b;
+  --color-secondary-container: #d9e1df;
+  --color-on-secondary-container: #5c6463;
+  --color-tertiary: #5d5f5f;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #e8e8e8;
+  --color-on-tertiary-container: #666868;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #e0e3e5;
+  --color-outline: #6d7a73;
+  --color-outline-variant: #bccac2;
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #3d4a44;
+  --color-background: #f7f9fb;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-error-container-dark: #FCA5A5;
+  --color-surface: #f7f9fb;
+
+  /* Medidas del portal: mas estrechas que las de la landing. Sin esto los
+     contenedores miden 1440px con 32px de gutter y el layout se desarma. */
+  --spacing-container-max: 1280px;
+  --spacing-gutter: 24px;
+  --spacing-section-padding: 120px;
+
+  /* El portal usa Hanken Grotesk en todo el texto, incluida la tipografia de
+     titular. `headline-lg` colisiona con la landing (Bricolage Grotesque). */
+  --font-headline-lg: 'Hanken Grotesk', sans-serif;
+
+  --text-headline-xl: 48px;
+  --text-headline-xl--line-height: 1.2;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 700;
+
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 1.3;
+  --text-headline-lg--letter-spacing: 0;
+  --text-headline-lg--font-weight: 700;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.6;
+  --text-body-md--font-weight: 400;
+
+  --text-label-md: 14px;
+  --text-label-md--line-height: 1.4;
+  --text-label-md--letter-spacing: 0.1em;
+  --text-label-md--font-weight: 600;
+
+  --text-button: 13px;
+  --text-button--line-height: 1;
+  --text-button--letter-spacing: 0.05em;
+  --text-button--font-weight: 700;
+
+  --radius-DEFAULT: 1rem;
+  --radius-lg: 2rem;
+  --radius-xl: 3rem;
+  --radius-2xl: 1rem;
+}
+
+/*
+ * Paginas del sitio publico (tema oscuro). La landing declara sus colores
+ * oscuros en cada seccion; este scope reutiliza ese mismo fondo oscuro y el
+ * texto secundario claro para paginas autonomas como la de error.
+ */
+.tema-landing {
+  --color-background: #0f1512;
+  --color-on-surface-variant: #bccac2;
 }
 
 body {

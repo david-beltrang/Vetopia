@@ -6,11 +6,12 @@ import { Tratamiento } from './tratamiento.model';
 export interface TratamientoDetalle {
   tratamiento: Tratamiento;
   drogaNombre: string;
+  clienteNombre: string;
 }
 
 export interface FichaClinicaDTO {
   mascota: Mascota;
-  propietario: Dueno | null;
+  propietario?: Dueno;
   historial: TratamientoDetalle[];
   veterinarioId: number;
   veterinario: Veterinario;

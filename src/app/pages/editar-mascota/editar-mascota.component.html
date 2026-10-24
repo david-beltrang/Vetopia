@@ -1,30 +1,26 @@
 <!-- CONTENIDO PRINCIPAL -->
-<app-header-veterinario [veterinario]="veterinario"></app-header-veterinario>
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+<app-header-veterinario [veterinario]="veterinario" [veterinarioId]="veterinarioId"></app-header-veterinario>
 
 <main class="flex-1">
-    <div class="max-w-[604px] mx-auto px-gutter py-stack-lg">
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
         <!-- Título y subtítulo -->
-        <div class="mb-stack-lg text-left">
-            <h1 class="text-4xl font-bold text-gray-900 mb-1">Editar Mascota</h1>
-            <p class="text-base text-gray-600">Modifica los detalles de la mascota</p>
-        </div>
+        <app-encabezado-editar-mascota></app-encabezado-editar-mascota>
 
-        <!-- Formulario -->
-        <app-formulario-mascota
-            *ngIf="mascota && !cargando"
-            [mascota]="mascota"
-            (guardar)="onGuardar()"
-            (cancelar)="onCancelar()">
-        </app-formulario-mascota>
-
-        <!-- Loading state -->
-        <div *ngIf="cargando" class="flex items-center justify-center py-20">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
-        </div>
+        @if (cargando) {
+            <app-cargando-mascota></app-cargando-mascota>
+        } @else if (mascota) {
+            <app-formulario-mascota
+                [mascota]="mascota"
+                (guardar)="onGuardar($event)"
+                (cancelar)="onCancelar()">
+            </app-formulario-mascota>
+        } @else {
+            <!-- Id no encontrado -->
+            <app-mascota-no-encontrada (volver)="onCancelar()"></app-mascota-no-encontrada>
+        }
     </div>
-
-    <!-- Gap entre formulario y footer -->
-    <div class="h-16"></div>
 </main>
 
-<app-footer></app-footer>
+<app-footer-portal></app-footer-portal>
+</div>

@@ -8,13 +8,22 @@ import { TratamientoDetalle } from '../../../../models/ficha-clinica.model';
 export class ItemTratamientoComponent {
   item = input<TratamientoDetalle>();
 
-  get esCompletado(): boolean {
+  esCompletado(): boolean {
     return this.item()?.tratamiento?.completado ?? false;
   }
 
-  get fechaFormateada(): string {
-    if (!this.item()?.tratamiento?.fecha) return '';
-    const fecha = new Date(this.item()!.tratamiento.fecha);
-    return fecha.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+  fechaFormateada(): string {
+    const fecha = this.item()?.tratamiento?.fecha;
+    if (!fecha) return '';
+    return new Date(`${fecha}T00:00:00`).toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+
+  nombreMedico(): string {
+    const nombre = this.item()?.tratamiento?.veterinario?.nombre;
+    return nombre ? 'Dr. ' + nombre : 'No registrado';
   }
 }

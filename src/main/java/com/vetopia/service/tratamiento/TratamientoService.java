@@ -2,6 +2,8 @@ package com.vetopia.service.tratamiento;
 
 import java.util.List;
 
+import com.vetopia.dto.HistorialTratamientoDTO;
+import com.vetopia.dto.ResultadoTratamientoDTO;
 import com.vetopia.entities.Tratamiento;
 
 // Esta interfaz define los métodos que el servicio de tratamientos debe implementar.
@@ -23,11 +25,19 @@ public interface TratamientoService {
     List<Tratamiento> listarTratamientosPorMascota(Long mascotaId);
 
     // Lista los tratamientos asociados a un veterinario específico, incluyendo el nombre de la droga utilizada
-    List<HistorialTratamientoMascota> listarTratamientosPorVeterinarioConDroga(Long veterinarioId);
+    List<HistorialTratamientoDTO> listarTratamientosPorVeterinarioConDroga(Long veterinarioId);
 
     // Lista los tratamientos asociados a una mascota específica, incluyendo el nombre de la droga utilizada
-    List<HistorialTratamientoMascota> listarHistorialDeMascota(Long mascotaId);
+    List<HistorialTratamientoDTO> listarHistorialDeMascota(Long mascotaId);
 
-    // Asigna un tratamiento a un veterinario y devuelve un objeto ResultadoTratamiento que contiene información sobre la operación
-    ResultadoTratamiento asignarTratamiento(Tratamiento tratamiento, Long veterinarioId);
+    // Asigna un tratamiento a un veterinario y devuelve un objeto ResultadoTratamientoDTO que contiene información sobre la operación
+    ResultadoTratamientoDTO asignarTratamiento(Tratamiento tratamiento, Long veterinarioId);
+
+    // Elimina un tratamiento por su id
+    void eliminarTratamiento(Long id);
+
+    void marcarTratamientoComoCompletado(Long id);
+
+    // Cambia el estado (completado/pendiente) de un tratamiento y lo devuelve
+    Tratamiento actualizarEstado(Long id, boolean completado);
 }

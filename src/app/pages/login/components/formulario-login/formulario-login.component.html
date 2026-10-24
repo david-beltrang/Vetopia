@@ -1,0 +1,61 @@
+<!-- Columna derecha: Formulario de login -->
+<div class="relative w-full bg-background flex items-center justify-center p-6 md:p-16">
+    <!-- Botón "Volver al Inicio": enlace a la landing page -->
+    <a routerLink="/" class="absolute top-8 right-6 md:right-8 flex items-center gap-2 text-on-surface-variant font-button text-button uppercase hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
+        Volver al Inicio
+    </a>
+
+    <!-- Tarjeta de login: contenedor del formulario -->
+    <div class="w-full max-w-[448px]">
+        <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest">
+            <!-- Título y subtítulo del formulario -->
+            <h2 class="text-headline-lg font-headline-lg text-on-surface mb-1">Iniciar Sesión</h2>
+            <p class="text-body-lg font-body-lg text-on-surface-variant mb-6">Ingresa tus credenciales para acceder a tu portal.</p>
+
+            <!-- Mensaje de error: se muestra cuando las credenciales son incorrectas -->
+            @if (mensajeError()) {
+                <div role="alert"
+                     class="mb-6 flex items-start gap-3 rounded-xl border border-error/30 bg-error-container/20 p-4">
+                    <span class="material-symbols-outlined text-error mt-0.5">error</span>
+                    <p class="font-body-md text-body-md text-on-error-container">{{ mensajeError() }}</p>
+                </div>
+            }
+
+            <!-- Formulario de login -->
+            <form [formGroup]="loginForm" (ngSubmit)="onIngresar()" class="space-y-6">
+                <!-- Campo: Correo Electrónico -->
+                <app-campo-login
+                    id="correo"
+                    label="Correo Electrónico"
+                    placeholder="ejemplo@correo.com"
+                    icono="person"
+                    tipo="text"
+                    [control]="correoControl">
+                </app-campo-login>
+
+                <!-- Campo: Contraseña -->
+                <div class="space-y-2">
+                    <app-campo-login
+                        id="contrasena"
+                        label="Contraseña"
+                        placeholder="••••••••"
+                        icono="lock"
+                        tipo="password"
+                        [control]="contrasenaControl">
+                    </app-campo-login>
+                    <!-- Enlace: recuperar contraseña -->
+                    <div class="text-right pt-1">
+                        <a href="#" class="text-primary font-button text-button uppercase hover:underline">¿Olvidaste tu contraseña?</a>
+                    </div>
+                </div>
+
+                <!-- Botón de envío del formulario -->
+                <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-container px-6 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary">
+                    INGRESAR AL PORTAL
+                    <span class="material-symbols-outlined text-lg">login</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

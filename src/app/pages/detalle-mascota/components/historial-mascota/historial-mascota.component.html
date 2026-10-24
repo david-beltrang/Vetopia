@@ -1,0 +1,18 @@
+<!-- Historial de tratamientos -->
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-8">Historial Médico Cronológico</h3>
+<div class="border-l-2 border-surface-container-highest flex flex-col gap-8">
+    @if (historial().length === 0) {
+        <!-- Estado vacío: mascota sin tratamientos registrados -->
+        <div class="relative pl-8">
+            <span class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-surface-container-highest border-4 border-surface-container-lowest"></span>
+            <div class="p-4 bg-surface-container-lowest rounded-xl border border-surface-container-highest text-on-surface-variant font-body-md text-body-md">
+                Esta mascota aún no tiene tratamientos registrados.
+            </div>
+        </div>
+    } @else {
+        <!-- Fila por cada tratamiento del historial -->
+        @for (item of historial(); track item.tratamiento.id) {
+            <app-item-historial [item]="item"></app-item-historial>
+        }
+    }
+</div>

@@ -148,7 +148,7 @@ public class MascotaServiceImpl implements MascotaService {
         if (duenoId == null) {
             throw new ParametroInvalidoException("No se especificó el identificador del dueño.");
         }
-        return mascotaRepository.findByDuenoId(duenoId);
+        return mascotaRepository.findByDueno_Id(duenoId);
     }
 
     // Orquestación en la capa SERVICE: consulta los tratamientos del veterinario
@@ -195,5 +195,14 @@ public class MascotaServiceImpl implements MascotaService {
             throw new ParametroInvalidoException("Debe indicar el nombre de la mascota a buscar.");
         }
         return mascotaRepository.findByNombreContainingIgnoreCase(nombre.trim());
+    }
+
+    // Elimina una mascota validando primero que exista. La colección de
+    // tratamientos está marcada con cascade ALL, así que se borran con ella.
+    @Override
+    @Transactional
+    public void eliminarMascota(Long id) {
+        obtenerMascotaPorId(id);
+        mascotaRepository.deleteById(id);
     }
 }

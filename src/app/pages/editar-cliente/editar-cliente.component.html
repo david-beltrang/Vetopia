@@ -1,0 +1,27 @@
+<!-- CONTENIDO PRINCIPAL -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+<app-header-veterinario [veterinario]="veterinario" [veterinarioId]="veterinarioId" seccionActiva="clientes"></app-header-veterinario>
+
+<main class="flex-1">
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Encabezado de la sección -->
+        <app-encabezado-editar-cliente></app-encabezado-editar-cliente>
+
+        @if (cargando) {
+            <app-cargando-cliente></app-cargando-cliente>
+        } @else if (cliente) {
+            <!-- Formulario de edición -->
+            <app-formulario-cliente
+                [cliente]="cliente"
+                (guardar)="onGuardar($event)"
+                (cancelar)="onCancelar()">
+            </app-formulario-cliente>
+        } @else {
+            <!-- Id no encontrado -->
+            <app-cliente-no-encontrado (volver)="onCancelar()"></app-cliente-no-encontrado>
+        }
+    </div>
+</main>
+
+<app-footer-portal></app-footer-portal>
+</div>

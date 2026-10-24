@@ -1,0 +1,50 @@
+<!-- CONTENIDO PRINCIPAL: detalle del cliente seleccionado -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+<app-header-veterinario [veterinario]="veterinario" [veterinarioId]="veterinarioId" seccionActiva="clientes"></app-header-veterinario>
+
+<main class="flex-1">
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+        <!-- Navegación de regreso al listado de clientes -->
+        <section class="mb-stack-md">
+            <a class="inline-flex items-center gap-2 font-button text-button uppercase tracking-widest text-secondary hover:text-primary transition-colors"
+               (click)="volverClientes()">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+                Volver a Clientes
+            </a>
+        </section>
+
+        @if (cargando) {
+            <div class="flex items-center justify-center py-20">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+        } @else if (cliente) {
+            <!-- Vista del detalle: se renderiza solo cuando el Service encontró el cliente -->
+            <section class="flex justify-center">
+                <div class="w-full max-w-5xl rounded-lg bg-surface-container-lowest border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+                    <!-- Cabecera del cliente: avatar, nombre e ID -->
+                    <app-cabecera-cliente [nombre]="cliente.nombre" [id]="cliente.id ?? 0"></app-cabecera-cliente>
+
+                    <!-- Datos del cliente: información de contacto -->
+                    <app-datos-contacto-cliente [cliente]="cliente"></app-datos-contacto-cliente>
+
+                    <!-- Mascotas del cliente -->
+                    <app-mascotas-cliente [mascotas]="mascotas" (verFicha)="verFicha($event)"></app-mascotas-cliente>
+
+                    <!-- Botones de acción: eliminar, editar y agregar mascota -->
+                    <app-acciones-cliente
+                        (eliminar)="eliminarCliente()"
+                        (editar)="editarCliente()"
+                        (agregarMascota)="agregarMascota()"></app-acciones-cliente>
+                </div>
+            </section>
+        } @else {
+            <!-- Mensaje cuando no se encontró el cliente -->
+            <section>
+                <app-cliente-no-encontrado></app-cliente-no-encontrado>
+            </section>
+        }
+    </div>
+</main>
+
+<app-footer-portal></app-footer-portal>
+</div>

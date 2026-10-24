@@ -1,5 +1,5 @@
 import { Component, input, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Dueno } from '../../../../models/dueno.model';
 
 @Component({
@@ -7,14 +7,19 @@ import { Dueno } from '../../../../models/dueno.model';
   templateUrl: './datos-propietario.component.html'
 })
 export class DatosPropietarioComponent {
-  propietario = input<Dueno | null>(null);
-  veterinarioId = input<number>();
+  propietario = input<Dueno>();
   router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  private veterinarioId(): number {
+    return Number(this.route.snapshot.queryParamMap.get('veterinarioId')) || 0;
+  }
 
   navigateToPerfil(): void {
-    if (this.propietario()) {
-      this.router.navigate(['/veterinario/clientes/detalle'], {
-        queryParams: { veterinarioId: this.veterinarioId(), id: this.propietario()!.id }
+    const propietario = this.propietario();
+    if (propietario?.id != null) {
+      this.router.navigate(['/veterinario/clientes/detalle', propietario.id], {
+        queryParams: { veterinarioId: this.veterinarioId() }
       });
     } else {
       this.router.navigate(['/error']);

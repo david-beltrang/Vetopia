@@ -23,8 +23,8 @@ public class ClienteMascotaController {
 
     @GetMapping
     public String listarMascotas(@RequestParam Long duenoId, Model model) {
-        model.addAttribute("mascotas", mascotaService.listarMascotasDeCliente(duenoId));
         model.addAttribute("duenoId", duenoId);
+        model.addAttribute("mascotas", mascotaService.listarMascotasDeCliente(duenoId));
         return "cliente/listar-mascota";
     }
 

@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
@@ -71,7 +72,11 @@ public class Mascota {
     @Column(nullable = false)
     private LocalDate fechaIngreso;
 
-    // Relación n-1 con Dueno: esta es la parte dueña de la FK
+    // Relación n-1 con Dueno: esta es la parte dueña de la FK.
+    // Con @JsonIgnore el dueño no se duplica dentro del JSON de la mascota y,
+    // junto con Dueno.mascotas (también ignorada), se corta la recursión.
+    // @ToString.Exclude solo evita la recursión de Lombok.
+    @JsonIgnore
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "dueno_id", nullable = false)
@@ -84,8 +89,16 @@ public class Mascota {
     // Relación 1-n con Tratamiento: mappedBy apunta a "mascota" en Tratamiento
     // dueño de la FK. Con cascade, al borrar la mascota se borran sus tratamientos
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL)
     private List<Tratamiento> tratamientos = new ArrayList<>();
+
+    // Se expone únicamente el id del dueño: el objeto completo no viaja en el
+    // JSON de la mascota (@JsonIgnore arriba), pero el frontend lo necesita
+    // para consultar el dueño por su propio endpoint /dueno/{id}.
+    public Long getDuenoId() {
+        return dueno != null ? dueno.getId() : null;
+    }
 
     // Método para verificar si la mascota tiene una imagen asociada
     public boolean tieneImagen() {

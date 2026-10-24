@@ -64,4 +64,12 @@ public class DrogaServiceImpl implements DrogaService {
         }
         drogaRepository.save(droga);
     }
+
+    // Elimina una droga validando que exista.
+    @Override
+    @Transactional
+    public void eliminarDroga(Long id) {
+        obtenerDrogaPorId(id);
+        drogaRepository.deleteById(id);
+    }
 }

@@ -1,0 +1,162 @@
+<form [formGroup]="mascotaForm" class="flex flex-col items-center gap-stack-lg" (ngSubmit)="onGuardar()">
+    <!-- Tarjeta del formulario -->
+    <div class="w-full bg-surface-container-lowest p-8 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant max-w-[604px]">
+        <div class="border-b border-surface-container-highest pb-4 mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-5 h-5 bg-primary rounded-full"></div>
+                <h2 class="text-headline-lg font-headline-lg text-on-surface">Información de la Mascota</h2>
+            </div>
+        </div>
+
+        <!-- Campos del formulario -->
+        <div class="flex flex-col gap-6">
+            <!-- Subida de foto (solo visual) -->
+            <app-upload-foto [imagen]="imagen" [nombre]="mascotaForm.get('nombre')?.value ?? ''"></app-upload-foto>
+
+            <!-- Nombre y Raza - Grid 2 columnas -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label for="nombre" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Nombre mascota</label>
+                    <input id="nombre" type="text" formControlName="nombre"
+                           class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="e.g. Max"/>
+                    @if (mascotaForm.get('nombre')?.touched && mascotaForm.get('nombre')?.invalid) {
+                        @if (mascotaForm.get('nombre')?.hasError('required')) {
+                            <small class="font-label-sm text-sm text-error">El nombre es obligatorio.</small>
+                        }
+                        @if (mascotaForm.get('nombre')?.hasError('minlength')) {
+                            <small class="font-label-sm text-sm text-error">Debe tener mínimo 3 caracteres.</small>
+                        }
+                    }
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="raza" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Raza</label>
+                    <input id="raza" type="text" formControlName="raza"
+                           class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="e.g. Golden Retriever"/>
+                    @if (mascotaForm.get('raza')?.touched && mascotaForm.get('raza')?.invalid) {
+                        @if (mascotaForm.get('raza')?.hasError('required')) {
+                            <small class="font-label-sm text-sm text-error">La raza es obligatoria.</small>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Edad y Peso - Grid 2 columnas -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label for="edad" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Edad (Años)</label>
+                    <input id="edad" type="number" step="0.1" min="0" formControlName="edad"
+                           class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="e.g. 2"/>
+                    @if (mascotaForm.get('edad')?.touched && mascotaForm.get('edad')?.invalid) {
+                        @if (mascotaForm.get('edad')?.hasError('required')) {
+                            <small class="font-label-sm text-sm text-error">La edad es obligatoria.</small>
+                        }
+                        @if (mascotaForm.get('edad')?.hasError('min')) {
+                            <small class="font-label-sm text-sm text-error">La edad no puede ser negativa.</small>
+                        }
+                    }
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="pesoKg" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Peso (kg)</label>
+                    <input id="pesoKg" type="number" step="0.1" min="0" formControlName="pesoKg"
+                           class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="e.g. 15.5"/>
+                    @if (mascotaForm.get('pesoKg')?.touched && mascotaForm.get('pesoKg')?.invalid) {
+                        @if (mascotaForm.get('pesoKg')?.hasError('required')) {
+                            <small class="font-label-sm text-sm text-error">El peso es obligatorio.</small>
+                        }
+                        @if (mascotaForm.get('pesoKg')?.hasError('min')) {
+                            <small class="font-label-sm text-sm text-error">El peso no puede ser negativo.</small>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Especie y Sexo - Grid 2 columnas -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label for="especie" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Especie</label>
+                    <select id="especie" formControlName="especie"
+                            class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">Seleccionar especie...</option>
+                        <option value="Perro">Perro</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    @if (mascotaForm.get('especie')?.touched && mascotaForm.get('especie')?.invalid) {
+                        @if (mascotaForm.get('especie')?.hasError('required')) {
+                            <small class="font-label-sm text-sm text-error">Selecciona una especie.</small>
+                        }
+                    }
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="sexo" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Sexo</label>
+                    <select id="sexo" formControlName="sexo"
+                            class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">Seleccionar sexo...</option>
+                        <option value="Macho">Macho</option>
+                        <option value="Hembra">Hembra</option>
+                    </select>
+                    @if (mascotaForm.get('sexo')?.touched && mascotaForm.get('sexo')?.invalid) {
+                        @if (mascotaForm.get('sexo')?.hasError('required')) {
+                            <small class="font-label-sm text-sm text-error">Selecciona un sexo.</small>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Campos: Color y Fecha de ingreso -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label for="color" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Color</label>
+                    <input id="color" type="text" formControlName="color"
+                           class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="e.g. Marrón"/>
+                    @if (mascotaForm.get('color')?.touched && mascotaForm.get('color')?.invalid) {
+                        @if (mascotaForm.get('color')?.hasError('required')) {
+                            <small class="font-label-sm text-sm text-error">El color es obligatorio.</small>
+                        }
+                    }
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="fechaIngreso" class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Fecha de ingreso</label>
+                    <input id="fechaIngreso" type="date" formControlName="fechaIngreso"
+                           class="w-full px-4 py-3 bg-background rounded border border-outline-variant text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"/>
+                    @if (mascotaForm.get('fechaIngreso')?.touched && mascotaForm.get('fechaIngreso')?.invalid) {
+                        @if (mascotaForm.get('fechaIngreso')?.hasError('required')) {
+                            <small class="font-label-sm text-sm text-error">La fecha de ingreso es obligatoria.</small>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-outline-variant">
+        @if (esEdicion) {
+            <button type="button" (click)="onCancelar()"
+                    class="inline-flex items-center gap-2 rounded-full bg-tertiary px-8 py-3 font-button text-button uppercase tracking-widest text-on-tertiary transition-colors hover:bg-tertiary-container hover:text-on-tertiary-container">
+                Cancelar
+            </button>
+            <button type="submit" [disabled]="mascotaForm.invalid"
+                    class="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-button text-button uppercase tracking-widest text-on-primary transition-colors hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50 disabled:cursor-not-allowed">
+                Finalizado
+                <span class="material-symbols-outlined text-lg">check</span>
+            </button>
+        } @else {
+            <button type="button" (click)="onGuardarYLimpiar()" [disabled]="mascotaForm.invalid"
+                    class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-3 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                <span class="material-symbols-outlined text-lg">add</span>
+                New pet
+            </button>
+            <button type="submit" [disabled]="mascotaForm.invalid"
+                    class="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-button text-button uppercase tracking-widest text-on-primary transition-colors hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50 disabled:cursor-not-allowed">
+                Terminar registro
+                <span class="material-symbols-outlined text-lg">check</span>
+            </button>
+        }
+    </div>
+</form>

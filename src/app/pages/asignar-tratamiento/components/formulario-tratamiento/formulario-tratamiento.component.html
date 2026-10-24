@@ -1,0 +1,102 @@
+<!-- Formulario de asignación de tratamiento -->
+<form [formGroup]="form" (ngSubmit)="onGuardar()"
+      class="bg-surface-container-lowest p-6 md:p-10 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest">
+    <!-- Tarjeta: veterinario responsable -->
+    <app-tarjeta-info
+        etiqueta="VETERINARIO RESPONSABLE"
+        [valor]="veterinario()?.nombre || 'Dr. Veterinario'"
+        icono="verified"
+        forma="pill">
+    </app-tarjeta-info>
+
+    <div class="mt-6 flex flex-col gap-6">
+        <!-- Mascota preseleccionada desde la ficha: solo lectura -->
+        <app-tarjeta-info
+            etiqueta="Mascota"
+            [valor]="mascota()?.nombre || 'No registrada'"
+            [detalle]="detalleMascota()"
+            icono="pets"
+            forma="card">
+        </app-tarjeta-info>
+
+        <!-- Dueño de la mascota: solo lectura -->
+        <app-tarjeta-info
+            etiqueta="Dueño"
+            [valor]="dueno()?.nombre || 'No registrado'"
+            [detalle]="dueno()?.correo || ''"
+            icono="person"
+            forma="card">
+        </app-tarjeta-info>
+
+        <!-- Fecha de Aplicación del tratamiento -->
+        <div class="flex flex-col gap-1">
+            <label for="fecha" class="font-body-md text-body-md text-on-surface">Fecha de Aplicación</label>
+            <input id="fecha" type="date" formControlName="fecha"
+                   class="w-full px-3 py-2 bg-white text-on-surface border border-outline rounded-DEFAULT focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"/>
+        </div>
+
+        <hr class="border-surface-container-highest"/>
+
+        <!-- Selector de Medicamento/Droga -->
+        <div class="flex flex-col gap-1">
+            <label for="droga" class="font-body-md text-body-md text-on-surface">Medicamento / Droga</label>
+            <div class="relative">
+                <select id="droga" formControlName="drogaId"
+                        class="w-full appearance-none px-3 py-2 bg-white text-on-surface border border-outline rounded-DEFAULT focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
+                    <option value="">Seleccionar medicamento...</option>
+                    @for (droga of drogas(); track droga.id) {
+                        <option [value]="droga.id" [disabled]="!droga.unidadesDisponibles || droga.unidadesDisponibles <= 0">
+                            {{ droga.nombre }} — {{ droga.unidadesDisponibles > 0 ? droga.unidadesDisponibles + ' disponibles' : 'Agotado' }}
+                        </option>
+                    }
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                    <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+                </div>
+            </div>
+            <!-- Indicador de stock de la droga seleccionada -->
+            @if (drogaSeleccionada(); as droga) {
+                @if (unidadesDisponibles() > 0) {
+                    <p class="flex items-center gap-1 font-body-sm text-body-sm text-primary">
+                        <span class="material-symbols-outlined text-base">check_circle</span>
+                        Quedan {{ unidadesDisponibles() }} unidades disponibles.
+                    </p>
+                } @else {
+                    <p role="alert" class="flex items-center gap-1 font-body-sm text-body-sm text-error">
+                        <span class="material-symbols-outlined text-base">error</span>
+                        Este medicamento no tiene unidades disponibles.
+                    </p>
+                }
+            }
+        </div>
+
+        <!-- Campo: Título del tratamiento -->
+        <div class="flex flex-col gap-1">
+            <label for="titulo" class="font-body-md text-body-md text-on-surface">Título del Tratamiento</label>
+            <input id="titulo" type="text" formControlName="titulo"
+                   class="w-full px-3 py-2 bg-white text-on-surface border border-outline rounded-DEFAULT focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                   placeholder="e.g. Vacunación anual"/>
+        </div>
+
+        <!-- Campo: Descripción del tratamiento -->
+        <div class="flex flex-col gap-1">
+            <label for="descripcion" class="font-body-md text-body-md text-on-surface">Descripción</label>
+            <textarea id="descripcion" rows="4" formControlName="descripcion"
+                      class="w-full px-3 py-2 bg-white text-on-surface border border-outline rounded-DEFAULT focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                      placeholder="Detalles del procedimiento, dosis, indicaciones..."></textarea>
+        </div>
+
+        <!-- Botones de acción: cancelar o aplicar tratamiento -->
+        <div class="flex flex-wrap items-center justify-end gap-4 pt-6 border-t border-surface-container-highest">
+            <button type="button" (click)="onCancelar()"
+                    class="px-8 py-4 rounded-full border border-surface-container-highest text-on-surface font-button text-button uppercase hover:bg-surface-container-high transition-colors">
+                Cancelar
+            </button>
+            <button type="submit" [disabled]="form.invalid"
+                    class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                Aplicar Tratamiento
+                <span class="material-symbols-outlined text-lg">check_circle</span>
+            </button>
+        </div>
+    </div>
+</form>

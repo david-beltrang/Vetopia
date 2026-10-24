@@ -10,14 +10,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.*;
 
 // Entidad Administrador
 @Entity
 @Table(name = "administradores")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+
 public class Administrador {
 
     @Id

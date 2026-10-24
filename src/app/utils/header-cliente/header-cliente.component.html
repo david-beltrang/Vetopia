@@ -1,0 +1,19 @@
+<!-- TopNavBar del Portal del Cliente: barra de navegación fija -->
+<header class="sticky top-0 z-50 bg-[#0f1115] text-white">
+    <div class="max-w-container-max mx-auto flex items-center justify-between px-gutter py-stack-md">
+        <!-- Logo y nombre del portal -->
+        <a class="flex items-center gap-3 cursor-pointer" (click)="irInicio()">
+            <img alt="Vetopia Logo" class="h-10 w-auto object-contain" src="/images/logo_Vetopia.png"/>
+            <span class="hidden sm:block font-label-md text-label-md uppercase tracking-widest text-gray-300">Portal Cliente</span>
+        </a>
+        <!-- Navegación del portal: enlaces a secciones principales -->
+        <nav class="flex items-center gap-6 md:gap-8 font-label-md text-label-md uppercase tracking-widest">
+            <a class="font-bold text-primary-fixed border-b-2 border-primary-fixed pb-1 cursor-pointer" (click)="irMascotas()">Mascotas</a>
+            <a class="hidden sm:inline text-gray-300 hover:text-primary-fixed transition-colors cursor-pointer" href="#">Citas</a>
+            <a class="flex items-center gap-2 text-gray-300 hover:text-error transition-colors cursor-pointer" (click)="cerrarSesion()">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
+                Cerrar Sesión
+            </a>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,17 @@
+<!-- CONTENIDO PRINCIPAL: layout de dos columnas (hero + formulario) -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+    <main class="flex-1 flex flex-col md:flex-row">
+        <!-- Columna izquierda: Hero visual con imagen de fondo (mitad de la pantalla) -->
+        <app-hero-login class="flex flex-1 min-h-[300px]"></app-hero-login>
+
+        <!-- Columna derecha: Formulario de login (mitad de la pantalla) -->
+        <app-formulario-login
+            class="flex flex-1"
+            [mensajeError]="mensajeError()"
+            (ingresar)="onIngresar($event)">
+        </app-formulario-login>
+    </main>
+
+    <!-- FOOTER: fragmento reutilizable del portal -->
+    <app-footer-portal></app-footer-portal>
+</div>

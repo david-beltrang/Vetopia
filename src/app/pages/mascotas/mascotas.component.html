@@ -1,90 +1,18 @@
 <!-- CONTENIDO PRINCIPAL: listado de mascotas a cargo del veterinario -->
-<app-header-veterinario [veterinario]="veterinario"></app-header-veterinario>
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+<app-header-veterinario [veterinario]="veterinario" [veterinarioId]="veterinarioId"></app-header-veterinario>
 
 <main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
     <!-- Encabezado de la sección: título y descripción -->
-    <section class="mb-stack-lg">
-        <h1 class="mb-6 text-4xl font-bold text-gray-900">Mascotas Registradas</h1>
-        <p class="text-lg text-gray-600">
-            Has click en <span class="font-bold text-emerald-700">"Ver Ficha"</span> para poder consultar la información detallada de los tratamientos del paciente y su respectivo cliente.
-        </p>
-    </section>
+    <app-encabezado-mascotas></app-encabezado-mascotas>
 
     <!-- Tarjeta contenedora del listado: tabla con mascotas -->
-    <section class="bg-white rounded-2xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
-        <!-- Cabecera de la tarjeta: título y contador dinámico -->
-        <div class="flex items-center justify-between gap-4 p-8 border-b border-gray-200">
-            <h2 class="text-2xl font-bold text-gray-900">Listado de mascotas</h2>
-            <span class="text-sm uppercase tracking-widest text-gray-500">{{ textoContador }}</span>
-        </div>
-        <!-- Tabla responsive -->
-        <div class="overflow-x-auto">
-            <table class="w-full min-w-[720px] text-left">
-                <!-- Cabecera de la tabla: columnas de datos -->
-                <thead>
-                <tr class="bg-gray-50 uppercase">
-                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-500" scope="col">Foto</th>
-                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-500" scope="col">Nombre</th>
-                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-500" scope="col">Especie</th>
-                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-500" scope="col">Raza</th>
-                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-500" scope="col">Edad</th>
-                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-500" scope="col">Sexo</th>
-                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-500" scope="col">Dueño</th>
-                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-500" scope="col">Acciones</th>
-                </tr>
-                </thead>
-                <!-- Cuerpo de la tabla -->
-                <tbody>
-                <!-- Estado vacío: no hay mascotas registradas -->
-                <tr *ngIf="mascotas.length === 0">
-                    <td class="px-6 py-16 text-center" colspan="8">
-                        <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-gray-400" style="font-variation-settings: 'FILL' 0;">pets</span>
-                        <p class="text-lg text-gray-600">Aún no tienes mascotas registradas.</p>
-                    </td>
-                </tr>
-                <!-- Fila por cada mascota del repositorio -->
-                <tr class="border-b border-gray-200 transition-colors last:border-0 hover:bg-gray-50"
-                    *ngFor="let mascota of mascotas">
-                    <!-- Columna: Foto de la mascota o icono por defecto -->
-                    <td class="px-6 py-4">
-                        <img alt="Foto de la mascota"
-                             class="h-14 w-14 rounded-full border border-gray-200 object-cover"
-                             *ngIf="mascota.imagen"
-                             [src]="mascota.imagen"
-                             (error)="onImageError($event)"/>
-                        <div aria-label="Sin fotografía disponible"
-                             class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-gray-400"
-                             role="img"
-                             *ngIf="!mascota.imagen">
-                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">pets</span>
-                        </div>
-                    </td>
-                    <!-- Columna: Nombre y número de paciente -->
-                    <td class="px-6 py-4">
-                        <p class="text-sm font-semibold text-gray-900">{{ mascota.nombre }}</p>
-                        <p class="text-xs uppercase tracking-widest text-gray-500">{{ getNumeroPaciente(mascota.id) }}</p>
-                    </td>
-                    <!-- Columnas de datos básicos -->
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ mascota.especie }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ mascota.raza }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ getEdad(mascota) }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 uppercase">{{ mascota.sexo }}</td>
-                    <!-- Columna: Dueño de la mascota -->
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ getDueno(mascota) }}</td>
-                    <!-- Columna: Botón para ver ficha clínica -->
-                    <td class="px-6 py-4">
-                        <a class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-bold uppercase text-emerald-800 transition-colors hover:bg-emerald-200"
-                           [attr.aria-label]="'Consultar ficha clínica de ' + mascota.nombre"
-                           (click)="verFicha(mascota)">
-                            Ver ficha
-                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0;">visibility</span>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
+    <app-tabla-mascotas
+        [mascotas]="mascotas"
+        [textoContador]="textoContador"
+        [duenosPorId]="duenosPorId"
+        (verFicha)="verFicha($event)"></app-tabla-mascotas>
 </main>
 
-<app-footer></app-footer>
+<app-footer-portal></app-footer-portal>
+</div>

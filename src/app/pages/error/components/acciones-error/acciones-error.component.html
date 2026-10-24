@@ -1,0 +1,11 @@
+<!-- Acciones: volver al inicio o regresar a la página anterior -->
+<div class="flex flex-wrap justify-center gap-4">
+    <a class="btn-primary bg-mint-accent text-deep-carbon font-bold px-8 py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
+       (click)="volverInicio.emit()">
+        Volver al inicio <span class="material-symbols-outlined text-[18px]">home</span>
+    </a>
+    <a class="btn-secondary border border-mint-accent text-mint-accent hover:bg-mint-accent/10 font-bold px-8 py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
+       (click)="regresar.emit()">
+        Regresar <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+    </a>
+</div>

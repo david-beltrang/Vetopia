@@ -41,4 +41,7 @@ public interface MascotaService {
     // Busca mascotas por nombre
     List<Mascota> buscarPorNombre(String nombre);
 
+    // Elimina una mascota por su id (sus tratamientos caen por cascade)
+    void eliminarMascota(Long id);
+
 }

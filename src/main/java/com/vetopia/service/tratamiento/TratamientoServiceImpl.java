@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vetopia.dto.HistorialTratamientoDTO;
+import com.vetopia.dto.ResultadoTratamientoDTO;
 import com.vetopia.entities.Droga;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.Veterinario;
@@ -84,22 +86,35 @@ public class TratamientoServiceImpl implements TratamientoService {
         return "Medicamento";
     }
 
+    // El nombre del cliente se navega con la relación de la mascota
+    // (tratamiento -> mascota -> dueno). Alimenta el DTO del listado del
+    // veterinario para no duplicar la entidad Dueno completa en el JSON.
+    private String resolverNombreCliente(Tratamiento tratamiento) {
+        Mascota mascota = tratamiento.getMascota();
+        if (mascota != null && mascota.getDueno() != null && mascota.getDueno().getNombre() != null) {
+            return mascota.getDueno().getNombre();
+        }
+        return "No registrado";
+    }
+
     // Lista los tratamientos asociados a un veterinario específico, incluyendo el nombre de la droga utilizada
     @Override
-    public List<HistorialTratamientoMascota> listarTratamientosPorVeterinarioConDroga(Long veterinarioId) {
-        List<HistorialTratamientoMascota> items = new ArrayList<>();
+    public List<HistorialTratamientoDTO> listarTratamientosPorVeterinarioConDroga(Long veterinarioId) {
+        List<HistorialTratamientoDTO> items = new ArrayList<>();
         for (Tratamiento tratamiento : listarTratamientosPorVeterinario(veterinarioId)) {
-            items.add(new HistorialTratamientoMascota(tratamiento, resolverNombreDroga(tratamiento)));
+            items.add(new HistorialTratamientoDTO(tratamiento, resolverNombreDroga(tratamiento),
+                    resolverNombreCliente(tratamiento)));
         }
         return items;
     }
 
     // Lista los tratamientos asociados a una mascota específica, incluyendo el nombre de la droga utilizada
     @Override
-    public List<HistorialTratamientoMascota> listarHistorialDeMascota(Long mascotaId) {
-        List<HistorialTratamientoMascota> historial = new ArrayList<>();
+    public List<HistorialTratamientoDTO> listarHistorialDeMascota(Long mascotaId) {
+        List<HistorialTratamientoDTO> historial = new ArrayList<>();
         for (Tratamiento tratamiento : listarTratamientosPorMascota(mascotaId)) {
-            historial.add(new HistorialTratamientoMascota(tratamiento, resolverNombreDroga(tratamiento)));
+            historial.add(new HistorialTratamientoDTO(tratamiento, resolverNombreDroga(tratamiento),
+                    resolverNombreCliente(tratamiento)));
         }
         return historial;
     }
@@ -108,7 +123,7 @@ public class TratamientoServiceImpl implements TratamientoService {
     // inventario de la droga), por lo que va en una única transacción
     @Override
     @Transactional
-    public ResultadoTratamiento asignarTratamiento(Tratamiento tratamiento, Long veterinarioId) {   
+    public ResultadoTratamientoDTO asignarTratamiento(Tratamiento tratamiento, Long veterinarioId) {   
         //  Validamos que se haya especificado el tratamiento a asignar
         if (tratamiento == null) {
             throw new ParametroInvalidoException("No se especificó el tratamiento a asignar.");
@@ -156,6 +171,31 @@ public class TratamientoServiceImpl implements TratamientoService {
             mascota.setEstado(DominioEstado.ACTIVO);
             mascotaRepository.save(mascota);
         }
-        return new ResultadoTratamiento(tratamiento, mascota, droga, 1);
+        return new ResultadoTratamientoDTO(tratamiento, mascota, droga, 1);
+    }
+
+    @Override
+    @Transactional
+    public void marcarTratamientoComoCompletado(Long id) {
+        actualizarEstado(id, true);
+    }
+
+    // Alterna el estado del tratamiento: el veterinario puede marcarlo como
+    // completado y también devolverlo a pendiente.
+    @Override
+    @Transactional
+    public Tratamiento actualizarEstado(Long id, boolean completado) {
+        Tratamiento tratamiento = obtenerTratamientoPorId(id);
+        tratamiento.setCompletado(completado);
+        return tratamientoRepository.save(tratamiento);
+    }
+
+
+    // Elimina un tratamiento validando que exista.
+    @Override
+    @Transactional
+    public void eliminarTratamiento(Long id) {
+        obtenerTratamientoPorId(id);
+        tratamientoRepository.deleteById(id);
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.vetopia.entities.Veterinario;
 import com.vetopia.exception.ParametroInvalidoException;
@@ -54,5 +55,14 @@ public class VeterinarioServiceImpl implements VeterinarioService {
             throw new ParametroInvalidoException("Debe indicar el correo y la contraseña.");
         }
         return veterinarioRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
+    }
+
+    // Elimina un veterinario validando que exista. Sus tratamientos se borran
+    // por la FK definida con ON DELETE CASCADE.
+    @Override
+    @Transactional
+    public void eliminarVeterinario(Long id) {
+        obtenerVeterinarioPorId(id);
+        veterinarioRepository.deleteById(id);
     }
 }
