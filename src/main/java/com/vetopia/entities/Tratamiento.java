@@ -52,8 +52,7 @@ public class Tratamiento {
     // Relación n-1 con Veterinario: esta es la parte dueña de la FK.
     @ToString.Exclude
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "veterinario_id", nullable = false)
+    @JoinColumn(name = "veterinario_id", nullable = true)
     private Veterinario veterinario;
 
     // Relación n-1 con Droga: esta es la parte dueña de la FK.

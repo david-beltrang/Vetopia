@@ -119,4 +119,12 @@ public class TratamientoRestController {
     public void eliminar(@PathVariable Long id) {
         tratamientoService.eliminarTratamiento(id);
     }
+
+    // Cuenta la cantidad total de tratamientos aplicados
+    @Operation(summary = "Total de tratamientos aplicados")
+    @GetMapping("/total-aplicados")
+    public long totalAplicados() {
+        // Expone el total para el indicador principal del dashboard.
+        return tratamientoService.contarTratamientosAplicados();
+    }
 }

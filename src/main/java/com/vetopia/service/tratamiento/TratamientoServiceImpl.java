@@ -190,6 +190,13 @@ public class TratamientoServiceImpl implements TratamientoService {
         return tratamientoRepository.save(tratamiento);
     }
 
+    // Cuenta la cantidad de tratamientos aplicados
+    @Override
+    public long contarTratamientosAplicados() {
+        // Cada registro representa una aplicación de tratamiento.
+        return tratamientoRepository.findAll().size();
+    }
+
 
     // Elimina un tratamiento validando que exista.
     @Override
