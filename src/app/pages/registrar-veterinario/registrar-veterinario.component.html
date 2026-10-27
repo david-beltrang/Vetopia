@@ -1,0 +1,17 @@
+<!-- Vista principal del registro de veterinario. -->
+<!-- El formulario devuelve los eventos de guardar y cancelar a esta vista. -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+  <app-header-admin [adminId]="adminId"></app-header-admin>
+
+  <main class="flex-1">
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+      <app-encabezado-registrar-veterinario></app-encabezado-registrar-veterinario>
+      <app-formulario-registrar-veterinario
+        (guardar)="onGuardar($event)"
+        (cancelar)="onCancelar()"
+      ></app-formulario-registrar-veterinario>
+    </div>
+  </main>
+
+  <app-footer-portal></app-footer-portal>
+</div>
