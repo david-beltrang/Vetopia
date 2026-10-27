@@ -9,10 +9,8 @@ import com.vetopia.entities.Veterinario;
 import com.vetopia.service.admin.AdministradorService;
 import com.vetopia.service.dueno.DuenoService;
 import com.vetopia.service.veterinario.VeterinarioService;
-/*
- Busca las credenciales en cada tabla (delegando en los services de cada
- entidad hasta encontrar un match.
- */
+// Busca las credenciales en cada tabla (delegando en los services de cada entidad hasta encontrar un match
+
 @Service
 public class LoginServiceImpl implements LoginService {
 
@@ -41,6 +39,11 @@ public class LoginServiceImpl implements LoginService {
         // Buscamos primero en la tabla de veterinarios
         Veterinario veterinario = veterinarioService.obtenerPorCorreoYContrasena(correo, contrasena);
         if (veterinario != null) {
+            // Un veterinario inactivo no puede iniciar sesión en el portal.
+            if (veterinario.getEstado() != null && veterinario.getEstado().toString().equalsIgnoreCase("Inactivo")) {
+                return null;
+            }
+            // Devuelve el rol para que el frontend determine la pantalla inicial.
             return new ResultadoLogin(Long.valueOf(veterinario.getId()), ROL_VETERINARIO, veterinario.getCorreo(), veterinario.getContrasena());
         }
 
