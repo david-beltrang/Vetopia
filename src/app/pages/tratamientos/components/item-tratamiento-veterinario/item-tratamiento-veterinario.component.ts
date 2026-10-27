@@ -45,7 +45,7 @@ export class ItemTratamientoVeterinarioComponent {
 
   nombreMedico(): string {
     const nombre = this.item().tratamiento?.veterinario?.nombre;
-    return nombre ? 'Dr. ' + nombre : 'No registrado';
+    return nombre ? 'Dr. ' + nombre : 'Desconocido';
   }
 
   nombreCliente(): string {

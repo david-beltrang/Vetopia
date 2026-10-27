@@ -24,6 +24,7 @@ export class TratamientoService {
   private http = inject(HttpClient);
   private readonly url = `${API_URL}/tratamiento`;
 
+  // Obtiene el historial enriquecido con el nombre del medicamento.
   listarHistorialDeMascota(mascotaId: number): Observable<TratamientoDetalle[]> {
     return this.http.get<TratamientoDetalle[]>(`${this.url}/mascota/${mascotaId}/historial`);
   }
@@ -33,6 +34,7 @@ export class TratamientoService {
     return this.http.get<TratamientoDetalle[]>(`${this.url}/veterinario/${veterinarioId}/historial`);
   }
 
+  // Asigna un traramiento a una mascota
   asignarTratamiento(tratamiento: TratamientoAsignacion, veterinarioId: number): Observable<ResultadoTratamientoDTO> {
     return this.http.post<ResultadoTratamientoDTO>(`${this.url}/asignar`, tratamiento, { params: { veterinarioId } });
   }
@@ -40,5 +42,11 @@ export class TratamientoService {
   // Cambia el estado del tratamiento entre completado y pendiente.
   actualizarEstado(id: number, completado: boolean): Observable<Tratamiento> {
     return this.http.put<Tratamiento>(`${this.url}/${id}/estado`, null, { params: { completado } });
+  }
+
+  // Obtiene os tratamientos aplicados en todo el sistem
+  obtenerTotalTratamientosAplicados(): Observable<number> {
+    // Consulta el total usado por los indicadores del panel administrativo.
+    return this.http.get<number>(`${this.url}/total-aplicados`);
   }
 }

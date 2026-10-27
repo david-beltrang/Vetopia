@@ -1,0 +1,83 @@
+<!-- Formulario validado para crear el veterinario. -->
+<!-- Las validaciones se muestran cuando el campo fue tocado y es invalido. -->
+<form [formGroup]="veterinarioForm" (ngSubmit)="onGuardar()" class="space-y-8">
+  <!-- Formulario único -->
+  <div class="bg-surface-container-lowest rounded-lg shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest overflow-hidden">
+    <div class="p-8 space-y-6">
+      <!-- Selección de imagen al inicio -->
+      <div class="flex flex-col gap-4">
+        <app-upload-foto [imagen]="imagen" [nombre]="veterinarioForm.get('nombre')?.value || ''" (imagenChange)="onImagenChange($event)"></app-upload-foto>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="flex flex-col gap-2">
+          <label class="font-label-md text-label-md text-on-surface" for="nombre">Nombre completo</label>
+          <input id="nombre" formControlName="nombre" class="px-4 py-3 bg-surface-container-high rounded-lg border border-surface-container-highest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Nombre y apellidos" />
+          @if (veterinarioForm.get('nombre')?.touched && veterinarioForm.get('nombre')?.invalid) {
+            @if (veterinarioForm.get('nombre')?.hasError('required')) {
+              <small class="text-sm text-error">El nombre es obligatorio.</small>
+            }
+            @if (veterinarioForm.get('nombre')?.hasError('minlength')) {
+              <small class="text-sm text-error">Debe tener mínimo 3 caracteres.</small>
+            }
+          }
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="font-label-md text-label-md text-on-surface" for="cedula">Cédula</label>
+          <input id="cedula" formControlName="cedula" class="px-4 py-3 bg-surface-container-high rounded-lg border border-surface-container-highest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Número de cédula" />
+          @if (veterinarioForm.get('cedula')?.touched && veterinarioForm.get('cedula')?.invalid) {
+            @if (veterinarioForm.get('cedula')?.hasError('required')) {
+              <small class="text-sm text-error">La cédula es obligatoria.</small>
+            }
+            @if (veterinarioForm.get('cedula')?.hasError('pattern')) {
+              <small class="text-sm text-error">La cédula solo debe contener números.</small>
+            }
+          }
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="font-label-md text-label-md text-on-surface" for="correo">Correo electrónico</label>
+          <input id="correo" type="email" formControlName="correo" class="px-4 py-3 bg-surface-container-high rounded-lg border border-surface-container-highest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="correo@ejemplo.com" />
+          @if (veterinarioForm.get('correo')?.touched && veterinarioForm.get('correo')?.invalid) {
+            @if (veterinarioForm.get('correo')?.hasError('required')) {
+              <small class="text-sm text-error">El correo es obligatorio.</small>
+            }
+            @if (veterinarioForm.get('correo')?.hasError('email')) {
+              <small class="text-sm text-error">Ingresa un correo válido.</small>
+            }
+          }
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="font-label-md text-label-md text-on-surface" for="contrasena">Contraseña</label>
+          <input id="contrasena" type="password" formControlName="contrasena" class="px-4 py-3 bg-surface-container-high rounded-lg border border-surface-container-highest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Contraseña" />
+          @if (veterinarioForm.get('contrasena')?.touched && veterinarioForm.get('contrasena')?.invalid) {
+            @if (veterinarioForm.get('contrasena')?.hasError('required')) {
+              <small class="text-sm text-error">La contraseña es obligatoria.</small>
+            }
+            @if (veterinarioForm.get('contrasena')?.hasError('minlength')) {
+              <small class="text-sm text-error">Debe tener mínimo 4 caracteres.</small>
+            }
+          }
+        </div>
+        <div class="flex flex-col gap-2 md:col-span-2">
+          <label class="font-label-md text-label-md text-on-surface" for="especialidad">Especialidad</label>
+          <input id="especialidad" formControlName="especialidad" class="px-4 py-3 bg-surface-container-high rounded-lg border border-surface-container-highest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Especialidad veterinaria" />
+          @if (veterinarioForm.get('especialidad')?.touched && veterinarioForm.get('especialidad')?.invalid) {
+            @if (veterinarioForm.get('especialidad')?.hasError('required')) {
+              <small class="text-sm text-error">La especialidad es obligatoria.</small>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="flex flex-col sm:flex-row justify-end gap-3">
+    <button type="button" (click)="onCancelar()" class="px-6 py-3 rounded-full border border-surface-container-highest text-on-surface font-button text-button uppercase tracking-wider hover:bg-surface-container-high transition-colors">
+      Cancelar
+    </button>
+    <button type="submit" class="px-6 py-3 rounded-full bg-primary text-on-primary font-button text-button uppercase tracking-wider hover:opacity-90 transition-opacity">
+      Guardar
+    </button>
+  </div>
+</form>

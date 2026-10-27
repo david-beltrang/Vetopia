@@ -47,18 +47,7 @@ export class LoginPageComponent {
     }
 
     if (rol === 'ADMINISTRADOR') {
-      // No hay pantalla de administrador: entra al área veterinario con el primer veterinario.
-      this.veterinarioService.listarVeterinarios().subscribe({
-        next: (veterinarios) => {
-          const veterinario = veterinarios[0];
-          if (veterinario?.id != null) {
-            this.router.navigate(['/veterinario/mascotas'], { queryParams: { veterinarioId: veterinario.id } });
-          } else {
-            this.mensajeError.set('No hay veterinarios disponibles.');
-          }
-        },
-        error: () => this.router.navigate(['/error'])
-      });
+      this.router.navigate(['/admin/dashboard'], { queryParams: { adminId: id } });
       return;
     }
 
