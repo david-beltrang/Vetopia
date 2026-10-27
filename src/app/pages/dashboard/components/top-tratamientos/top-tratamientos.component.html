@@ -1,0 +1,45 @@
+<!-- Card para el top de tratamientos-->
+<!-- Muestra estados de carga, error y el ranking recibido del servicio. -->
+<div class="bg-white rounded-2xl border border-[#e0e3e5] p-6 card-shadow flex flex-col h-full">
+  <div class="flex items-center justify-between pb-5 border-b border-[#e0e3e5]">
+    <div>
+      <h2 class="text-lg font-bold text-[#191c1e] tracking-tight">Top 3 Tratamientos</h2>
+      <p class="text-xs text-[#58605f] mt-0.5">Medicamentos con más tratamientos registrados</p>
+    </div>
+    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-[#006c52] bg-[#e8faf2] px-2.5 py-1 rounded-full uppercase tracking-wider">
+      <span class="material-symbols-outlined text-xs">bar_chart</span> Ranking
+    </span>
+  </div>
+
+
+  <div class="space-y-4 my-4 flex-grow flex flex-col justify-center">
+    <p *ngIf="cargando" class="text-sm text-center text-[#58605f] py-8">Cargando tratamientos...</p>
+    <p *ngIf="error" class="text-sm text-center text-red-600 py-8">No se pudo cargar el ranking.</p>
+    <p *ngIf="!cargando && !error && tratamientos.length === 0" class="text-sm text-center text-[#58605f] py-8">
+      Aún no hay tratamientos registrados.
+    </p>
+
+    <!-- Ordena visualmente cada medicamento según su posición en el ranking. -->
+    <article *ngFor="let tratamiento of tratamientos; let indice = index"
+      class="p-3.5 rounded-xl border transition-colors"
+      [ngClass]="indice === 0 ? 'bg-[#e8faf2]/70 border-[#5adcb3]/40' : 'bg-white border-[#e0e3e5] hover:border-[#5adcb3]/60'">
+      <div class="flex items-center justify-between gap-3 mb-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-6 h-6 shrink-0 rounded-full flex items-center justify-center font-bold text-xs"
+            [ngClass]="indice === 0 ? 'bg-[#006c52] text-white' : indice === 1 ? 'bg-[#5adcb3] text-[#00513d]' : 'bg-slate-200 text-slate-700'">
+            {{ indice + 1 }}
+          </span>
+          <h4 class="font-bold text-sm text-[#191c1e] truncate">{{ tratamiento.nombre }}</h4>
+        </div>
+        <span class="font-bold text-xs text-[#191c1e] whitespace-nowrap">{{ tratamiento.tratamientos }}</span>
+      </div>
+      <div class="flex justify-between text-[11px] mb-1 pl-8">
+        <span class="text-[#58605f]">Sobre el total de tratamientos</span>
+        <span class="text-[#58605f] font-medium">{{ tratamiento.porcentaje }}%</span>
+      </div>
+      <div class="w-full bg-[#f2f4f6] rounded-full h-2 overflow-hidden ml-8" style="width: calc(100% - 2rem)">
+        <div class="bg-[#5adcb3] h-2 rounded-full" [style.width.%]="tratamiento.porcentaje"></div>
+      </div>
+    </article>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<!-- Tabla con los medicamentos mas utilizados durante los ultimos 30 dias. -->
+<div class="bg-white rounded-2xl border border-[#e0e3e5] p-6 card-shadow flex flex-col">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-[#e0e3e5]">
+    <div>
+      <h2 class="text-lg font-bold text-[#191c1e] tracking-tight">Tratamientos por medicamento</h2>
+      <p class="text-xs text-[#58605f] mt-0.5">Medicamentos más utilizados en los últimos 30 días</p>
+    </div>
+    <span class="self-start sm:self-auto text-xs font-semibold px-2.5 py-1 rounded-full bg-[#f2f4f6] text-[#58605f]">
+      Top 6
+    </span>
+  </div>
+
+  <div class="overflow-x-auto table-scroll mt-2">
+    <p *ngIf="cargando" class="text-sm text-center text-[#58605f] py-8">Cargando tratamientos...</p>
+    <p *ngIf="error" class="text-sm text-center text-red-600 py-8">No se pudo cargar la tabla.</p>
+    <p *ngIf="!cargando && !error && medicamentos.length === 0" class="text-sm text-center text-[#58605f] py-8">
+      No hay tratamientos registrados en los últimos 30 días.
+    </p>
+
+    <!-- La tabla aparece únicamente cuando la consulta devuelve resultados. -->
+    <table *ngIf="!cargando && !error && medicamentos.length > 0" class="w-full text-left border-collapse" id="medicamentos-kpi-table">
+      <thead>
+        <tr class="border-b border-[#edf0f2] text-[11px] font-semibold text-[#58605f] uppercase tracking-wider">
+          <th class="py-3 px-2">Medicamento</th>
+          <th class="py-3 px-2 text-right">Cantidad</th>
+          <th class="py-3 px-2 text-right w-32">% del total</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#f2f4f6] text-xs">
+        <tr class="hover:bg-slate-50/80 transition-colors" *ngFor="let med of medicamentos">
+          <td class="py-3.5 px-2 font-semibold text-[#191c1e]">{{ med.nombre }}</td>
+          <td class="py-3.5 px-2 text-right font-bold text-[#191c1e]">{{ med.tratamientos }}</td>
+          <td class="py-3.5 px-2 text-right">
+            <div class="flex items-center justify-end gap-2">
+              <span class="font-medium text-[#58605f]">{{ med.porcentaje }}%</span>
+              <div class="w-16 bg-slate-100 rounded-full h-2 overflow-hidden">
+                <div class="h-2 rounded-full bg-[#5adcb3]" [style.width.%]="med.porcentaje"></div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
