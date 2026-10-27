@@ -27,6 +27,7 @@ import com.vetopia.repository.MascotaRepository;
 import com.vetopia.repository.TratamientoRepository;
 import com.vetopia.repository.VeterinarioRepository;
 import com.vetopia.config.DataDrogasLoader;
+import com.vetopia.service.tratamiento.TratamientoService;
 
 // Script inicializador de datos para poblar la BD
 @Component
@@ -45,6 +46,9 @@ public class DataLoader implements CommandLineRunner {
     private DrogaRepository drogaRepository;
 
     @Autowired
+    private TratamientoService tratamientoService;
+
+    @Autowired
     private VeterinarioRepository veterinarioRepository;
 
     @Autowired
@@ -53,9 +57,10 @@ public class DataLoader implements CommandLineRunner {
     // Fija la semilla para que los datos aleatorios generados sean consistentes entre ejecuciones
     private final Random random = new Random(42L);
 
-    // Cantidad de datos de prueba: 50 clientes y 100 mascotas aleatorias
+    // Cantidad de datos de prueba: 50 clientes, 100 mascotas y 80 tratamientos.
     private static final int CANTIDAD_DUENOS = 50;
     private static final int CANTIDAD_MASCOTAS = 100;
+    private static final int CANTIDAD_TRATAMIENTOS = 80;
     private String rutaDrogasExcel = "drogasVetopia.xlsx";
 
     // Opciones de nombres para generar clientes aleatorios con variedad
@@ -79,6 +84,9 @@ public class DataLoader implements CommandLineRunner {
         poblarDrogas();
         poblarMascotas();
         poblarTratamientos();
+
+        long totalTratamientosAplicados = tratamientoService.contarTratamientosAplicados();
+        System.out.println("Total de tratamientos aplicados: " + totalTratamientosAplicados);
     }
 
     // Crea los clientes (dueños) de prueba. Lleva registro de las cédulas y
@@ -192,7 +200,9 @@ public class DataLoader implements CommandLineRunner {
     // Crea mascotas aleatorias asignando cada una a un dueño
     private void poblarMascotas() {
         long cantidadDuenos = duenoRepository.count();
-        String[] nombres = { "Max", "Luna", "Rocky", "Bella", "Toby", "Nala", "Coco", "Milo", "Lola", "Simba" };
+        String[] nombres = { "Max", "Luna", "Rocky", "Bella", "Toby", "Nala", "Coco", "Milo", "Lola", "Simba",
+                "Bruno", "Kira", "Thor", "Daisy", "Leo", "Maya", "Zeus", "Canela", "Oliver", "Mia",
+                "Bobby", "Kiara", "Tommy", "Chispa", "Balu", "Frida", "Benji", "Pelusa", "Rex", "Sasha" };
         String[] razas = { "Doberman", "Siamés", "Bulldog Francés", "Golden Retriever", "Beagle", "Persa",
                 "Criollo", "Labrador", "Poodle", "Bengalí" };
         String[] colores = { "Negro", "Blanco", "Café", "Gris", "Atigrado", "Blanco y café", "Dorado", "Marrón" };
@@ -239,7 +249,8 @@ public class DataLoader implements CommandLineRunner {
                 "Limpieza de la zona, drenaje y vendaje.",
                 "Consulta con recomendaciones de alimentación y ejercicio." };
 
-        int cantidadTratamientos = random.nextInt(20);
+        // Genera una cantidad fija para que el dashboard siempre tenga datos suficientes.
+        int cantidadTratamientos = CANTIDAD_TRATAMIENTOS;
         // Crea tratamientos aleatorios asignando cada uno a una mascota, un veterinario y una droga existentes
         for (int i = 0; i < cantidadTratamientos; i++) {
             int numeroMascota = random.nextInt(1, (int) cantidadMascotas + 1);
