@@ -1,0 +1,22 @@
+<!-- Control del estado del veterinario. -->
+<div class="flex items-center gap-3 rounded-full border border-surface-container-highest bg-surface-container-lowest px-5 py-2 shadow-[0px_10px_30px_rgba(0,0,0,0.02)]">
+  <div class="flex flex-col items-end">
+    <span class="font-label-md text-label-md text-on-surface">Estado del veterinario</span>
+    <span class="font-body-sm text-body-sm" [class.text-primary]="esActivo" [class.text-outline]="!esActivo">
+      {{ esActivo ? 'Activo' : 'Inactivo' }}
+    </span>
+  </div>
+  <button
+    type="button"
+    class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer"
+    [class.bg-primary]="esActivo"
+    [class.bg-surface-container-high]="!esActivo"
+    (click)="toggleEstado()"
+    [attr.aria-pressed]="esActivo">
+    <span
+      class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200"
+      [class.translate-x-6]="esActivo"
+      [class.translate-x-1]="!esActivo">
+    </span>
+  </button>
+</div>

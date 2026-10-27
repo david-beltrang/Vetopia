@@ -9,7 +9,6 @@
         <div class="hidden md:flex gap-8">
             <a [class]="claseEnlace('pacientes')" [attr.aria-current]="esActiva('pacientes') ? 'page' : null" (click)="navigateToMascotas()">Pacientes</a>
             <a [class]="claseEnlace('clientes')" [attr.aria-current]="esActiva('clientes') ? 'page' : null" (click)="navigateToClientes()">Clientes</a>
-            <a class="text-gray-300 font-body-md text-body-md hover:text-primary transition-colors duration-200" href="#">Citas</a>
             <a [class]="claseEnlace('tratamientos')" [attr.aria-current]="esActiva('tratamientos') ? 'page' : null" (click)="navigateToTratamientos()">Tratamientos</a>
         </div>
         <!-- Barra de herramientas: notificaciones, perfil del veterinario y logout -->

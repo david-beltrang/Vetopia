@@ -1,0 +1,59 @@
+<!-- Vista principal del detalle del veterinario. -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+  <app-header-admin [adminId]="adminId" seccionActiva="veterinarios"></app-header-admin>
+
+  <main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+
+    @if (cargando) {
+    <!-- Indicador de carga mientras se obtiene la información del veterinario. -->
+    <div class="flex items-center justify-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    </div>
+    } @else if (veterinario) {
+    <section>
+      <!-- Encabezado de la sección: título y panel de estado -->
+      <div class="flex flex-wrap items-center justify-between gap-stack-md mb-stack-lg">
+        <div>
+          <h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">
+            Detalle del Veterinario: {{ veterinario.nombre }}
+          </h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant">
+            Información general y estado del veterinario.
+          </p>
+        </div>
+        <!-- Panel de estado del veterinario -->
+        <app-estado-veterinario
+          [veterinario]="veterinario"
+          (estadoCambiado)="onEstadoCambiado($event)">
+        </app-estado-veterinario>
+      </div>
+
+      <!-- Tarjeta de información del veterinario -->
+      <div class="grid grid-cols-1 gap-stack-lg items-stretch mb-stack-lg">
+        <div class="bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+          <app-datos-veterinario [veterinario]="veterinario"></app-datos-veterinario>
+          <app-acciones-veterinario (eliminar)="eliminarVeterinario()"></app-acciones-veterinario>
+        </div>
+      </div>
+    </section>
+
+    } @else {
+    <!-- Panel de error: veterinario no encontrado -->
+    <section class="bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-[0px_10px_30px_rgba(0,0,0,0.04)] p-stack-lg text-center">
+      <span class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-high">
+        <span class="material-symbols-outlined text-[32px] text-outline" style="font-variation-settings: 'FILL' 0;">search_off</span>
+      </span>
+      <h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Veterinario no encontrado</h1>
+      <p class="max-w-xl mx-auto font-body-lg text-body-lg text-on-surface-variant mb-8">
+        {{ mensajeError || 'No encontramos ningún veterinario registrado.' }}
+      </p>
+      <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-6 py-3 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary"
+         (click)="navigateToDashboard()">
+        Volver al Dashboard
+        <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
+      </a>
+    </section>
+    }
+  </main>
+  <app-footer-portal></app-footer-portal>
+</div>
