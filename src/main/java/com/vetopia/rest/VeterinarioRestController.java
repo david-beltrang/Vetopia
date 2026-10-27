@@ -61,10 +61,45 @@ public class VeterinarioRestController {
         return veterinario;
     }
 
+    // Modificar el estado de un veterinario "Activo"-"Inactivo"
+    @Operation(summary = "Cambia el estado de un veterinario")
+    @PutMapping("/{id}/estado")
+    public Veterinario cambiarEstado(@PathVariable Long id, @RequestBody java.util.Map<String, String> body) {
+        // Conserva los datos actuales y modifica únicamente el estado recibido.
+        Veterinario veterinario = veterinarioService.obtenerVeterinarioPorId(id);
+        String estadoStr = body.get("estado");
+        if (estadoStr != null) {
+            veterinario.setEstado(com.vetopia.entities.mascota.dominio_attr.DominioEstado.fromValor(estadoStr));
+        }
+        veterinarioService.guardar(veterinario);
+        return veterinario;
+    }
+
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Elimina un veterinario por su id")
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         veterinarioService.eliminarVeterinario(id);
+    }
+
+    // Contar cuantos veterinarios hay activos
+    @Operation(summary = "Cantidad de veterinarios activos")
+    @GetMapping("/activos/count")
+    public long contarActivos() {
+        return veterinarioService.contarVeterinariosActivos();
+    }
+
+    // Contar cuantos veterinarios hay inactivos
+    @Operation(summary = "Cantidad de veterinarios inactivos")
+    @GetMapping("/inactivos/count")
+    public long contarInactivos() {
+        return veterinarioService.contarVeterinariosInactivos();
+    }
+
+    // Contar cantidad de tratamienots aplicados del veterinario
+    @Operation(summary = "Cantidad de tratamientos aplicados por un veterinario")
+    @GetMapping("/{id}/atenciones/count")
+    public long contarAtenciones(@PathVariable Long id) {
+        return veterinarioService.contarAtenciones(id);
     }
 }

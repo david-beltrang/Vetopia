@@ -23,4 +23,10 @@ public interface VeterinarioService {
 
     // Elimina un veterinario por su id
     void eliminarVeterinario(Long id);
+
+    long contarVeterinariosActivos();
+
+    long contarVeterinariosInactivos();
+
+    long contarAtenciones(Long veterinarioId);
 }

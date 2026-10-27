@@ -64,6 +64,7 @@ public class Veterinario {
     // Tratamiento. Con cascade, al borrar el veterinario se borran sus tratamientos
     @JsonIgnore 
     @ToString.Exclude
+    // Los tratamientos se conservan aunque este veterinario sea eliminado.
     @OneToMany(mappedBy = "veterinario")
     private List<Tratamiento> tratamientos = new ArrayList<>();
 

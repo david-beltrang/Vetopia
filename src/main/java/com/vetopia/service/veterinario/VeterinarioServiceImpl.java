@@ -10,6 +10,7 @@ import com.vetopia.entities.Veterinario;
 import com.vetopia.exception.ParametroInvalidoException;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.VeterinarioRepository;
+import com.vetopia.repository.TratamientoRepository;
 
 // Esta clase implementa la interfaz VeterinarioService y define la lógica de negocio relacionada con veterinarios. Es el único punto al que los controladores acceden para obtener datos; a su vez, delega el acceso a datos en la capa repository.
 @Service
@@ -18,6 +19,9 @@ public class VeterinarioServiceImpl implements VeterinarioService {
     //Inyección de dependencias
     @Autowired
     private VeterinarioRepository veterinarioRepository;
+
+    @Autowired
+    private TratamientoRepository tratamientoRepository;
 
     // Devuelve todos los veterinarios registrados
     @Override
@@ -57,12 +61,34 @@ public class VeterinarioServiceImpl implements VeterinarioService {
         return veterinarioRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
     }
 
-    // Elimina un veterinario validando que exista. Sus tratamientos se borran
-    // por la FK definida con ON DELETE CASCADE.
+    // Elimina un veterinario y conserva sus tratamientos sin profesional asignado.
     @Override
     @Transactional
     public void eliminarVeterinario(Long id) {
         obtenerVeterinarioPorId(id);
+        // Desvincula los tratamientos para que no sean eliminados en cascada.
+        tratamientoRepository.findByVeterinarioId(id).forEach(tratamiento -> tratamiento.setVeterinario(null));
+        tratamientoRepository.flush();
         veterinarioRepository.deleteById(id);
+    }
+
+    // Cuenta veterinarios activos
+    @Override
+    public long contarVeterinariosActivos() {
+        return veterinarioRepository.countByEstado(com.vetopia.entities.mascota.dominio_attr.DominioEstado.ACTIVO);
+    }
+
+    // Cuenta veterinarios activos
+    @Override
+    public long contarVeterinariosInactivos() {
+        return veterinarioRepository.countByEstado(com.vetopia.entities.mascota.dominio_attr.DominioEstado.INACTIVO);
+    }
+
+    // Cuenta la cantidad de atenciones por Veterinario
+    @Override
+    public long contarAtenciones(Long veterinarioId) {
+        // Valida que el veterinario exista antes de contar sus tratamientos.
+        obtenerVeterinarioPorId(veterinarioId);
+        return tratamientoRepository.countByVeterinarioId(veterinarioId);
     }
 }
