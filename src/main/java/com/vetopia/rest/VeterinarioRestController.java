@@ -28,6 +28,7 @@ public class VeterinarioRestController {
     @Autowired
     private VeterinarioService veterinarioService;
 
+    //http://localhost:8090/veterinario/all
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Lista todos los veterinarios")
     @GetMapping("/all")
@@ -35,6 +36,7 @@ public class VeterinarioRestController {
         return veterinarioService.listarVeterinarios();
     }
 
+    //http://localhost:8090/veterinario/1
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Obtiene un veterinario por su id")
     @GetMapping("/{id}")
@@ -42,6 +44,7 @@ public class VeterinarioRestController {
         return veterinarioService.obtenerVeterinarioPorId(id);
     }
 
+    //http://localhost:8090/veterinario
     // El service asigna el id, se devuelve el objeto para reutilizarlo en Angular.
     // Se limpia el id entrante para que siempre sea un alta y no una actualización.
     @Operation(summary = "Registra un nuevo veterinario")
@@ -52,6 +55,7 @@ public class VeterinarioRestController {
         return veterinario;
     }
 
+    //http://localhost:8090/veterinario/1
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Actualiza un veterinario existente")
     @PutMapping("/{id}")
@@ -61,6 +65,7 @@ public class VeterinarioRestController {
         return veterinario;
     }
 
+    //http://localhost:8090/veterinario/1/estado
     // Modificar el estado de un veterinario "Activo"-"Inactivo"
     @Operation(summary = "Cambia el estado de un veterinario")
     @PutMapping("/{id}/estado")
@@ -75,6 +80,7 @@ public class VeterinarioRestController {
         return veterinario;
     }
 
+    //http://localhost:8090/veterinario/1
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Elimina un veterinario por su id")
     @DeleteMapping("/{id}")
@@ -82,6 +88,7 @@ public class VeterinarioRestController {
         veterinarioService.eliminarVeterinario(id);
     }
 
+    //http://localhost:8090/veterinario/activos/count
     // Contar cuantos veterinarios hay activos
     @Operation(summary = "Cantidad de veterinarios activos")
     @GetMapping("/activos/count")
@@ -89,6 +96,7 @@ public class VeterinarioRestController {
         return veterinarioService.contarVeterinariosActivos();
     }
 
+    //http://localhost:8090/veterinario/inactivos/count
     // Contar cuantos veterinarios hay inactivos
     @Operation(summary = "Cantidad de veterinarios inactivos")
     @GetMapping("/inactivos/count")
@@ -96,6 +104,7 @@ public class VeterinarioRestController {
         return veterinarioService.contarVeterinariosInactivos();
     }
 
+    //http://localhost:8090/veterinario/1/atenciones/count
     // Contar cantidad de tratamienots aplicados del veterinario
     @Operation(summary = "Cantidad de tratamientos aplicados por un veterinario")
     @GetMapping("/{id}/atenciones/count")

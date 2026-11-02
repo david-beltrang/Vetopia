@@ -34,6 +34,7 @@ public class TratamientoRestController {
     @Autowired
     private TratamientoService tratamientoService;
 
+    //http://localhost:8090/tratamiento/all
     // Lista todos los tratamientos
     @Operation(summary = "Lista todos los tratamientos")
     @GetMapping("/all")
@@ -41,6 +42,7 @@ public class TratamientoRestController {
         return tratamientoService.listarTratamientos();
     }
 
+    //http://localhost:8090/tratamiento/1
     // Una tratamiento concreto por su id
     @Operation(summary = "Obtiene un tratamiento por su id")
     @GetMapping("/{id}")
@@ -48,6 +50,7 @@ public class TratamientoRestController {
         return tratamientoService.obtenerTratamientoPorId(id);
     }
 
+    //http://localhost:8090/tratamiento/mascota/1
     // Tratamientos de una mascota (consulta derivada findByMascotaId)
     @Operation(summary = "Lista los tratamientos de una mascota")
     @GetMapping("/mascota/{mascotaId}")
@@ -55,6 +58,7 @@ public class TratamientoRestController {
         return tratamientoService.listarTratamientosPorMascota(mascotaId);
     }
 
+    //http://localhost:8090/tratamiento/mascota/1/historial
     // Historial de una mascota con el nombre de la droga, se devuelve el DTO 
     // y no la entidad para que el frontend reciba el nombre del medicamento ya resuelto
     @Operation(summary = "Historial de tratamientos de una mascota (con nombre de droga)")
@@ -63,6 +67,7 @@ public class TratamientoRestController {
         return tratamientoService.listarHistorialDeMascota(mascotaId);
     }
 
+    //http://localhost:8090/tratamiento/veterinario/1
     // Tratamientos de un veterinario (consulta derivada findByVeterinarioId)
     @Operation(summary = "Lista los tratamientos de un veterinario")
     @GetMapping("/veterinario/{veterinarioId}")
@@ -70,6 +75,7 @@ public class TratamientoRestController {
         return tratamientoService.listarTratamientosPorVeterinario(veterinarioId);
     }
 
+    //http://localhost:8090/tratamiento/veterinario/1/historial
     // Historial de un veterinario con el nombre de la droga, se devuelve el DTO
     @Operation(summary = "Historial de tratamientos de un veterinario (con nombre de droga)")
     @GetMapping("/veterinario/{veterinarioId}/historial")
@@ -77,6 +83,7 @@ public class TratamientoRestController {
         return tratamientoService.listarTratamientosPorVeterinarioConDroga(veterinarioId);
     }
 
+    //http://localhost:8090/tratamiento
     // Guarda el tratamiento tal cual llega, sin descontar stock.
     // Se limpia el id para que la base de datos asigne uno nuevo
     @Operation(summary = "Registra un nuevo tratamiento")
@@ -87,6 +94,7 @@ public class TratamientoRestController {
         return tratamiento;
     }
 
+    //http://localhost:8090/tratamiento/1
     // Guarda el tratamiento tal cual llega, sin descontar stock
     @Operation(summary = "Actualiza un tratamiento existente")
     @PutMapping("/{id}")
@@ -96,6 +104,7 @@ public class TratamientoRestController {
         return tratamiento;
     }
 
+    //http://localhost:8090/tratamiento/asignar?veterinarioId=1
     // Asignar un tratamiento a una mascota. En el JSON llegan la mascota y la
     // droga con su id; el veterinario viene por la URL
     @Operation(summary = "Asigna un tratamiento a una mascota y descuenta inventario")
@@ -106,6 +115,7 @@ public class TratamientoRestController {
         return tratamientoService.asignarTratamiento(tratamiento, veterinarioId);
     }
 
+    //http://localhost:8090/tratamiento/1/estado?completado=true
     // Cambia el estado de un tratamiento entre completado y pendiente
     @Operation(summary = "Cambia el estado de un tratamiento (completado/pendiente)")
     @PutMapping("/{id}/estado")
@@ -113,6 +123,7 @@ public class TratamientoRestController {
         return tratamientoService.actualizarEstado(id, completado);
     }
 
+    //http://localhost:8090/tratamiento/1
     // Elimina un tratamiento por su id. No se descuenta inventario porque ya se descontó al asignar
     @Operation(summary = "Elimina un tratamiento por su id")
     @DeleteMapping("/{id}")
@@ -120,6 +131,7 @@ public class TratamientoRestController {
         tratamientoService.eliminarTratamiento(id);
     }
 
+    //http://localhost:8090/tratamiento/total-aplicados
     // Cuenta la cantidad total de tratamientos aplicados
     @Operation(summary = "Total de tratamientos aplicados")
     @GetMapping("/total-aplicados")

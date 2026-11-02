@@ -36,6 +36,7 @@ public class DuenoRestController {
     @Autowired
     private MascotaService mascotaService;
 
+    //http://localhost:8090/dueno/all
     // Lista todos los clientes registrados
     @Operation(summary = "Lista todos los clientes")
     @GetMapping("/all")
@@ -43,6 +44,7 @@ public class DuenoRestController {
         return duenoService.listarDuenos();
     }
 
+    //http://localhost:8090/dueno/1
     // Un cliente concreto por su id
     @Operation(summary = "Obtiene un cliente por su id")
     @GetMapping("/{id}")
@@ -50,6 +52,7 @@ public class DuenoRestController {
         return duenoService.obtenerDuenoPorId(id);
     }
 
+    //http://localhost:8090/dueno/1/mascotas
     // Mascotas de un cliente, usa la consulta del findByDuenoIdmediante el service
     // Valida el dueño para devolver 404 si el id no existe
     @Operation(summary = "Lista las mascotas de un cliente")
@@ -59,6 +62,7 @@ public class DuenoRestController {
         return mascotaService.listarMascotasDeCliente(id);
     }
 
+    //http://localhost:8090/dueno
     // Devuelve el cliente con el id ya asignado por la base de datos, porque
     // el frontend lo necesita para registrar sus mascotas justo después
     @Operation(summary = "Registra un nuevo cliente")
@@ -68,6 +72,7 @@ public class DuenoRestController {
         return duenoService.registrarClienteActivo(dueno);
     }
 
+    //http://localhost:8090/dueno/1
     // El id viaja en la URL, así que JPA actualiza el registro existente
     @Operation(summary = "Actualiza un cliente existente")
     @PutMapping("/{id}")
@@ -77,6 +82,7 @@ public class DuenoRestController {
         return dueno;
     }
 
+    //http://localhost:8090/dueno/1
     // Borra el cliente y, en cascada, sus mascotas y tratamientos
     @Operation(summary = "Elimina un cliente por su id")
     @DeleteMapping("/{id}")
