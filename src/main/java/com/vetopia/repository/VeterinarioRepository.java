@@ -11,6 +11,8 @@ public interface VeterinarioRepository extends JpaRepository<Veterinario, Long> 
     // Consulta derivada para el login del portal. Devuelve null si no hay coincidencia
     Veterinario findByCorreoIgnoreCaseAndContrasena(String correo, String contrasena);
 
+    Veterinario findByCorreoIgnoreCase(String correo);
+
     // Cuenta veterinarios activos o inactivos para los indicadores
     long countByEstado(DominioEstado estado);
 }

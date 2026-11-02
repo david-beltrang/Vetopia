@@ -61,6 +61,14 @@ public class VeterinarioServiceImpl implements VeterinarioService {
         return veterinarioRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
     }
 
+    @Override
+    public Veterinario obtenerPorCorreo(String correo) {
+        if (correo == null || correo.isBlank()) {
+            throw new ParametroInvalidoException("Debe indicar el correo.");
+        }
+        return veterinarioRepository.findByCorreoIgnoreCase(correo);
+    }
+
     // Elimina un veterinario y conserva sus tratamientos sin profesional asignado.
     @Override
     @Transactional

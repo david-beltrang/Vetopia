@@ -21,6 +21,8 @@ public interface VeterinarioService {
     // Busca un veterinario por correo y contraseña (para login)
     Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena);
 
+    Veterinario obtenerPorCorreo(String correo);
+
     // Elimina un veterinario por su id
     void eliminarVeterinario(Long id);
 
