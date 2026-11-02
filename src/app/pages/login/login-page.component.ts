@@ -31,7 +31,7 @@ export class LoginPageComponent {
         this.mensajeError.set('');
         this.ingresarSegunRol(resultado.rol, resultado.id);
       },
-      error: () => this.mensajeError.set('Credenciales incorrectas.')
+      error: (err) => this.mensajeError.set(err?.error?.message || 'Credenciales incorrectas.')
     });
   }
 
