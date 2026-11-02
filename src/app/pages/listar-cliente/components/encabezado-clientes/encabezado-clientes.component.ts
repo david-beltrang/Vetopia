@@ -7,4 +7,9 @@ import { Component, output } from '@angular/core';
 })
 export class EncabezadoClientesComponent {
   nuevoCliente = output<void>();
+  busqueda = output<string>();
+
+  actualizarBusqueda(event: Event): void {
+    this.busqueda.emit((event.target as HTMLInputElement).value);
+  }
 }
