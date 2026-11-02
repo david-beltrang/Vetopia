@@ -37,28 +37,24 @@ public class LoginServiceImpl implements LoginService {
         }
 
         // Buscamos primero en la tabla de veterinarios
-        Veterinario veterinario = veterinarioService.obtenerPorCorreoYContrasena(correo, contrasena);
-        if (veterinario != null) {
-            // Un veterinario inactivo no puede iniciar sesión en el portal.
-            if (veterinario.getEstado() != null && veterinario.getEstado().toString().equalsIgnoreCase("Inactivo")) {
-                return null;
-            }
+        Veterinario veterinario = veterinarioService.obtenerPorCorreo(correo);
+        if (veterinario != null && veterinario.getContrasena().equals(contrasena)) {
             // Devuelve el rol para que el frontend determine la pantalla inicial.
-            return new ResultadoLogin(Long.valueOf(veterinario.getId()), ROL_VETERINARIO, veterinario.getCorreo(), veterinario.getContrasena());
+            return new ResultadoLogin(Long.valueOf(veterinario.getId()), ROL_VETERINARIO, veterinario.getCorreo(), veterinario.getContrasena(), veterinario.getEstado());
         }
 
         // Si no se encuentra en veterinarios, buscamos en la tabla de administradores
         Administrador administrador = administradorService.obtenerPorCorreoYContrasena(correo, contrasena);
         // Si se encuentra un administrador, devolvemos el resultado de login con el rol correspondiente
         if (administrador != null) {
-            return new ResultadoLogin(Long.valueOf(administrador.getId()), ROL_ADMINISTRADOR, administrador.getCorreo(), administrador.getContrasena());
+            return new ResultadoLogin(Long.valueOf(administrador.getId()), ROL_ADMINISTRADOR, administrador.getCorreo(), administrador.getContrasena(), null);
         }
 
         // Si no se encuentra en administradores, buscamos en la tabla de dueños
         Dueno dueno = duenoService.obtenerPorCorreoYContrasena(correo, contrasena);
         // Si se encuentra un dueño, devolvemos el resultado de login con el rol correspondiente
         if (dueno != null) {
-            return new ResultadoLogin(dueno.getId(), ROL_CLIENTE, dueno.getCorreo(), dueno.getContrasena());
+            return new ResultadoLogin(dueno.getId(), ROL_CLIENTE, dueno.getCorreo(), dueno.getContrasena(), null);
         }
 
         // Si no se encuentra en ninguna tabla, devolvemos null indicando que las credenciales no son válidas
