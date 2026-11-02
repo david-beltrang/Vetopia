@@ -78,6 +78,11 @@ export class AsignarTratamientoComponent implements OnInit {
     const mascota = this.mascota;
     if (!mascota?.id) return;
 
+    if (mascota.estado === 'Inactivo') {
+      this.mensajeError.set('No se puede asignar un tratamiento a una mascota inactiva.');
+      return;
+    }
+
     this.mensajeError.set('');
 
     // El backend solo necesita el id de la mascota y de la droga en el cuerpo.
