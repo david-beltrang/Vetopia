@@ -1,0 +1,21 @@
+<!-- Vista principal del listado de veterinarios. -->
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+  <app-header-admin [adminId]="adminId" seccionActiva="veterinarios"></app-header-admin>
+
+  <main class="flex-1">
+    <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
+      <app-encabezado-veterinarios
+        (nuevoVeterinario)="nuevoVeterinario()"
+        (busqueda)="filtrarVeterinarios($event)">
+      </app-encabezado-veterinarios>
+      <app-tabla-veterinarios
+        [veterinarios]="veterinarios"
+        [textoContador]="textoContador"
+        (verDetalle)="verDetalle($event)"
+        (nuevoVeterinario)="nuevoVeterinario()"
+      ></app-tabla-veterinarios>
+    </div>
+  </main>
+
+  <app-footer-portal></app-footer-portal>
+</div>

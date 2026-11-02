@@ -4,4 +4,19 @@
     <p class="font-body-lg text-body-lg text-on-surface-variant">
         Has click en <span class="font-bold text-on-primary-container">"Ver Ficha"</span> para poder consultar la información detallada de los tratamientos del paciente y su respectivo cliente.
     </p>
+    <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div class="flex w-full max-w-md items-center gap-3 rounded-full bg-surface-container-high px-4 py-2">
+            <span class="material-symbols-outlined text-on-surface-variant">search</span>
+            <input type="text"
+                placeholder="Buscar mascota por nombre..."
+                (input)="actualizarBusqueda($event)"
+                class="flex-1 border-0 bg-transparent font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none" />
+        </div>
+        <label class="inline-flex cursor-pointer items-center gap-2 font-body-md text-body-md text-on-surface">
+            <input type="checkbox"
+                (change)="actualizarFiltro($event)"
+                class="h-4 w-4 rounded border-outline text-primary focus:ring-primary" />
+            Solo mascotas atendidas por este veterinario
+        </label>
+    </div>
 </section>

@@ -15,12 +15,20 @@ import { DetalleMascotaComponent } from './pages/detalle-mascota/detalle-mascota
 import { ListarMascotaComponent } from './pages/listar-mascota/listar-mascota.component';
 import { ErrorPageComponent } from './pages/error/error-page.component';
 import { TratamientosComponent } from './pages/tratamientos/tratamientos.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { DetallesVeterinarioComponent } from './pages/detalles-veterinario/detalles-veterinario.component';
+import { ListarVeterinariosComponent } from './pages/listar-veterinarios/listar-veterinarios.component';
+import { RegistrarVeterinarioComponent } from './pages/registrar-veterinario/registrar-veterinario.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginPageComponent, title: 'Vetopia - Iniciar Sesión' },
   { path: 'veterinario/mascotas', component: MascotasComponent, pathMatch: 'full' },
   { path: 'veterinario/mascotas/tratamientos', component: TratamientosComponent, pathMatch: 'full' },
+  { path: 'admin/dashboard', component: DashboardComponent, pathMatch: 'full' },
+  { path: 'admin/veterinarios', component: ListarVeterinariosComponent, pathMatch: 'full' },
+  { path: 'admin/registrar-veterinario', component: RegistrarVeterinarioComponent, pathMatch: 'full' },
+  { path: 'admin/detalles-veterinario/:id', component: DetallesVeterinarioComponent },
   { path: 'veterinario/mascotas/registrar-cliente', component: RegistrarClienteComponent },
   { path: 'veterinario/mascotas/registrar-mascota/:duenoId', component: RegistrarMascotaComponent },
   { path: 'veterinario/mascotas/ficha/:id', component: FichaClinicaComponent },

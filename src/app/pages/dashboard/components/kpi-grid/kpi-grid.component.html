@@ -1,0 +1,75 @@
+<!-- Primera fila de indicadores. -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-5">
+  <app-kpi-card
+    title="Tratamientos"
+    [value]="totalTratamientosAplicados.toString()"
+    icon="vaccines"
+    iconBgClass="bg-[#e8faf2]"
+    iconTextClass="text-[#006c52]">
+  </app-kpi-card>
+
+  <!-- Tarjeta de indicador para veterinarios activos. -->
+  <app-kpi-card
+    title="Veterinarios activos"
+    [value]="veterinariosActivos.toString()"
+    icon="stethoscope"
+    iconBgClass="bg-[#e8faf2]"
+    iconTextClass="text-[#006c52]">
+  </app-kpi-card>
+
+  <!-- Tarjeta de indicador para veterinarios inactivos. -->
+  <app-kpi-card
+    title="Veterinarios inactivos"
+    [value]="veterinariosInactivos.toString()"
+    icon="person_off"
+    iconBgClass="bg-[#f2f4f6]"
+    iconTextClass="text-[#58605f]">
+  </app-kpi-card>
+
+  <!-- Tarjeta de indicador para total de mascotas. -->
+  <app-kpi-card
+    title="Total de mascotas"
+    [value]="totalMascotas.toString()"
+    icon="pets"
+    iconBgClass="bg-[#e8faf2]"
+    iconTextClass="text-[#006c52]">
+  </app-kpi-card>
+</div>
+
+<!-- Segunda fila de indicadores. -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+  <app-kpi-card
+    title="Mascotas en tratamiento"
+    [value]="mascotasEnTratamiento.toString()"
+    icon="healing"
+    iconBgClass="bg-teal-50"
+    iconTextClass="text-teal-700">
+  </app-kpi-card>
+
+  <app-kpi-card
+    title="Tratamientos en los últimos 30 días"
+    [value]="tratamientosUltimoMes.toString()"
+    icon="calendar_month"
+    iconBgClass="bg-[#e8faf2]"
+    iconTextClass="text-[#006c52]">
+  </app-kpi-card>
+
+  <!-- Tarjeta de indicador para ventas totales. -->
+  <app-kpi-card
+    title="Ventas totales"
+    [value]="formatoMoneda(ventasTotales)"
+    icon="payments"
+    iconBgClass="bg-[#e8faf2]"
+    iconTextClass="text-[#006c52]">
+  </app-kpi-card>
+
+  <!-- Tarjeta de indicador para ganancias totales. -->
+  <app-kpi-card
+    title="Ganancias totales"
+    [value]="formatoMoneda(gananciasTotales)"
+    icon="trending_up"
+    iconBgClass="bg-emerald-50"
+    iconTextClass="text-emerald-700"
+    valueClass="text-[#006c52]">
+  </app-kpi-card>
+</div>

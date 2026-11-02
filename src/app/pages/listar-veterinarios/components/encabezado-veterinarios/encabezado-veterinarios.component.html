@@ -1,0 +1,24 @@
+<!-- El buscador emite el texto para filtrar el listado. -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-stack-lg">
+  <div>
+    <h1 class="text-headline-xl font-headline-xl text-on-surface">Veterinarios</h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Consulta la información de los veterinarios registrados en Vetopia</p>
+  </div>
+
+  <!-- Buscador por cédula y botón de crear veterinario -->
+  <div class="w-full md:max-w-[560px] flex items-center gap-3">
+    <div class="flex flex-1 items-center gap-3 px-4 py-2 bg-surface-container-high rounded-full">
+      <span class="material-symbols-outlined text-on-surface-variant">search</span>
+      <input type="text"
+             placeholder="Buscar por nombre o cédula..."
+             (input)="actualizarBusqueda($event)"
+             class="flex-1 bg-transparent text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none font-body-md text-body-md border-0"/>
+    </div>
+    <!-- Botón: registrar nuevo veterinario -->
+    <a class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-container text-on-primary-container font-button text-button uppercase rounded-full hover:bg-primary hover:text-on-primary transition-colors text-nowrap cursor-pointer"
+       (click)="nuevoVeterinario.emit()">
+      NUEVO VETERINARIO
+      <span class="material-symbols-outlined text-sm">add</span>
+    </a>
+  </div>
+</div>

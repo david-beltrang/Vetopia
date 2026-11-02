@@ -1,19 +1,22 @@
 package com.vetopia.service.login;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 
 public class ResultadoLogin {
     private Long id;
     private String rol;
     private String correo;
     private String contrasena;
+    private DominioEstado estado;
 
     // Constructor para inicializar los campos de la clase ResultadoLogin
-    public ResultadoLogin(Long id, String rol, String correo, String contrasena) {
+    public ResultadoLogin(Long id, String rol, String correo, String contrasena, DominioEstado estado) {
         this.id = id;
         this.rol = rol;
         this.correo = correo;
         this.contrasena = contrasena;
+        this.estado = estado;
     }
 
     // Identificador del usuario autenticado (veterinario, administrador o dueño)
@@ -52,5 +55,13 @@ public class ResultadoLogin {
     // Establece la contraseña del usuario autenticado
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public DominioEstado getEstado(){
+        return this.estado;
+    }
+
+    public void setEstado(DominioEstado estado){
+        this.estado = estado;
     }
 }

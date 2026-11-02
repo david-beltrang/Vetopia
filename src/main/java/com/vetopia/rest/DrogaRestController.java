@@ -28,6 +28,7 @@ public class DrogaRestController {
     @Autowired
     private DrogaService drogaService;
 
+    //http://localhost:8090/droga/all
     // Se listan todas las drogas disponibles en la base de datos
     @Operation(summary = "Lista todas las drogas")
     @GetMapping("/all")
@@ -35,6 +36,7 @@ public class DrogaRestController {
         return drogaService.listarDrogas();
     }
 
+    //http://localhost:8090/droga/1
     // Se obtiene una droga por su id, si no se encuentra, se lanza una excepción
     @Operation(summary = "Obtiene una droga por su id")
     @GetMapping("/{id}")
@@ -42,6 +44,7 @@ public class DrogaRestController {
         return drogaService.obtenerDrogaPorId(id);
     }
 
+    //http://localhost:8090/droga
     // Se limpia el id entrante para que la base de datos asigne uno nuevo.
     @Operation(summary = "Registra una nueva droga")
     @PostMapping
@@ -51,6 +54,7 @@ public class DrogaRestController {
         return droga;
     }
 
+    //http://localhost:8090/droga/1
     // Se actualiza una droga existente, si no se encuentra, se lanza una excepción
     @Operation(summary = "Actualiza una droga existente")
     @PutMapping("/{id}")
@@ -60,6 +64,7 @@ public class DrogaRestController {
         return droga;
     }
 
+    //http://localhost:8090/droga/1
     // Se elimina una droga por su id, si no se encuentra, se lanza una excepción
     @Operation(summary = "Elimina una droga por su id")
     @DeleteMapping("/{id}")

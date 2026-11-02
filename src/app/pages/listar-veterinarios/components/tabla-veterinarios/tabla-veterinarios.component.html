@@ -1,0 +1,45 @@
+<!-- Tabla de veterinarios: listado con columnas de información -->
+<!-- Tabla con la información de cada veterinario. -->
+<div class="bg-surface-container-lowest rounded-lg shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest overflow-hidden">
+  <!-- Cabecera de la tarjeta: título y contador dinámico -->
+  <div class="flex flex-wrap items-center justify-between gap-4 px-8 py-6 border-b border-surface-container-high">
+    <h2 class="text-headline-lg font-headline-lg text-on-surface">Listado de veterinarios</h2>
+    <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">{{ textoContador() }}</span>
+  </div>
+
+  <!-- Tabla responsive -->
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[720px]">
+      <!-- Cabecera de la tabla: columnas de datos -->
+      <thead class="bg-surface-container-low">
+        <tr>
+          <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">NOMBRE</th>
+          <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">CÉDULA</th>
+          <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ESPECIALIDAD</th>
+          <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ESTADO</th>
+          <th class="text-left px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">ACCIONES</th>
+        </tr>
+      </thead>
+      <!-- Cuerpo de la tabla -->
+      <tbody>
+        @if (veterinarios().length === 0) {
+          <!-- Estado vacío: no hay veterinarios registrados -->
+          <tr>
+            <td class="px-6 py-16 text-center" colspan="5">
+              <span class="mx-auto mb-3 block material-symbols-outlined text-5xl text-outline-variant">medical_services</span>
+              <p class="font-body-lg text-body-lg text-on-surface-variant">Aún no hay veterinarios registrados.</p>
+            </td>
+          </tr>
+        } @else {
+          <!-- Fila por cada veterinario del repositorio -->
+          @for (vet of veterinarios(); track vet.id) {
+            <tr app-fila-veterinario
+                class="border-b border-surface-container-high hover:bg-surface-container-low transition-colors"
+                [veterinario]="vet"
+                (verDetalle)="verDetalle.emit($event)"></tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

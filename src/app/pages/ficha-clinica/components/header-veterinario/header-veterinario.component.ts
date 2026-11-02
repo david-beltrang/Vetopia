@@ -14,6 +14,7 @@ export class HeaderVeterinarioComponent {
   seccionActiva = input<SeccionVeterinario>('pacientes');
   router = inject(Router);
 
+  // Usa las dos primeras letras para identificar al veterinario en el encabezado.
   iniciales(): string {
     const nombre = this.veterinario()?.nombre;
     return nombre ? nombre.slice(0, 2).toUpperCase() : 'VT';

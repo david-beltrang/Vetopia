@@ -40,4 +40,7 @@ public interface TratamientoService {
 
     // Cambia el estado (completado/pendiente) de un tratamiento y lo devuelve
     Tratamiento actualizarEstado(Long id, boolean completado);
+
+    // Retorna el total de tratamientos aplicados registrados en la base de datos
+    long contarTratamientosAplicados();
 }

@@ -5,7 +5,9 @@
 <main class="flex-1">
     <div class="max-w-container-max mx-auto px-gutter py-stack-lg">
         <!-- Encabezado de la sección: título y buscador -->
-        <app-encabezado-clientes (nuevoCliente)="nuevoCliente()"></app-encabezado-clientes>
+        <app-encabezado-clientes
+            (nuevoCliente)="nuevoCliente()"
+            (busqueda)="filtrarClientes($event)"></app-encabezado-clientes>
 
         <!-- Tabla de clientes: listado con columnas de información -->
         <app-tabla-clientes

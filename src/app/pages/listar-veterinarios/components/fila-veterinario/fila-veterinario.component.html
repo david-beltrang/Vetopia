@@ -1,0 +1,33 @@
+<!-- Columna: Nombre con avatar e ID -->
+<td class="px-6 py-4">
+  <div class="flex items-center gap-3">
+    <div class="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center border border-surface-container-highest">
+      <span class="text-on-primary-container font-bold text-body-md">{{ iniciales() }}</span>
+    </div>
+    <div>
+      <div class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-widest">{{ veterinario().nombre }}</div>
+      <div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">VETERINARIO N° {{ veterinario().id }}</div>
+    </div>
+  </div>
+</td>
+<!-- Columna: Cédula -->
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">{{ veterinario().cedula }}</td>
+<!-- Columna: Especialidad -->
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{{ veterinario().especialidad }}</td>
+<!-- Columna: Estado -->
+<td class="px-6 py-4">
+  <span class="inline-flex items-center rounded-full px-4 py-1.5 font-label-md text-label-md text-black"
+        [class.bg-success-container]="esActivo()"
+        [class.bg-error-container-dark]="!esActivo()">
+    {{ esActivo() ? 'Activo' : 'Inactivo' }}
+  </span>
+</td>
+<!-- Columna: Botón de ver detalle -->
+<td class="px-6 py-4">
+  <a class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-container text-on-primary-container font-button text-button uppercase rounded-full hover:bg-primary/90 transition-colors cursor-pointer"
+     [attr.aria-label]="'Consultar detalle de ' + veterinario().nombre"
+     (click)="verDetalle.emit(veterinario())">
+    VER DETALLE
+    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+  </a>
+</td>

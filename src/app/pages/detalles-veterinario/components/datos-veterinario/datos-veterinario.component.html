@@ -1,0 +1,46 @@
+<!-- Datos personales y profesionales. -->
+<section>
+  <header class="flex items-center gap-3 px-stack-lg py-5 border-b border-surface-container-highest">
+    <span class="material-symbols-outlined text-[24px] text-primary" style="font-variation-settings: 'FILL' 0;">stethoscope</span>
+    <h2 class="font-headline-md text-headline-md text-on-surface">Datos del Veterinario</h2>
+  </header>
+  <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-stack-lg p-stack-lg">
+    <!-- Imagen del veterinario -->
+    <div class="flex flex-col items-center justify-center">
+      <div class="w-56 h-56 rounded-full overflow-hidden border border-surface-container-highest bg-surface-container-high flex items-center justify-center">
+        @if (veterinario()?.urlFoto) {
+          <img [src]="veterinario()?.urlFoto" [alt]="veterinario()?.nombre" class="w-full h-full object-cover" />
+        } @else {
+          <span class="material-symbols-outlined text-[96px] text-outline" style="font-variation-settings: 'FILL' 0;">person</span>
+        }
+      </div>
+    </div>
+    <!-- Datos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+      <div class="bg-surface-container-low rounded-lg p-4 border border-surface-container-highest">
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Nombre</p>
+        <p class="font-body-lg text-body-lg text-on-surface">{{ veterinario()?.nombre }}</p>
+      </div>
+      <div class="bg-surface-container-low rounded-lg p-4 border border-surface-container-highest">
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Cédula</p>
+        <p class="font-body-lg text-body-lg text-on-surface">{{ veterinario()?.cedula }}</p>
+      </div>
+      <div class="bg-surface-container-low rounded-lg p-4 border border-surface-container-highest">
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Especialidad</p>
+        <p class="font-body-lg text-body-lg text-on-surface">{{ veterinario()?.especialidad }}</p>
+      </div>
+      <div class="bg-surface-container-low rounded-lg p-4 border border-surface-container-highest">
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Número de Atenciones</p>
+        <p class="font-body-lg text-body-lg text-on-surface">{{ veterinario()?.numeroAtenciones }}</p>
+      </div>
+      <div class="bg-surface-container-low rounded-lg p-4 border border-surface-container-highest">
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Estado</p>
+        <p class="font-body-lg text-body-lg text-on-surface">{{ veterinario()?.estado }}</p>
+      </div>
+      <div class="bg-surface-container-low rounded-lg p-4 border border-surface-container-highest">
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Correo</p>
+        <p class="font-body-lg text-body-lg text-on-surface">{{ veterinario()?.correo }}</p>
+      </div>
+    </div>
+  </div>
+</section>

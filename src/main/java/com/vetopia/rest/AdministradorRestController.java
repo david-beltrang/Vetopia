@@ -27,6 +27,7 @@ public class AdministradorRestController {
     @Autowired
     private AdministradorService administradorService;
 
+    //http://localhost:8090/administrador/all
     // Se listan todos los administradores disponibles en la base de datos.
     @Operation(summary = "Lista todos los administradores")
     @GetMapping("/all")
@@ -34,6 +35,7 @@ public class AdministradorRestController {
         return administradorService.listarAdministradores();
     }
 
+    //http://localhost:8090/administrador/1
     // Se obtiene un administrador por su id, si no se encuentra, se lanza una excepción
     @Operation(summary = "Obtiene un administrador por su id")
     @GetMapping("/{id}")
@@ -41,6 +43,7 @@ public class AdministradorRestController {
         return administradorService.obtenerAdministradorPorId(id);
     }
 
+    //http://localhost:8090/administrador
     // Se limpia el id entrante para que la base de datos asigne uno nuevo
     @Operation(summary = "Registra un nuevo administrador")
     @PostMapping
@@ -50,6 +53,7 @@ public class AdministradorRestController {
         return administrador;
     }
 
+    //http://localhost:8090/administrador/1
     // Se actualiza un administrador existente, si no se encuentra, se lanza una excepción
     @Operation(summary = "Actualiza un administrador existente")
     @PutMapping("/{id}")
@@ -59,6 +63,7 @@ public class AdministradorRestController {
         return administrador;
     }
 
+    //http://localhost:8090/administrador/1
     // Se elimina un administrador por su id, si no se encuentra, se lanza una excepción
     @Operation(summary = "Elimina un administrador por su id")
     @DeleteMapping("/{id}")

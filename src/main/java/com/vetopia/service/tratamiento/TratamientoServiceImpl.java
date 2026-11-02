@@ -134,6 +134,16 @@ public class TratamientoServiceImpl implements TratamientoService {
             throw new ParametroInvalidoException("Debes seleccionar un paciente y un medicamento para asignar el tratamiento.");
         }
 
+        Mascota mascota = mascotaRepository.findById(tratamiento.getMascota().getId()).orElse(null);
+        // Una mascota inactiva no puede recibir tratamientos.
+        if (mascota == null) {
+            throw new ParametroInvalidoException("El paciente seleccionado no existe.");
+        }
+        if (mascota.getEstado() == DominioEstado.INACTIVO) {
+            throw new ParametroInvalidoException(
+                    "No se puede asignar un tratamiento a una mascota inactiva.");
+        }
+
         Droga droga = drogaService.obtenerDrogaPorId(tratamiento.getDroga().getId());
 
         int unidadesDisponibles = droga.getUnidadesDisponibles() == null ? 0 : droga.getUnidadesDisponibles();
@@ -160,17 +170,6 @@ public class TratamientoServiceImpl implements TratamientoService {
         guardar(tratamiento);
         drogaService.descontarUnidades(tratamiento.getDroga().getId(), 1);
 
-        Mascota mascota = mascotaRepository.findById(tratamiento.getMascota().getId()).orElse(null);
-        // Validamos que la mascota asociada al tratamiento exista en la base de datos
-        if (mascota == null) {
-            throw new ParametroInvalidoException("El paciente seleccionado no existe.");
-        }
-
-        // Si la mascota estaba inactiva, la activamos al aplicarle un tratamiento
-        if (mascota.getEstado() != DominioEstado.ACTIVO) {
-            mascota.setEstado(DominioEstado.ACTIVO);
-            mascotaRepository.save(mascota);
-        }
         return new ResultadoTratamientoDTO(tratamiento, mascota, droga, 1);
     }
 
@@ -188,6 +187,13 @@ public class TratamientoServiceImpl implements TratamientoService {
         Tratamiento tratamiento = obtenerTratamientoPorId(id);
         tratamiento.setCompletado(completado);
         return tratamientoRepository.save(tratamiento);
+    }
+
+    // Cuenta la cantidad de tratamientos aplicados
+    @Override
+    public long contarTratamientosAplicados() {
+        // Cada registro representa una aplicación de tratamiento.
+        return tratamientoRepository.findAll().size();
     }
 
 

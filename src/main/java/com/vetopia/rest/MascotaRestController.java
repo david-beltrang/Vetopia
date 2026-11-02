@@ -32,6 +32,7 @@ public class MascotaRestController {
     @Autowired
     private MascotaService mascotaService;
 
+    //http://localhost:8090/mascota/all
     // Lista todas las mascotas
     @Operation(summary = "Lista todas las mascotas")
     @GetMapping("/all")
@@ -39,6 +40,7 @@ public class MascotaRestController {
         return mascotaService.listarMascotas();
     }
 
+    //http://localhost:8090/mascota/1
     // Una mascota concreta por su id
     @Operation(summary = "Obtiene una mascota por su id")
     @GetMapping("/{id}")
@@ -46,6 +48,7 @@ public class MascotaRestController {
         return mascotaService.obtenerMascotaPorId(id);
     }
 
+    //http://localhost:8090/mascota/dueno/1
     // Mascotas de un dueño (consulta derivada findByDuenoId)
     @Operation(summary = "Lista las mascotas de un dueño")
     @GetMapping("/dueno/{duenoId}")
@@ -53,6 +56,7 @@ public class MascotaRestController {
         return mascotaService.listarMascotasDeCliente(duenoId);
     }
 
+    //http://localhost:8090/mascota/buscar?nombre=nombre
     // Búsqueda por nombre (consulta derivada findByNombreContainingIgnoreCase)
     @Operation(summary = "Busca mascotas por nombre")
     @GetMapping("/buscar")
@@ -60,6 +64,7 @@ public class MascotaRestController {
         return mascotaService.buscarPorNombre(nombre);
     }
 
+    //http://localhost:8090/mascota?duenoId=1
     // El service valida el dueño, fija el estado en Activo y conserva la imagen
     // que venga en el JSON. Se retorna null en el archivo porque no hay subida de imagen
     @Operation(summary = "Registra una nueva mascota")
@@ -69,6 +74,7 @@ public class MascotaRestController {
         return mascotaService.registrarMascota(mascota, duenoId, null);
     }
 
+    //http://localhost:8090/mascota/1
     // Igual que en el POST, sin foto: se conservan dueño, estado e imagen
     // cuando no vienen en el JSON
     @Operation(summary = "Actualiza una mascota existente")
@@ -78,6 +84,7 @@ public class MascotaRestController {
         return mascotaService.actualizarMascota(mascota, null);
     }
 
+    //http://localhost:8090/mascota/1/estado?estado=Activo
     // Cambia el estado de la mascota de activo a inactivo o al reves.
     // El estado llega por la URL como texto ("Activo")
     @Operation(summary = "Cambia el estado (activo/inactivo) de una mascota")
@@ -86,6 +93,7 @@ public class MascotaRestController {
         mascotaService.cambiarEstado(id, estado);
     }
 
+    //http://localhost:8090/mascota/1
     // Borra la mascota y, en cascada, sus tratamientos.
     @Operation(summary = "Elimina una mascota por su id")
     @DeleteMapping("/{id}")

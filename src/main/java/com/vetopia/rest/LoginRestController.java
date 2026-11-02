@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 
 import com.vetopia.dto.LoginRequestDTO;
+import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 import com.vetopia.exception.CredencialesInvalidasException;
 import com.vetopia.service.login.LoginService;
 import com.vetopia.service.login.ResultadoLogin;
+import com.vetopia.service.veterinario.VeterinarioService;
 
 
 @RestController
@@ -22,7 +24,9 @@ public class LoginRestController {
 
     @Autowired
     private LoginService loginService;
+    private VeterinarioService veterinarioService;
 
+    //http://localhost:8090/auth/login
     // Autentica un usuario (veterinario, administrador o cliente) y 
     // devuelve un objeto ResultadoLogin con la información del usuario y su rol
     @Operation(summary = "Autentica un usuario (veterinario, administrador o cliente)")
@@ -36,6 +40,8 @@ public class LoginRestController {
         // un 200 con cuerpo vacío.
         if (resultado == null) {
             throw new CredencialesInvalidasException("Credenciales incorrectas.");
+        } else if (DominioEstado.INACTIVO.equals(resultado.getEstado())){
+            throw new CredencialesInvalidasException("Usuario Inactivo");
         }
         return resultado;
     }
