@@ -22,6 +22,7 @@ import { TablaClientesComponent } from './components/tabla-clientes/tabla-client
 })
 export class ListarClienteComponent implements OnInit {
   clientes: Dueno[] = [];
+  private todosLosClientes: Dueno[] = [];
   veterinario?: Veterinario;
   veterinarioId = 0;
 
@@ -39,11 +40,25 @@ export class ListarClienteComponent implements OnInit {
       veterinario: this.veterinarioService.obtenerVeterinarioOpcional(this.veterinarioId)
     }).subscribe({
       next: ({ clientes, veterinario }) => {
+        this.todosLosClientes = clientes;
         this.clientes = clientes;
         this.veterinario = veterinario;
       },
       error: () => this.router.navigate(['/error'])
     });
+  }
+
+  filtrarClientes(texto: string): void {
+    const termino = texto.trim().toLocaleLowerCase();
+
+    if (!termino) {
+      this.clientes = this.todosLosClientes;
+      return;
+    }
+
+    this.clientes = this.todosLosClientes.filter(cliente =>
+      cliente.nombre.toLocaleLowerCase().includes(termino)
+    );
   }
 
   get totalClientes(): number {
