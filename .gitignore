@@ -18,6 +18,10 @@ target/
 mydatabase.mv.db
 mydatabase.trace.db
 
+# Base de datos de pruebas H2
+testdb.mv.db
+testdb.trace.db
+
 # Enunciado del proyecto (no versionar)
 docs/enunciado/
 
