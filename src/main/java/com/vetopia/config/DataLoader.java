@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +30,12 @@ import com.vetopia.repository.VeterinarioRepository;
 import com.vetopia.config.DataDrogasLoader;
 import com.vetopia.service.tratamiento.TratamientoService;
 
-// Script inicializador de datos para poblar la BD
+// Script inicializador de datos para poblar la BD.
+// En el perfil "test" se usa DataLoaderTest, que también carga datos de prueba.
+// Sin esta exclusión ambos cargadores insertaban los mismos dueños y el contexto
+// de Spring fallaba por violación de la restricción unique de la cédula.
 @Component
+@Profile("!test")
 public class DataLoader implements CommandLineRunner {
 
     @Autowired
