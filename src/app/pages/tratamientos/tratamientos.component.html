@@ -19,6 +19,7 @@
             <div class="border-l-2 border-surface-container-highest flex flex-col gap-8">
                 @for (item of tratamientos; track item.tratamiento.id) {
                     <app-item-tratamiento-veterinario
+                        class="tratamientoItemTest"
                         [item]="item"
                         [guardando]="guardandoId() === item.tratamiento.id"
                         [mensajeError]="mensajeErrorDe(item.tratamiento.id)"

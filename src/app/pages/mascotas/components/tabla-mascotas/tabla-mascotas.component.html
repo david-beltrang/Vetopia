@@ -36,7 +36,8 @@
                 <!-- Fila por cada mascota del repositorio -->
                 @for (mascota of mascotas(); track mascota.id) {
                     <tr app-fila-mascota
-                        class="border-b border-surface-container-high transition-colors last:border-0 hover:bg-surface-container-low"
+                        [attr.data-testid]="'fila-mascota-' + mascota.id"
+                        class="fila-mascota border-b border-surface-container-high transition-colors last:border-0 hover:bg-surface-container-low"
                         [mascota]="mascota"
                         [duenosPorId]="duenosPorId()"
                         (verFicha)="verFicha.emit($event)"></tr>

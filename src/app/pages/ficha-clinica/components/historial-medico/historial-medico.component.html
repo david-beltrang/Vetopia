@@ -4,7 +4,7 @@
     <div class="border-l-2 border-surface-container-highest flex flex-col gap-8">
         @for (item of historial(); track item.tratamiento.fecha) {
             <!-- Fila por cada tratamiento del historial -->
-            <app-item-tratamiento [item]="item"></app-item-tratamiento>
+            <app-item-tratamiento class="tratamientoItemTest" [item]="item"></app-item-tratamiento>
         } @empty {
             <!-- Estado vacío: mascota sin tratamientos registrados -->
             <div class="relative pl-8">

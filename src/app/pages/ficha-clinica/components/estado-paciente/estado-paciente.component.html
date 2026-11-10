@@ -4,13 +4,13 @@
         <p class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Estado del Paciente</p>
         @if (esActivo) {
             <!-- Estado activo: indicador verde -->
-            <span class="inline-flex items-center gap-2 rounded-full bg-primary-container/20 px-4 py-1.5 font-label-md text-label-md uppercase tracking-widest text-primary">
+            <span id="estadoPacienteTest" class="inline-flex items-center gap-2 rounded-full bg-primary-container/20 px-4 py-1.5 font-label-md text-label-md uppercase tracking-widest text-primary">
                 <span class="inline-block h-2 w-2 rounded-full bg-primary"></span>
                 Activo
             </span>
         } @else {
             <!-- Estado inactivo: indicador rojo -->
-            <span class="inline-flex items-center gap-2 rounded-full bg-error-container/20 px-4 py-1.5 font-label-md text-label-md uppercase tracking-widest text-error">
+            <span id="estadoPacienteTest" class="inline-flex items-center gap-2 rounded-full bg-error-container/20 px-4 py-1.5 font-label-md text-label-md uppercase tracking-widest text-error">
                 <span class="inline-block h-2 w-2 rounded-full bg-error"></span>
                 Inactivo
             </span>
@@ -18,7 +18,7 @@
     </div>
     <!-- Botón toggle: alterna entre Activo/Inactivo -->
     <div class="pl-4">
-        <button type="button" (click)="toggleEstado()" class="flex items-center gap-2">
+        <button type="button" (click)="toggleEstado()" class="activoTest flex items-center gap-2">
             @if (esActivo) {
                 <span class="relative inline-flex h-[24px] w-[44px] items-center rounded-full bg-primary">
                     <span class="absolute right-[2px] inline-block h-5 w-5 rounded-full bg-white shadow"></span>
