@@ -10,6 +10,7 @@
             <a id = "listadoPacientesTest" [class]="claseEnlace('pacientes')" [attr.aria-current]="esActiva('pacientes') ? 'page' : null" (click)="navigateToMascotas()">Pacientes</a>
             <a [class]="claseEnlace('clientes')" [attr.aria-current]="esActiva('clientes') ? 'page' : null" (click)="navigateToClientes()">Clientes</a>
             <a id = "listadoTratamientosTest" [class]="claseEnlace('tratamientos')" [attr.aria-current]="esActiva('tratamientos') ? 'page' : null" (click)="navigateToTratamientos()">Tratamientos</a>
+            <a [class]="claseEnlace('citas')" [attr.aria-current]="esActiva('citas') ? 'page' : null" (click)="navigateToCitas()">Citas</a>
         </div>
         <!-- Barra de herramientas: notificaciones, perfil del veterinario y logout -->
         <div class="flex items-center gap-4">

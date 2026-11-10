@@ -1,0 +1,213 @@
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+  <app-header-cliente [duenoId]="duenoId" seccionActiva="citas"></app-header-cliente>
+
+  <main class="mx-auto w-full max-w-container-max flex-grow px-gutter py-stack-lg">
+    <section class="mb-stack-lg flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="mb-2 font-label-md text-label-md uppercase tracking-widest text-primary">Cuidado con cita previa</p>
+        <h1 class="font-headline-xl text-headline-xl text-on-surface">Agenda una visita</h1>
+        <p class="mt-2 max-w-2xl font-body-lg text-body-lg text-on-surface-variant">
+          Cuéntanos qué necesitan tus mascotas y encontraremos un espacio con el equipo adecuado.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-surface-container-highest bg-surface-container-lowest px-5 py-3 text-sm text-on-surface-variant">
+        <span class="material-symbols-outlined mr-2 align-middle text-primary">schedule</span>
+        Lun–sáb · 9:00–13:00 y 14:00–18:00
+      </div>
+    </section>
+
+    @if (error) {
+      <div role="alert" class="mb-6 rounded-xl border border-error/30 bg-error-container/30 px-5 py-4 text-on-error-container">
+        {{ error }}
+      </div>
+    }
+
+    @if (citaConfirmada; as cita) {
+      <section class="mb-10 grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
+        <article class="rounded-3xl border border-primary/20 bg-surface-container-lowest p-6 shadow-sm md:p-8">
+          <div class="mb-6 flex items-start gap-4">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-container text-primary">
+              <span class="material-symbols-outlined">check_circle</span>
+            </span>
+            <div>
+              <p id="confirmacionCitaTest" class="font-label-md text-label-md uppercase tracking-widest text-primary">Cita confirmada · #{{ cita.id }}</p>
+              <h2 class="mt-1 font-headline-lg text-headline-lg text-on-surface">¡Te esperamos!</h2>
+            </div>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="rounded-2xl bg-surface-container-low p-4">
+              <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Fecha y hora</p>
+              <p class="mt-2 font-semibold capitalize text-on-surface">{{ fechaHora(cita.fechaHoraInicio) }}</p>
+              <p class="mt-1 text-sm text-on-surface-variant">Termina a las {{ hora(cita.fechaHoraFin) }}</p>
+            </div>
+            <div class="rounded-2xl bg-surface-container-low p-4">
+              <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Veterinario</p>
+              <p class="mt-2 font-semibold text-on-surface">{{ cita.veterinarioNombre }}</p>
+              <p class="mt-1 text-sm text-on-surface-variant">{{ cita.veterinarioEspecialidad }}</p>
+            </div>
+            <div class="rounded-2xl bg-surface-container-low p-4 sm:col-span-2">
+              <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Mascotas</p>
+              <p class="mt-2 font-semibold text-on-surface">{{ nombresMascotas(cita) }}</p>
+              <p class="mt-1 text-sm text-on-surface-variant">{{ cita.especialidad }} · {{ cita.motivo }}</p>
+            </div>
+          </div>
+          <button type="button" class="mt-6 rounded-full bg-primary px-6 py-3 font-button text-button uppercase text-on-primary transition hover:opacity-90" (click)="cancelarFlujo()">
+            Agendar otra cita
+          </button>
+        </article>
+
+        <article class="overflow-hidden rounded-3xl border border-surface-container-highest bg-surface-container-lowest shadow-sm">
+          <div class="aspect-[4/3] bg-surface-container-high">
+            <iframe class="h-full w-full border-0" [src]="mapaEmbedUrl" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación de la sede demo de Vetopia cerca del Parque de la 93"></iframe>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-4 p-5">
+            <div>
+              <h3 class="font-headline-md text-headline-md text-on-surface">{{ ubicacion.nombre }}</h3>
+              <p class="mt-1 text-sm text-on-surface-variant">{{ ubicacion.direccion }}</p>
+            </div>
+            <a id="comoLlegarTest" [href]="ubicacion.urlComoLlegar" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-primary px-5 py-3 font-button text-button uppercase text-primary transition hover:bg-primary hover:text-on-primary">
+              <span class="material-symbols-outlined">near_me</span>Cómo llegar
+            </a>
+          </div>
+          <p class="px-5 pb-5 text-xs text-on-surface-variant">Ubicación de demostración para el portafolio.</p>
+        </article>
+      </section>
+    } @else {
+      <section class="grid gap-6 xl:grid-cols-[1.15fr_.85fr]">
+        <article class="rounded-3xl border border-surface-container-highest bg-surface-container-lowest p-6 shadow-sm md:p-8">
+          <div class="mb-7 flex items-center gap-3">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container text-primary">1</span>
+            <div>
+              <h2 class="font-headline-lg text-headline-lg text-on-surface">Cuéntanos sobre la visita</h2>
+              <p class="text-sm text-on-surface-variant">Puedes incluir hasta cinco mascotas en una misma cita.</p>
+            </div>
+          </div>
+
+          <fieldset class="mb-7">
+            <legend class="mb-3 font-label-md text-label-md font-bold uppercase tracking-widest text-on-surface">¿Quiénes asistirán?</legend>
+            @if (mascotas.length === 0) {
+              <p class="rounded-xl bg-surface-container-low p-4 text-sm text-on-surface-variant">Aún no tienes mascotas registradas.</p>
+            } @else {
+              <div class="grid gap-3 sm:grid-cols-2">
+                @for (mascota of mascotas; track mascota.id) {
+                  <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-surface-container-highest p-4 transition hover:border-primary">
+                    <input type="checkbox" [checked]="mascotasSeleccionadas.has(mascota.id!)" [disabled]="!mascotasSeleccionadas.has(mascota.id!) && mascotasSeleccionadas.size >= 5" (change)="alternarMascota(mascota.id!, $event)" class="h-4 w-4 accent-primary" />
+                    <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container/50 text-primary"><span class="material-symbols-outlined">pets</span></span>
+                    <span class="min-w-0"><span class="block font-semibold text-on-surface">{{ mascota.nombre }}</span><span class="block truncate text-xs text-on-surface-variant">{{ mascota.especie }} · {{ mascota.raza }}</span></span>
+                  </label>
+                }
+              </div>
+            }
+            @if (mascotasSeleccionadas.size > 0) {
+              <p class="mt-3 text-sm text-on-surface-variant">Duración estimada: <strong>{{ mascotasSeleccionadas.size * 30 }} minutos</strong></p>
+            }
+          </fieldset>
+
+          <div class="mb-7">
+            <label for="motivoCita" class="mb-2 block font-label-md text-label-md font-bold uppercase tracking-widest text-on-surface">Motivo de la cita</label>
+            <textarea id="motivoCita" [ngModel]="motivo" (ngModelChange)="cambiarMotivo($event)" [disabled]="clasificando" maxlength="1000" rows="4" placeholder="Describe qué observaste o qué atención necesitan..." class="w-full resize-y rounded-2xl border border-outline-variant bg-white px-4 py-3 text-on-surface outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60"></textarea>
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <p class="text-xs text-on-surface-variant">Enviaremos solo este motivo y la lista de especialidades para sugerir el área adecuada.</p>
+              <button id="analizarMotivoTest" type="button" [disabled]="clasificando || motivo.trim().length < 8" (click)="analizarMotivo()" class="inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2.5 font-button text-button uppercase text-on-primary-container transition disabled:cursor-not-allowed disabled:opacity-50">
+                <span class="material-symbols-outlined">psychology</span>{{ clasificando ? 'Analizando…' : 'Sugerir especialidad' }}
+              </button>
+            </div>
+          </div>
+
+          @if (clasificacion) {
+            <div class="mb-7 rounded-2xl border border-primary/20 bg-primary-container/20 p-4">
+              @if (!clasificacion.requiereSeleccionManual) {
+                <p class="font-semibold text-on-surface">Especialidad sugerida: {{ especialidad }}</p>
+                <p class="mt-1 text-sm text-on-surface-variant">{{ clasificacion.mensaje }} Puedes cambiarla si no representa lo que necesitas.</p>
+              } @else {
+                <p class="font-semibold text-on-surface">Elige el área que mejor corresponde a tu consulta</p>
+                <p class="mt-1 text-sm text-on-surface-variant">{{ clasificacion.mensaje }}</p>
+              }
+              <label for="especialidadCita" class="mb-2 mt-4 block text-xs font-bold uppercase tracking-widest text-on-surface-variant">Especialidad</label>
+              <select id="especialidadCita" [ngModel]="especialidad" (ngModelChange)="cambiarEspecialidad($event)" class="w-full rounded-xl border border-outline-variant bg-white px-4 py-3 text-on-surface">
+                <option value="">Selecciona una especialidad</option>
+                @for (opcion of especialidades; track opcion) { <option [value]="opcion">{{ opcion }}</option> }
+              </select>
+            </div>
+          }
+
+          <div class="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div>
+              <label for="fechaCita" class="mb-2 block font-label-md text-label-md font-bold uppercase tracking-widest text-on-surface">Fecha</label>
+              <input id="fechaCita" type="date" [ngModel]="fecha" (ngModelChange)="cambiarFecha($event)" [min]="fechaMinima()" class="w-full rounded-xl border border-outline-variant bg-white px-4 py-3 text-on-surface" />
+            </div>
+            <div class="rounded-xl bg-surface-container-low px-4 py-3 text-sm text-on-surface-variant">Horario local · Bogotá</div>
+          </div>
+
+          @if (especialidad && mascotasSeleccionadas.size > 0) {
+            <div class="mt-6">
+              <div class="mb-3 flex items-center justify-between gap-3">
+                <h3 class="font-label-md text-label-md font-bold uppercase tracking-widest text-on-surface">Horarios disponibles</h3>
+                @if (cargandoHorarios) { <span class="text-sm text-on-surface-variant">Buscando espacios…</span> }
+              </div>
+              @if (!cargandoHorarios && horarios.length > 0) {
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  @for (horario of horarios; track horario.fechaHoraInicio) {
+                    <button type="button" class="horarioDisponibleTest rounded-xl border border-surface-container-highest px-4 py-3 text-center font-semibold text-on-surface transition hover:border-primary" (click)="seleccionarHorario(horario.fechaHoraInicio)" [class.border-primary]="horarioSeleccionado === horario.fechaHoraInicio" [class.bg-primary-container]="horarioSeleccionado === horario.fechaHoraInicio">{{ hora(horario.fechaHoraInicio) }}–{{ hora(horario.fechaHoraFin) }}</button>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          @if (horarioSeleccionado) {
+            <div class="mt-7 rounded-2xl bg-surface-container-low p-5">
+              <h3 class="font-label-md text-label-md font-bold uppercase tracking-widest text-on-surface">Revisa tu solicitud</h3>
+              <p class="mt-3 text-sm text-on-surface-variant">{{ mascotasSeleccionadas.size }} mascota(s) · {{ especialidad }} · {{ fecha }} a las {{ hora(horarioSeleccionado) }}</p>
+              <p class="mt-2 text-sm text-on-surface-variant">{{ motivo }}</p>
+              <button id="confirmarCitaTest" type="button" [disabled]="guardando" (click)="confirmarCita()" class="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-button text-button uppercase text-on-primary transition hover:opacity-90 disabled:opacity-50">
+                <span class="material-symbols-outlined">event_available</span>{{ guardando ? 'Confirmando…' : 'Confirmar y agendar' }}
+              </button>
+            </div>
+          }
+        </article>
+
+        <aside class="space-y-6">
+          <article class="overflow-hidden rounded-3xl border border-surface-container-highest bg-surface-container-lowest shadow-sm">
+            <div class="aspect-[4/3] bg-surface-container-high">
+              <iframe class="h-full w-full border-0" [src]="mapaEmbedUrl" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Sede demo Vetopia cerca del Parque de la 93, Bogotá"></iframe>
+            </div>
+            <div class="p-5">
+              <p class="text-xs font-bold uppercase tracking-widest text-primary">Nuestra sede</p>
+              <h2 class="mt-2 font-headline-md text-headline-md text-on-surface">{{ ubicacion.nombre }}</h2>
+              <p class="mt-1 text-sm text-on-surface-variant">{{ ubicacion.direccion }}</p>
+              <a id="comoLlegarTest" [href]="ubicacion.urlComoLlegar" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-2 rounded-full border border-primary px-5 py-2.5 font-button text-button uppercase text-primary transition hover:bg-primary hover:text-on-primary"><span class="material-symbols-outlined">near_me</span>Cómo llegar</a>
+              <p class="mt-3 text-xs text-on-surface-variant">Ubicación de demostración para el portafolio.</p>
+            </div>
+          </article>
+
+          <article class="rounded-3xl border border-surface-container-highest bg-surface-container-lowest p-5 shadow-sm">
+            <h2 class="font-headline-md text-headline-md text-on-surface">Tus próximas citas</h2>
+            @if (citas.length === 0) {
+              <p class="mt-3 text-sm text-on-surface-variant">Todavía no tienes citas agendadas.</p>
+            } @else {
+              <div class="mt-4 space-y-3">
+                @for (cita of citas; track cita.id) {
+                  <div class="rounded-2xl bg-surface-container-low p-4">
+                    <div class="flex items-start justify-between gap-3">
+                      <div>
+                        <p class="font-semibold capitalize text-on-surface">{{ fechaHora(cita.fechaHoraInicio) }}</p>
+                        <p class="mt-1 text-sm text-on-surface-variant">{{ nombresMascotas(cita) }} · {{ cita.veterinarioNombre }}</p>
+                      </div>
+                      <span class="rounded-full bg-primary-container px-3 py-1 text-xs font-bold text-on-primary-container">{{ estadoVisible(cita.estado) }}</span>
+                    </div>
+                    @if (cita.estado === 'CONFIRMADA') {
+                      <button type="button" (click)="cancelarCita(cita)" class="mt-3 text-sm font-semibold text-error underline">Cancelar cita</button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </article>
+        </aside>
+      </section>
+    }
+  </main>
+
+  <app-footer-portal></app-footer-portal>
+</div>

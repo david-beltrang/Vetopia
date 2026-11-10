@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderClienteComponent {
   duenoId = input(0);
+  seccionActiva = input<'mascotas' | 'citas'>('mascotas');
   private router = inject(Router);
 
   irInicio(): void {
@@ -15,6 +16,10 @@ export class HeaderClienteComponent {
 
   irMascotas(): void {
     this.router.navigate(['/cliente/mascotas'], { queryParams: { duenoId: this.duenoId() } });
+  }
+
+  irCitas(): void {
+    this.router.navigate(['/cliente/citas'], { queryParams: { duenoId: this.duenoId() } });
   }
 
   cerrarSesion(): void {

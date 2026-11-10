@@ -2,7 +2,7 @@ import { Component, input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Veterinario } from '../../../../models/veterinario.model';
 
-export type SeccionVeterinario = 'pacientes' | 'clientes' | 'tratamientos';
+export type SeccionVeterinario = 'pacientes' | 'clientes' | 'tratamientos' | 'citas';
 
 @Component({
   selector: 'app-header-veterinario',
@@ -41,6 +41,10 @@ export class HeaderVeterinarioComponent {
 
   navigateToTratamientos(): void {
     this.router.navigate(['/veterinario/mascotas/tratamientos'], { queryParams: { veterinarioId: this.veterinarioId() } });
+  }
+
+  navigateToCitas(): void {
+    this.router.navigate(['/veterinario/citas'], { queryParams: { veterinarioId: this.veterinarioId() } });
   }
 
   navigateToLogin(): void {

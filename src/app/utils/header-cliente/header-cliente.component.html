@@ -8,7 +8,20 @@
         </a>
         <!-- Navegación del portal: enlaces a secciones principales -->
         <nav class="flex items-center gap-6 md:gap-8 font-label-md text-label-md uppercase tracking-widest">
-            <a class="font-bold text-primary-fixed border-b-2 border-primary-fixed pb-1 cursor-pointer" (click)="irMascotas()">Mascotas</a>
+            <a class="cursor-pointer border-b-2 pb-1 transition-colors"
+               [class.font-bold]="seccionActiva() === 'mascotas'"
+               [class.text-primary-fixed]="seccionActiva() === 'mascotas'"
+               [class.border-primary-fixed]="seccionActiva() === 'mascotas'"
+               [class.text-gray-300]="seccionActiva() !== 'mascotas'"
+               [class.border-transparent]="seccionActiva() !== 'mascotas'"
+               (click)="irMascotas()">Mascotas</a>
+            <a id="citasClienteTest" class="cursor-pointer border-b-2 pb-1 transition-colors"
+               [class.font-bold]="seccionActiva() === 'citas'"
+               [class.text-primary-fixed]="seccionActiva() === 'citas'"
+               [class.border-primary-fixed]="seccionActiva() === 'citas'"
+               [class.text-gray-300]="seccionActiva() !== 'citas'"
+               [class.border-transparent]="seccionActiva() !== 'citas'"
+               (click)="irCitas()">Citas</a>
             <a class="flex items-center gap-2 text-gray-300 hover:text-error transition-colors cursor-pointer" (click)="cerrarSesion()">
                 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
                 Cerrar Sesión

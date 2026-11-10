@@ -1,7 +1,7 @@
 import { Component, input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-export type SeccionAdmin = 'dashboard' | 'veterinarios';
+export type SeccionAdmin = 'dashboard' | 'veterinarios' | 'citas';
 
 @Component({
   selector: 'app-header-admin',
@@ -25,6 +25,10 @@ export class HeaderAdminComponent {
 
   navigateToVeterinarios(): void {
     this.router.navigate(['/admin/veterinarios'], { queryParams: { adminId: this.adminId() } });
+  }
+
+  navigateToCitas(): void {
+    this.router.navigate(['/admin/citas'], { queryParams: { adminId: this.adminId() } });
   }
 
   navigateToLogin(): void {

@@ -19,13 +19,18 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DetallesVeterinarioComponent } from './pages/detalles-veterinario/detalles-veterinario.component';
 import { ListarVeterinariosComponent } from './pages/listar-veterinarios/listar-veterinarios.component';
 import { RegistrarVeterinarioComponent } from './pages/registrar-veterinario/registrar-veterinario.component';
+import { CitasClienteComponent } from './pages/citas-cliente/citas-cliente.component';
+import { CitasVeterinarioComponent } from './pages/citas-veterinario/citas-veterinario.component';
+import { CitasAdminComponent } from './pages/citas-admin/citas-admin.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginPageComponent, title: 'Vetopia - Iniciar Sesión' },
   { path: 'veterinario/mascotas', component: MascotasComponent, pathMatch: 'full' },
   { path: 'veterinario/mascotas/tratamientos', component: TratamientosComponent, pathMatch: 'full' },
+  { path: 'veterinario/citas', component: CitasVeterinarioComponent, pathMatch: 'full' },
   { path: 'admin/dashboard', component: DashboardComponent, pathMatch: 'full' },
+  { path: 'admin/citas', component: CitasAdminComponent, pathMatch: 'full' },
   { path: 'admin/veterinarios', component: ListarVeterinariosComponent, pathMatch: 'full' },
   { path: 'admin/registrar-veterinario', component: RegistrarVeterinarioComponent, pathMatch: 'full' },
   { path: 'admin/detalles-veterinario/:id', component: DetallesVeterinarioComponent },
@@ -40,6 +45,7 @@ export const routes: Routes = [
   { path: 'veterinario/clientes/editar/:id', component: EditarClienteComponent },
   { path: 'cliente/mascotas/detalle', component: DetalleMascotaComponent },
   { path: 'cliente/mascotas', component: ListarMascotaComponent, pathMatch: 'full' },
+  { path: 'cliente/citas', component: CitasClienteComponent, pathMatch: 'full' },
   { path: 'error', component: ErrorPageComponent },
   { path: '**', redirectTo: 'veterinario/mascotas' }
 ];

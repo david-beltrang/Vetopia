@@ -9,6 +9,7 @@
         <div class="hidden md:flex gap-8">
             <a [class]="claseEnlace('dashboard')" [attr.aria-current]="seccionActiva() === 'dashboard' ? 'page' : null" (click)="navigateToDashboard()">Dashboard</a>
             <a [class]="claseEnlace('veterinarios')" [attr.aria-current]="seccionActiva() === 'veterinarios' ? 'page' : null" (click)="navigateToVeterinarios()">Veterinarios</a>
+            <a [class]="claseEnlace('citas')" [attr.aria-current]="seccionActiva() === 'citas' ? 'page' : null" (click)="navigateToCitas()">Citas</a>
         </div>
         <!-- Barra de herramientas -->
         <div class="flex items-center gap-4">

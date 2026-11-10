@@ -1,0 +1,54 @@
+<div class="flex min-h-screen flex-col bg-[#f6f8f7] text-[#191c1e]">
+  <app-header-admin [adminId]="adminId" seccionActiva="citas"></app-header-admin>
+
+  <main class="mx-auto w-full max-w-7xl flex-grow px-4 py-8 sm:px-6 lg:px-8">
+    <section class="mb-8 flex flex-wrap items-end justify-between gap-5">
+      <div>
+        <p class="mb-2 text-xs font-bold uppercase tracking-[.2em] text-emerald-700">Centro de operaciones</p>
+        <h1 class="text-3xl font-extrabold tracking-tight text-[#191c1e]">Calendario de la clínica</h1>
+        <p class="mt-2 text-[#58605f]">Vista general de las citas, capacidad y actividad del equipo.</p>
+      </div>
+      <div class="flex items-center gap-2 rounded-2xl border border-[#e0e3e5] bg-white p-2 shadow-sm">
+        <button type="button" (click)="moverSemana(-1)" aria-label="Semana anterior" class="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-slate-100"><span class="material-symbols-outlined">chevron_left</span></button>
+        <div class="min-w-40 text-center"><p class="text-xs font-bold uppercase tracking-widest text-[#58605f]">Semana</p><p class="font-semibold capitalize">{{ fechaVisible() }}</p></div>
+        <button type="button" (click)="moverSemana(1)" aria-label="Semana siguiente" class="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-slate-100"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </section>
+
+    @if (error) { <div role="alert" class="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-red-800">{{ error }}</div> }
+
+    <section class="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <article class="rounded-2xl border border-[#e0e3e5] bg-white p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-widest text-[#58605f]">Citas visibles</p><p class="mt-2 text-3xl font-extrabold">{{ citasFiltradas.length }}</p></article>
+      <article class="rounded-2xl border border-[#e0e3e5] bg-white p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-widest text-[#58605f]">Por atender</p><p class="mt-2 text-3xl font-extrabold text-primary">{{ confirmadas }}</p></article>
+      <article class="rounded-2xl border border-[#e0e3e5] bg-white p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-widest text-[#58605f]">Canceladas</p><p class="mt-2 text-3xl font-extrabold text-error">{{ canceladas }}</p></article>
+      <article class="rounded-2xl border border-[#e0e3e5] bg-white p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-widest text-[#58605f]">Inasistencias</p><p class="mt-2 text-3xl font-extrabold text-amber-700">{{ inasistencias }}</p></article>
+    </section>
+
+    <section class="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#e0e3e5] bg-white p-4 shadow-sm">
+      <div><h2 class="font-bold">Agenda semanal</h2><p class="text-sm text-[#58605f]">Cada tarjeta muestra la hora, mascotas y responsable.</p></div>
+      <label class="flex items-center gap-3 text-sm font-semibold">Veterinario
+        <select [(ngModel)]="veterinarioFiltro" class="rounded-xl border border-[#c5c7c7] bg-white px-4 py-2.5" aria-label="Filtrar por veterinario">
+          <option value="">Todos</option>
+          @for (veterinario of veterinarios; track veterinario.id) { <option [value]="veterinario.id">{{ veterinario.nombre }}</option> }
+        </select>
+      </label>
+      <label class="flex items-center gap-3 text-sm font-semibold">Estado
+        <select [(ngModel)]="estadoFiltro" class="rounded-xl border border-[#c5c7c7] bg-white px-4 py-2.5" aria-label="Filtrar por estado de cita">
+          <option value="">Todos</option>
+          <option value="CONFIRMADA">Confirmada</option>
+          <option value="COMPLETADA">Completada</option>
+          <option value="CANCELADA">Cancelada</option>
+          <option value="INASISTENCIA">Inasistencia</option>
+        </select>
+      </label>
+    </section>
+
+    @if (cargando) { <div class="rounded-2xl bg-white p-10 text-center text-[#58605f]">Cargando calendario…</div> }
+    @else {
+      <div class="overflow-x-auto rounded-3xl">
+        <app-agenda-semanal [citas]="citasFiltradas" [dias]="dias" modo="administracion" (cancelar)="cancelarCita($event)"></app-agenda-semanal>
+      </div>
+    }
+  </main>
+  <app-footer-portal></app-footer-portal>
+</div>
