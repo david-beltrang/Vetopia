@@ -7,7 +7,7 @@
     </div>
     <!-- Tabla responsive -->
     <div class="overflow-x-auto">
-        <table class="w-full min-w-[720px] text-left">
+        <table id="tablaMascotasVeterinario" class="w-full min-w-[720px] text-left">
             <!-- Cabecera de la tabla: columnas de datos -->
             <thead>
             <tr class="bg-surface-container-low uppercase">
@@ -36,7 +36,7 @@
                 <!-- Fila por cada mascota del repositorio -->
                 @for (mascota of mascotas(); track mascota.id) {
                     <tr app-fila-mascota
-                        class="border-b border-surface-container-high transition-colors last:border-0 hover:bg-surface-container-low"
+                        class="filaMascota border-b border-surface-container-high transition-colors last:border-0 hover:bg-surface-container-low"
                         [mascota]="mascota"
                         [duenosPorId]="duenosPorId()"
                         (verFicha)="verFicha.emit($event)"></tr>
