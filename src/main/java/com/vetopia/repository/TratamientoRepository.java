@@ -20,8 +20,9 @@ public interface TratamientoRepository extends JpaRepository<Tratamiento, Long> 
 
     long countByVeterinarioId(Long veterinarioId);
 
+    
+    // COALESCE Evita devolver null cuando aún no existen tratamientos registrados
     @Query("SELECT COALESCE(SUM(t.droga.precioVenta), 0.0) FROM Tratamiento t")
-    // Evita devolver null cuando aún no existen tratamientos registrados.
     double sumVentasAplicadas();
 
     @Query("SELECT COALESCE(SUM(t.droga.precioVenta - t.droga.precioCompra), 0.0) FROM Tratamiento t")

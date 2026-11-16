@@ -3,6 +3,8 @@ package com.vetopia.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,16 +34,24 @@ public class VeterinarioRestController {
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Lista todos los veterinarios")
     @GetMapping("/all")
-    public List<Veterinario> listar() {
-        return veterinarioService.listarVeterinarios();
+    public ResponseEntity<List<Veterinario>> listar() {
+
+        List<Veterinario> veterinarios = veterinarioService.listarVeterinarios();
+
+        ResponseEntity<List<Veterinario>> response = new ResponseEntity<>(veterinarios, HttpStatus.OK);
+
+        return response;
     }
 
     //http://localhost:8090/veterinario/1
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Obtiene un veterinario por su id")
     @GetMapping("/{id}")
-    public Veterinario buscarPorId(@PathVariable Long id) {
-        return veterinarioService.obtenerVeterinarioPorId(id);
+    public ResponseEntity<Veterinario> buscarPorId(@PathVariable Long id) {
+
+        Veterinario veterinario = veterinarioService.obtenerVeterinarioPorId(id);
+
+        return new ResponseEntity<>(veterinario, HttpStatus.OK);
     }
 
     //http://localhost:8090/veterinario
@@ -49,66 +59,71 @@ public class VeterinarioRestController {
     // Se limpia el id entrante para que siempre sea un alta y no una actualización.
     @Operation(summary = "Registra un nuevo veterinario")
     @PostMapping
-    public Veterinario agregar(@RequestBody Veterinario veterinario) {
+    public ResponseEntity<Veterinario> agregar(@RequestBody Veterinario veterinario) {
         veterinario.setId(null);
         veterinarioService.guardar(veterinario);
-        return veterinario;
+        return new ResponseEntity<>(veterinario, HttpStatus.CREATED);
     }
 
     //http://localhost:8090/veterinario/1
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Actualiza un veterinario existente")
     @PutMapping("/{id}")
-    public Veterinario actualizar(@PathVariable Long id, @RequestBody Veterinario veterinario) {
+    public ResponseEntity<Veterinario> actualizar(@PathVariable Long id, @RequestBody Veterinario veterinario) {
+        veterinarioService.obtenerVeterinarioPorId(id);
         veterinario.setId(id);
         veterinarioService.guardar(veterinario);
-        return veterinario;
+        return new ResponseEntity<>(veterinario, HttpStatus.OK);
     }
 
     //http://localhost:8090/veterinario/1/estado
     // Modificar el estado de un veterinario "Activo"-"Inactivo"
     @Operation(summary = "Cambia el estado de un veterinario")
     @PutMapping("/{id}/estado")
-    public Veterinario cambiarEstado(@PathVariable Long id, @RequestBody java.util.Map<String, String> body) {
+    public ResponseEntity<Veterinario> cambiarEstado(@PathVariable Long id, @RequestBody java.util.Map<String, String> body) {
         // Conserva los datos actuales y modifica únicamente el estado recibido.
+        if (body == null || body.get("estado") == null || body.get("estado").isBlank()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Veterinario veterinario = veterinarioService.obtenerVeterinarioPorId(id);
         String estadoStr = body.get("estado");
-        if (estadoStr != null) {
-            veterinario.setEstado(com.vetopia.entities.mascota.dominio_attr.DominioEstado.fromValor(estadoStr));
-        }
+        veterinario.setEstado(com.vetopia.entities.mascota.dominio_attr.DominioEstado.fromValor(estadoStr));
         veterinarioService.guardar(veterinario);
-        return veterinario;
+        return new ResponseEntity<>(veterinario, HttpStatus.OK);
     }
 
     //http://localhost:8090/veterinario/1
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
     @Operation(summary = "Elimina un veterinario por su id")
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         veterinarioService.eliminarVeterinario(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //http://localhost:8090/veterinario/activos/count
     // Contar cuantos veterinarios hay activos
     @Operation(summary = "Cantidad de veterinarios activos")
     @GetMapping("/activos/count")
-    public long contarActivos() {
-        return veterinarioService.contarVeterinariosActivos();
+    public ResponseEntity<Long> contarActivos() {
+        return new ResponseEntity<>(veterinarioService.contarVeterinariosActivos(), HttpStatus.OK);
     }
 
     //http://localhost:8090/veterinario/inactivos/count
     // Contar cuantos veterinarios hay inactivos
     @Operation(summary = "Cantidad de veterinarios inactivos")
     @GetMapping("/inactivos/count")
-    public long contarInactivos() {
-        return veterinarioService.contarVeterinariosInactivos();
+    public ResponseEntity<Long> contarInactivos() {
+        return new ResponseEntity<>(veterinarioService.contarVeterinariosInactivos(), HttpStatus.OK);
     }
 
     //http://localhost:8090/veterinario/1/atenciones/count
     // Contar cantidad de tratamienots aplicados del veterinario
     @Operation(summary = "Cantidad de tratamientos aplicados por un veterinario")
     @GetMapping("/{id}/atenciones/count")
-    public long contarAtenciones(@PathVariable Long id) {
-        return veterinarioService.contarAtenciones(id);
+    public ResponseEntity<Long> contarAtenciones(@PathVariable Long id) {
+        veterinarioService.obtenerVeterinarioPorId(id);
+        return new ResponseEntity<>(veterinarioService.contarAtenciones(id), HttpStatus.OK);
     }
 }

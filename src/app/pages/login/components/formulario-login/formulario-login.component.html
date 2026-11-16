@@ -15,7 +15,7 @@
 
             <!-- Mensaje de error: se muestra cuando las credenciales son incorrectas -->
             @if (mensajeError()) {
-                <div role="alert"
+                <div id="mensajeErrorLogin" role="alert"
                      class="mb-6 flex items-start gap-3 rounded-xl border border-error/30 bg-error-container/20 p-4">
                     <span class="material-symbols-outlined text-error mt-0.5">error</span>
                     <p class="font-body-md text-body-md text-on-error-container">{{ mensajeError() }}</p>
