@@ -27,7 +27,6 @@ import com.vetopia.repository.DuenoRepository;
 import com.vetopia.repository.MascotaRepository;
 import com.vetopia.repository.TratamientoRepository;
 import com.vetopia.repository.VeterinarioRepository;
-import com.vetopia.config.DataDrogasLoader;
 import com.vetopia.service.tratamiento.TratamientoService;
 
 // Script inicializador de datos para poblar la BD

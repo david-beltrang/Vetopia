@@ -2,19 +2,23 @@ package com.vetopia.config;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vetopia.entities.Administrador;
 import com.vetopia.entities.Droga;
 import com.vetopia.entities.Dueno;
+import com.vetopia.entities.Role;
 import com.vetopia.entities.Tratamiento;
+import com.vetopia.entities.UserEntity;
 import com.vetopia.entities.Veterinario;
 import com.vetopia.entities.mascota.Mascota;
 import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
@@ -25,9 +29,10 @@ import com.vetopia.repository.AdministradorRepository;
 import com.vetopia.repository.DrogaRepository;
 import com.vetopia.repository.DuenoRepository;
 import com.vetopia.repository.MascotaRepository;
+import com.vetopia.repository.RoleRepository;
 import com.vetopia.repository.TratamientoRepository;
+import com.vetopia.repository.UserRepository;
 import com.vetopia.repository.VeterinarioRepository;
-import com.vetopia.config.DataDrogasLoader;
 import com.vetopia.service.tratamiento.TratamientoService;
 
 // Script inicializador de datos para poblar la BD.
@@ -59,6 +64,15 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private AdministradorRepository administradorRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired 
+    RoleRepository roleRepository;
+
+    @Autowired 
+    UserRepository userRepository;
+
     // Fija la semilla para que los datos aleatorios generados sean consistentes entre ejecuciones
     private final Random random = new Random(42L);
 
@@ -83,6 +97,10 @@ public class DataLoader implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
+        roleRepository.save(new Role("ADMIN"));
+        roleRepository.save(new Role("DUENO"));
+        roleRepository.save(new Role("VETERINARIO"));
+
         poblarDuenos();
         poblarVeterinarios();
         poblarAdministradores();
@@ -102,13 +120,24 @@ public class DataLoader implements CommandLineRunner {
         // Crea los dueños con datos aleatorios y asigna cédula y celular únicos    
         for (int i = 0; i < CANTIDAD_DUENOS; i++) {
             String cedula = cedulaUnica(cedulasUsadas);
-            duenoRepository.save(Dueno.builder()
+
+            // 1. Crear el objeto
+            Dueno dueno = Dueno.builder()
                     .cedula(cedula)
                     .nombre(nombreAleatorio())
                     .correo("cliente" + cedula + "@correo.com")
                     .contrasena("dueno123")
                     .celular(celularUnico(celularesUsados))
-                    .build());
+                    .build();
+
+            // 2. Guardarlo en la tabla User
+            UserEntity userEntity = saveUser(dueno.getCorreo(), dueno.getContrasena(), "DUENO");
+
+            // 3. Agregar al objeto del paso 1 el ID obtenido en el paso 2
+            dueno.setUser(userEntity);
+
+            // 4. Guardar el objeto en la tabla Dueno
+            duenoRepository.save(dueno);
         }
     }
 
@@ -151,7 +180,9 @@ public class DataLoader implements CommandLineRunner {
         // Crea los veterinarios con datos fijos y asigna una foto aleatoria (o ninguna)
         for (String[] d : datos) {
             int indiceFoto = random.nextInt(fotos.length + 1);
-            veterinarioRepository.save(Veterinario.builder()
+
+            // 1. Crear el objeto
+            Veterinario veterinario = Veterinario.builder()
                     .cedula(d[0])
                     .nombre(d[1])
                     .correo(d[2])
@@ -160,7 +191,16 @@ public class DataLoader implements CommandLineRunner {
                     .numeroAtenciones(random.nextInt(30))
                     .estado(estadoAleatorio())
                     .urlFoto(indiceFoto == fotos.length ? null : fotos[indiceFoto])
-                    .build());
+                    .build();
+
+            // 2. Guardarlo en la tabla User
+            UserEntity userEntity = saveUser(veterinario.getCorreo(), veterinario.getContrasena(), "VETERINARIO");
+
+            // 3. Agregar al objeto del paso 1 el ID obtenido en el paso 2
+            veterinario.setUser(userEntity);
+
+            // 4. Guardar el objeto en la tabla Veterinario
+            veterinarioRepository.save(veterinario);
         }
     }
 
@@ -172,12 +212,22 @@ public class DataLoader implements CommandLineRunner {
                 { "1000000003", "Finanzas", "finanzas@vetopia.com", "finanzas123" } };
         // Crea los administradores con datos fijos y asigna una foto aleatoria
         for (String[] d : datos) {
-            administradorRepository.save(Administrador.builder()
+            // 1. Crear el objeto
+            Administrador administrador = Administrador.builder()
                     .cedula(d[0])
                     .nombre(d[1])
                     .correo(d[2])
                     .contrasena(d[3])
-                    .build());
+                    .build();
+
+            // 2. Guardarlo en la tabla User
+            UserEntity userEntity = saveUser(administrador.getCorreo(), administrador.getContrasena(), "ADMIN");
+
+            // 3. Agregar al objeto del paso 1 el ID obtenido en el paso 2
+            administrador.setUser(userEntity);
+
+            // 4. Guardar el objeto en la tabla Administrador
+            administradorRepository.save(administrador);
         }
     }
 
@@ -287,5 +337,15 @@ public class DataLoader implements CommandLineRunner {
     // Redondea un valor a 2 decimales
     private static double redondear(double valor) {
         return Math.round(valor * 100.0) / 100.0;
+    }
+
+    // Guarda las credenciales en la tabla User y retorna la entidad con el ID generado
+    private UserEntity saveUser(String correo, String contrasena, String nombreRol) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(correo);
+        userEntity.setPassword(passwordEncoder.encode(contrasena));
+        Role role = roleRepository.findByName(nombreRol).get();
+        userEntity.setRoles(List.of(role));
+        return userRepository.save(userEntity);
     }
 }
