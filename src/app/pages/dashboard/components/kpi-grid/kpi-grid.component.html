@@ -1,6 +1,7 @@
 <!-- Primera fila de indicadores. -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-5">
   <app-kpi-card
+    id = "totalTratamientosAplicadosTest"
     title="Tratamientos"
     [value]="totalTratamientosAplicados.toString()"
     icon="vaccines"
@@ -56,6 +57,7 @@
 
   <!-- Tarjeta de indicador para ventas totales. -->
   <app-kpi-card
+    id="ventasTotalesTest"
     title="Ventas totales"
     [value]="formatoMoneda(ventasTotales)"
     icon="payments"
@@ -65,6 +67,7 @@
 
   <!-- Tarjeta de indicador para ganancias totales. -->
   <app-kpi-card
+    id="gananciasTotalesTest"
     title="Ganancias totales"
     [value]="formatoMoneda(gananciasTotales)"
     icon="trending_up"

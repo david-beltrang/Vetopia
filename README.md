@@ -7,6 +7,22 @@ El repositorio convive con dos proyectos en la raíz:
 - **Backend** — Spring Boot 3.5.4 con Maven y Thymeleaf, siguiendo el patrón de diseño de capas.
 - **Frontend** — Angular 19 con Vite y Tailwind CSS 4.
 
+## Citas veterinarias
+
+El portal del cliente permite reservar una o varias mascotas en una misma cita. Cada mascota ocupa 30 minutos; el horario común es de lunes a sábado, 9:00–13:00 y 14:00–18:00 (hora de Bogotá). El backend valida los solapamientos y asigna un veterinario activo de la especialidad requerida, priorizando la menor carga.
+
+El motivo puede clasificarse con OpenRouter. Configura la credencial únicamente en el entorno del proceso Spring Boot; nunca la guardes en el repositorio ni en Angular:
+
+```powershell
+$env:OPENROUTER_API_KEY = "<tu-clave-nueva>"
+$env:OPENROUTER_MODEL = "nvidia/nemotron-3-ultra-550b-a55b:free"
+mvn spring-boot:run
+```
+
+Si no hay clave configurada o el proveedor no responde, la interfaz solicita elegir la especialidad manualmente. La sede del mapa es una ubicación de demostración en Chicó, cerca del Parque de la 93.
+
+> El portal conserva la identificación actual mediante `duenoId`, `veterinarioId` y `adminId` en la navegación. Es coherente con el prototipo existente, pero no sustituye autenticación/autorización de servidor para producción.
+
 ## Backend (Spring Boot)
 
 ### Descripción

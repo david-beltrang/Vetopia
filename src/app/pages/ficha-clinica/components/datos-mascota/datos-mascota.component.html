@@ -59,9 +59,9 @@
                 Editar
             </a>
             <button type="button"
-               [disabled]="mascota()?.estado === 'Inactivo'"
-               [attr.title]="mascota()?.estado === 'Inactivo' ? 'No se pueden asignar tratamientos a mascotas inactivas' : null"
-               class="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 font-button text-button uppercase tracking-widest text-on-primary transition-colors hover:bg-primary-container hover:text-on-primary-container disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-primary"
+                [disabled]="mascota()?.estado === 'Inactivo'"
+                [attr.title]="mascota()?.estado === 'Inactivo' ? 'No se pueden asignar tratamientos a mascotas inactivas' : null"
+                class="AsignarTratamientoTest inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 font-button text-button uppercase tracking-widest text-on-primary transition-colors hover:bg-primary-container hover:text-on-primary-container disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-primary"
                (click)="navigateToAsignarTratamiento()">
                 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">add</span>
                 Asignar Tratamiento +

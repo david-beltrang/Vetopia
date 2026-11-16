@@ -1,5 +1,5 @@
 <!-- Formulario de asignación de tratamiento -->
-<form [formGroup]="form" (ngSubmit)="onGuardar()"
+<form id = "formularioTratamientoTest" [formGroup]="form" (ngSubmit)="onGuardar()"
       class="bg-surface-container-lowest p-6 md:p-10 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-surface-container-highest">
     <!-- Tarjeta: veterinario responsable -->
     <app-tarjeta-info
@@ -92,7 +92,7 @@
                     class="px-8 py-4 rounded-full border border-surface-container-highest text-on-surface font-button text-button uppercase hover:bg-surface-container-high transition-colors">
                 Cancelar
             </button>
-            <button type="submit" [disabled]="form.invalid"
+            <button id = "aplicarTratamientoTest" type="submit" [disabled]="form.invalid"
                     class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary disabled:opacity-50 disabled:cursor-not-allowed">
                 Aplicar Tratamiento
                 <span class="material-symbols-outlined text-lg">check_circle</span>

@@ -1,6 +1,9 @@
 package com.vetopia.config;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vetopia.entities.Administrador;
+import com.vetopia.entities.Cita;
+import com.vetopia.entities.CitaMascota;
 import com.vetopia.entities.Droga;
 import com.vetopia.entities.Dueno;
 import com.vetopia.entities.Role;
@@ -26,6 +31,8 @@ import com.vetopia.entities.mascota.dominio_attr.DominioEspecie;
 import com.vetopia.entities.mascota.dominio_attr.DominioSexo;
 import com.vetopia.exception.RecursoNoEncontradoException;
 import com.vetopia.repository.AdministradorRepository;
+import com.vetopia.repository.CitaMascotaRepository;
+import com.vetopia.repository.CitaRepository;
 import com.vetopia.repository.DrogaRepository;
 import com.vetopia.repository.DuenoRepository;
 import com.vetopia.repository.MascotaRepository;
@@ -72,6 +79,10 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired 
     UserRepository userRepository;
+    private CitaRepository citaRepository;
+
+    @Autowired
+    private CitaMascotaRepository citaMascotaRepository;
 
     // Fija la semilla para que los datos aleatorios generados sean consistentes entre ejecuciones
     private final Random random = new Random(42L);
@@ -107,6 +118,7 @@ public class DataLoader implements CommandLineRunner {
         poblarDrogas();
         poblarMascotas();
         poblarTratamientos();
+        poblarCitas();
 
         long totalTratamientosAplicados = tratamientoService.contarTratamientosAplicados();
         System.out.println("Total de tratamientos aplicados: " + totalTratamientosAplicados);
@@ -189,7 +201,9 @@ public class DataLoader implements CommandLineRunner {
                     .especialidad(d[3])
                     .contrasena("vet123")
                     .numeroAtenciones(random.nextInt(30))
-                    .estado(estadoAleatorio())
+                    // Se consume el mismo valor aleatorio para mantener estable
+                    // la generación determinista de mascotas del DataLoader.
+                    .estado(estadoActivoParaAgenda())
                     .urlFoto(indiceFoto == fotos.length ? null : fotos[indiceFoto])
                     .build();
 
@@ -327,6 +341,80 @@ public class DataLoader implements CommandLineRunner {
                     .completado(random.nextBoolean())
                     .build());
         }
+    }
+
+    // Crea citas demostrativas para que las agendas de cliente, veterinario y
+    // administrador tengan datos desde el primer arranque.
+    private void poblarCitas() {
+        List<Veterinario> veterinarios = veterinarioRepository.findAll().stream()
+                .filter(veterinario -> veterinario.getEstado() == DominioEstado.ACTIVO)
+                .sorted((a, b) -> a.getId().compareTo(b.getId()))
+                .toList();
+        List<Mascota> mascotas = mascotaRepository.findAll().stream()
+                .sorted((a, b) -> a.getId().compareTo(b.getId()))
+                .toList();
+
+        if (veterinarios.isEmpty() || mascotas.isEmpty()) {
+            return;
+        }
+
+        String[] motivos = new String[veterinarios.size()];
+        for (int i = 0; i < veterinarios.size(); i++) {
+            motivos[i] = motivoDemoPorEspecialidad(veterinarios.get(i).getEspecialidad());
+        }
+        LocalDate primerDia = siguienteDiaDeAtencion(LocalDate.now(ZoneId.of("America/Bogota")).plusDays(1));
+        LocalTime[] horas = {
+                LocalTime.of(9, 0), LocalTime.of(10, 30), LocalTime.of(14, 0), LocalTime.of(15, 30)
+        };
+
+        int cantidadCitasDemo = Math.min(8, veterinarios.size() * 2);
+        for (int i = 0; i < cantidadCitasDemo; i++) {
+            Veterinario veterinario = veterinarios.get(i % veterinarios.size());
+            Mascota mascota = mascotas.get((i * 7) % mascotas.size());
+            LocalDate fecha = siguienteDiaDeAtencion(primerDia.plusDays(i / horas.length));
+            LocalDateTime inicio = LocalDateTime.of(fecha, horas[i % horas.length]);
+
+            Cita cita = citaRepository.save(Cita.builder()
+                    .dueno(mascota.getDueno())
+                    .veterinario(veterinario)
+                    .fechaHoraInicio(inicio)
+                    .fechaHoraFin(inicio.plusMinutes(30))
+                    .motivo(motivos[i % motivos.length])
+                    .especialidad(veterinario.getEspecialidad())
+                    .estado(EstadoCita.CONFIRMADA)
+                    .creadaEn(LocalDateTime.now(ZoneId.of("America/Bogota")))
+                    .build());
+            citaMascotaRepository.save(CitaMascota.builder().cita(cita).mascota(mascota).build());
+        }
+    }
+
+    private String motivoDemoPorEspecialidad(String especialidad) {
+        if (especialidad == null) return "Consulta preventiva y revisión general.";
+        return switch (especialidad.toLowerCase()) {
+            case "cirugía", "cirugia" -> "Valoración quirúrgica y revisión preoperatoria.";
+            case "dermatología", "dermatologia" -> "Revisión de piel y seguimiento dermatológico.";
+            case "odontología", "odontologia" -> "Valoración odontológica de rutina.";
+            case "nutrición", "nutricion" -> "Control nutricional y recomendaciones de alimentación.";
+            default -> "Consulta preventiva y revisión general.";
+        };
+    }
+
+    // La primera versión opera con el horario común de lunes a sábado. Se
+    // mantiene el método separado para reutilizar la regla al generar la demo.
+    private LocalDate siguienteDiaDeAtencion(LocalDate fecha) {
+        LocalDate resultado = fecha;
+        while (resultado.getDayOfWeek() == java.time.DayOfWeek.SUNDAY) {
+            resultado = resultado.plusDays(1);
+        }
+        return resultado;
+    }
+
+    // Todos los veterinarios demo están disponibles para que cada especialidad
+    // tenga al menos un candidato de asignación. Se consume el aleatorio que
+    // antes determinaba el estado para conservar el resto de la semilla.
+    private DominioEstado estadoActivoParaAgenda() {
+        estadoAleatorio();
+        return DominioEstado.ACTIVO;
     }
 
     // Devuelve un estado aleatorio entre (activo - suspendido)

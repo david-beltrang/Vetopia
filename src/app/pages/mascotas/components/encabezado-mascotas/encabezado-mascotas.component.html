@@ -7,11 +7,12 @@
     <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
         <div class="flex w-full max-w-md items-center gap-3 rounded-full bg-surface-container-high px-4 py-2">
             <span class="material-symbols-outlined text-on-surface-variant">search</span>
-            <input type="text"
+            <input id = "busquedaMascotaTest" type="text"
                 placeholder="Buscar mascota por nombre..."
                 (input)="actualizarBusqueda($event)"
                 class="flex-1 border-0 bg-transparent font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none" />
-        </div>
+        
+            </div>
         <label class="inline-flex cursor-pointer items-center gap-2 font-body-md text-body-md text-on-surface">
             <input type="checkbox"
                 (change)="actualizarFiltro($event)"

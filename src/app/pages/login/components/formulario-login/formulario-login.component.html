@@ -26,7 +26,7 @@
             <form [formGroup]="loginForm" (ngSubmit)="onIngresar()" class="space-y-6">
                 <!-- Campo: Correo Electrónico -->
                 <app-campo-login
-                    [id]="'correo'"
+                    inputId="correo"
                     label="Correo Electrónico"
                     placeholder="ejemplo@correo.com"
                     icono="person"
@@ -37,7 +37,7 @@
                 <!-- Campo: Contraseña -->
                 <div class="space-y-2">
                     <app-campo-login
-                        [id]="'contrasena'"
+                        inputId="contrasena"
                         label="Contraseña"
                         placeholder="••••••••"
                         icono="lock"
@@ -51,7 +51,7 @@
                 </div>
 
                 <!-- Botón de envío del formulario -->
-                <button id="btnIngresar" type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-container px-6 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary">
+                <button id="loginSubmitTest" type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-container px-6 py-4 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary">
                     INGRESAR AL PORTAL
                     <span class="material-symbols-outlined text-lg">login</span>
                 </button>
