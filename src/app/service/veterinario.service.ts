@@ -49,4 +49,9 @@ export class VeterinarioService {
   eliminarVeterinario(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+
+  // Autentica al veterinario con Spring Security y devuelve el JWT como string
+  login(correo: string, contrasena: string): Observable<string> {
+    return this.http.post(`${this.url}/login`, { correo, contrasena }, { responseType: 'text' });
+  }
 }

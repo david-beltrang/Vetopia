@@ -1,6 +1,7 @@
 import { Component, input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Veterinario } from '../../../../models/veterinario.model';
+import { AuthService } from '../../../../service/auth.service';
 
 export type SeccionVeterinario = 'pacientes' | 'clientes' | 'tratamientos' | 'citas';
 
@@ -13,6 +14,7 @@ export class HeaderVeterinarioComponent {
   veterinarioId = input<number>(0);
   seccionActiva = input<SeccionVeterinario>('pacientes');
   router = inject(Router);
+  private auth = inject(AuthService);
 
   // Usa las dos primeras letras para identificar al veterinario en el encabezado.
   iniciales(): string {
@@ -48,6 +50,7 @@ export class HeaderVeterinarioComponent {
   }
 
   navigateToLogin(): void {
+    this.auth.logout();
     this.router.navigate(['/login']);
   }
 }
