@@ -35,4 +35,9 @@ export class DuenoService {
   eliminarDueno(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+
+  // Autentica al dueño con Spring Security y devuelve el JWT como string
+  login(correo: string, contrasena: string): Observable<string> {
+    return this.http.post(`${this.url}/login`, { correo, contrasena }, { responseType: 'text' });
+  }
 }

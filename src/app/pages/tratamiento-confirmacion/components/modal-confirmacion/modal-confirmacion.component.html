@@ -1,11 +1,11 @@
 <!-- Modal: tarjeta de confirmación -->
-<div class="w-full max-w-md bg-surface-container-lowest rounded-xl shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] border border-outline-variant/20 overflow-hidden">
+<div class="confirmacionTest w-full max-w-md bg-surface-container-lowest rounded-xl shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] border border-outline-variant/20 overflow-hidden">
     <div class="p-8 flex flex-col items-center">
         <!-- Foto de la mascota con indicador de completado -->
         <app-avatar-mascota [mascota]="mascota()"></app-avatar-mascota>
 
         <!-- Título y nombre de la mascota -->
-        <h2 class="text-headline-xl-mobile font-headline-xl-mobile text-on-surface text-center mb-4">
+        <h2 id = "confirmacionTest" class="text-headline-xl-mobile font-headline-xl-mobile text-on-surface text-center mb-4">
             Tratamiento Aplicado
         </h2>
         @if (mascota()) {

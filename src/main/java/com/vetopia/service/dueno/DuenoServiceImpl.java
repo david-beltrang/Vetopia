@@ -83,4 +83,13 @@ public class DuenoServiceImpl implements DuenoService {
         }
         return duenoRepository.findByCorreoIgnoreCaseAndContrasena(correo, contrasena);
     }
+
+    // Busca un dueño por correo (para el endpoint /details del usuario autenticado)
+    @Override
+    public Dueno obtenerPorCorreo(String correo) {
+        if (correo == null || correo.isBlank()) {
+            throw new ParametroInvalidoException("Debe indicar el correo del dueño.");
+        }
+        return duenoRepository.findByCorreo(correo).orElse(null);
+    }
 }

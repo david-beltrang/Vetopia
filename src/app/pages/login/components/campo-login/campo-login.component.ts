@@ -7,7 +7,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './campo-login.component.html'
 })
 export class CampoLoginComponent {
-  id = input.required<string>();
+  inputId = input.required<string>();
   label = input.required<string>();
   placeholder = input('');
   icono = input.required<string>();

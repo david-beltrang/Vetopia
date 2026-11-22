@@ -54,7 +54,7 @@
                         <small class="font-label-sm text-sm text-error">El correo es obligatorio.</small>
                     }
                     @if (clienteForm.get('correo')?.hasError('email')) {
-                        <small class="font-label-sm text-sm text-error">Ingresa un correo válido.</small>
+                        <small id="mensajeErrorCorreoCliente" class="font-label-sm text-sm text-error">Ingresa un correo válido.</small>
                     }
                 }
             </div>
@@ -109,7 +109,7 @@
                     class="px-6 py-3 rounded-full border border-outline text-on-surface font-button text-button uppercase hover:bg-surface-container-high transition-colors">
                 Cancelar
             </button>
-            <button type="submit" [disabled]="clienteForm.invalid"
+            <button id="btnRegistrarCliente" type="submit" [disabled]="clienteForm.invalid"
                     class="inline-flex items-center gap-2 rounded-full bg-primary-container px-8 py-3 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary disabled:opacity-50 disabled:cursor-not-allowed">
                 Siguiente paso
                 <span class="material-symbols-outlined text-lg">arrow_forward</span>

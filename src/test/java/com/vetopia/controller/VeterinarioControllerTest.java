@@ -15,19 +15,25 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vetopia.entities.UserEntity;
 import com.vetopia.entities.Veterinario;
 import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
+import com.vetopia.repository.UserRepository;
 import com.vetopia.rest.VeterinarioRestController;
+import com.vetopia.security.CustomUserDetailService;
 import com.vetopia.service.veterinario.VeterinarioService;
 
 @WebMvcTest(VeterinarioRestController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class VeterinarioControllerTest {
 
@@ -39,6 +45,15 @@ public class VeterinarioControllerTest {
 
     @MockitoBean
     private VeterinarioService veterinarioService;
+
+    @MockitoBean
+    private UserRepository userRepository;
+
+    @MockitoBean
+    private CustomUserDetailService customUserDetailService;
+
+    @MockitoBean
+    private AuthenticationManager authenticationManager;
 
     // GET (listar todos) 
     @Test
@@ -95,8 +110,11 @@ public class VeterinarioControllerTest {
             "1234567890", "vet123", "doctor@vetopia.com", "Medicina general",
             0, "Carlos Pérez", DominioEstado.ACTIVO, "https://example.com/foto.jpg");
 
-        // guardar() es void, por eso se usa doNothing() en lugar de when(...).thenReturn(...)
-        doNothing().when(veterinarioService).guardar(Mockito.any());
+        when(userRepository.existsByUsername(veterinario.getCorreo())).thenReturn(false);
+        when(customUserDetailService.VeterinarioToUser(Mockito.any(Veterinario.class)))
+                .thenReturn(new UserEntity());
+        when(veterinarioService.registrarVeterinario(Mockito.any(Veterinario.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         ResultActions response = mockMvc.perform(
             post("/veterinario")

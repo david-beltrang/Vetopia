@@ -1,0 +1,35 @@
+<div class="tema-portal flex min-h-screen flex-col bg-background text-on-background font-body-md">
+  <app-header-veterinario [veterinario]="veterinario" [veterinarioId]="veterinarioId" seccionActiva="citas"></app-header-veterinario>
+
+  <main class="mx-auto w-full max-w-container-max flex-grow px-gutter py-stack-lg">
+    <section class="mb-8 flex flex-wrap items-end justify-between gap-5">
+      <div>
+        <p class="mb-2 font-label-md text-label-md uppercase tracking-widest text-primary">Agenda clínica</p>
+        <h1 class="font-headline-xl text-headline-xl text-on-surface">Mis citas</h1>
+        <p class="mt-2 text-on-surface-variant">Organiza tu semana y consulta los detalles de cada paciente.</p>
+      </div>
+      <div class="flex items-center gap-2 rounded-2xl border border-surface-container-highest bg-surface-container-lowest p-2 shadow-sm">
+        <button type="button" (click)="moverSemana(-1)" aria-label="Semana anterior" class="flex h-10 w-10 items-center justify-center rounded-xl text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined">chevron_left</span></button>
+        <div class="min-w-40 text-center"><p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Semana</p><p class="font-semibold capitalize text-on-surface">{{ fechaVisible() }}</p></div>
+        <button type="button" (click)="moverSemana(1)" aria-label="Semana siguiente" class="flex h-10 w-10 items-center justify-center rounded-xl text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined">chevron_right</span></button>
+      </div>
+    </section>
+
+    @if (error) { <div role="alert" class="mb-6 rounded-xl border border-error/30 bg-error-container/30 px-5 py-4 text-on-error-container">{{ error }}</div> }
+
+    <section class="mb-6 grid gap-4 sm:grid-cols-3">
+      <article class="rounded-2xl border border-surface-container-highest bg-surface-container-lowest p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Citas esta semana</p><p class="mt-2 font-headline-xl text-headline-xl text-on-surface">{{ citas.length }}</p></article>
+      <article class="rounded-2xl border border-surface-container-highest bg-surface-container-lowest p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Por atender</p><p class="mt-2 font-headline-xl text-headline-xl text-primary">{{ confirmadas }}</p></article>
+      <article class="rounded-2xl border border-surface-container-highest bg-surface-container-lowest p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Completadas</p><p class="mt-2 font-headline-xl text-headline-xl text-on-surface">{{ completadas }}</p></article>
+    </section>
+
+    @if (cargando) { <div class="rounded-2xl bg-surface-container-lowest p-10 text-center text-on-surface-variant">Cargando agenda…</div> }
+    @else {
+      <div class="overflow-x-auto rounded-3xl">
+        <app-agenda-semanal [citas]="citas" [dias]="dias" modo="veterinario" (cambioEstado)="cambiarEstado($event)"></app-agenda-semanal>
+      </div>
+      <p class="mt-4 text-sm text-on-surface-variant">Selecciona “Ver detalles” para consultar el motivo, los datos del cliente y las mascotas.</p>
+    }
+  </main>
+  <app-footer-portal></app-footer-portal>
+</div>

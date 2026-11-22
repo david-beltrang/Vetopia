@@ -12,4 +12,7 @@ public interface DuenoRepository extends JpaRepository<Dueno, Long> {
 
     // Consulta derivada para buscar un dueño por su cédula.
     java.util.Optional<Dueno> findByCedula(String cedula);
+
+    // Consulta derivada para buscar un dueño por su correo (usado en /details).
+    java.util.Optional<Dueno> findByCorreo(String correo);
 }

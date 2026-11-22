@@ -1,7 +1,9 @@
 package com.vetopia.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,5 +46,14 @@ public class LoginRestController {
             throw new CredencialesInvalidasException("Usuario Inactivo");
         }
         return resultado;
+    }
+
+    //http://localhost:8090/auth/validate
+    // El filtro JWT ya rechazó cualquier token ausente, inválido o expirado
+    // antes de llegar aquí, así que un 200 significa que la sesión sigue siendo válida.
+    @Operation(summary = "Valida que el JWT enviado siga siendo válido")
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validarToken() {
+        return ResponseEntity.ok().build();
     }
 }

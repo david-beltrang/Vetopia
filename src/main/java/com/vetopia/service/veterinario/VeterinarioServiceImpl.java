@@ -52,6 +52,15 @@ public class VeterinarioServiceImpl implements VeterinarioService {
         veterinarioRepository.save(veterinario);
     }
 
+    @Override
+    public Veterinario registrarVeterinario(Veterinario veterinario) {
+        if (veterinario == null) {
+            throw new ParametroInvalidoException("No se especificó el veterinario a registrar.");
+        }
+        veterinarioRepository.save(veterinario);
+        return veterinario;
+    }
+
     // Busca un veterinario por correo y contraseña
     @Override
     public Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena) {

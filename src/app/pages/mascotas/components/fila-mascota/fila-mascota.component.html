@@ -15,16 +15,16 @@
 </td>
 <!-- Columna: Nombre y número de paciente -->
 <td class="px-6 py-4">
-    <p class="font-label-md text-label-md text-on-surface">{{ mascota().nombre }}</p>
+    <p class="nombreMascota font-label-md text-label-md text-on-surface">{{ mascota().nombre }}</p>
     <p class="text-xs uppercase tracking-widest text-on-surface-variant">{{ getNumeroPaciente(mascota().id) }}</p>
 </td>
 <!-- Columnas de datos básicos -->
-<td class="px-6 py-4 font-body-md text-body-md text-on-surface">{{ mascota().especie }}</td>
-<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{{ mascota().raza }}</td>
-<td class="px-6 py-4 font-body-md text-body-md text-on-surface">{{ getEdad(mascota()) }}</td>
-<td class="px-6 py-4 font-body-md text-body-md text-on-surface uppercase">{{ mascota().sexo }}</td>
+<td class="especieMascota px-6 py-4 font-body-md text-body-md text-on-surface">{{ mascota().especie }}</td>
+<td class="razaMascota px-6 py-4 font-body-md text-body-md text-on-surface-variant">{{ mascota().raza }}</td>
+<td class="edadMascota px-6 py-4 font-body-md text-body-md text-on-surface">{{ getEdad(mascota()) }}</td>
+<td class="sexoMascota px-6 py-4 font-body-md text-body-md text-on-surface uppercase">{{ mascota().sexo }}</td>
 <!-- Columna: Dueño de la mascota -->
-<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{{ getDueno(mascota()) }}</td>
+<td class="duenoMascota px-6 py-4 font-body-md text-body-md text-on-surface-variant">{{ getDueno(mascota()) }}</td>
 <!-- Columna Estado: chip ovalado verde si está activa, rojo si está inactiva -->
 <td class="px-6 py-4">
     <span class="inline-flex items-center rounded-full px-4 py-1.5 font-label-md text-label-md text-black"
@@ -35,7 +35,7 @@
 </td>
 <!-- Columna: Botón para ver ficha clínica -->
 <td class="px-6 py-4">
-    <a class="inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2.5 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary cursor-pointer"
+    <a class="verFichaTest inline-flex items-center gap-2 rounded-full bg-primary-container px-5 py-2.5 font-button text-button uppercase text-on-primary-container transition-colors hover:bg-primary hover:text-on-primary cursor-pointer"
        [attr.aria-label]="'Consultar ficha clínica de ' + mascota().nombre"
        (click)="verFicha.emit(mascota())">
         Ver ficha

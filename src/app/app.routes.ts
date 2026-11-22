@@ -19,27 +19,132 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DetallesVeterinarioComponent } from './pages/detalles-veterinario/detalles-veterinario.component';
 import { ListarVeterinariosComponent } from './pages/listar-veterinarios/listar-veterinarios.component';
 import { RegistrarVeterinarioComponent } from './pages/registrar-veterinario/registrar-veterinario.component';
+import { CitasClienteComponent } from './pages/citas-cliente/citas-cliente.component';
+import { CitasVeterinarioComponent } from './pages/citas-veterinario/citas-veterinario.component';
+import { CitasAdminComponent } from './pages/citas-admin/citas-admin.component';
+import { authGuard } from './guards/auth.guard';
+import { rolGuard } from './guards/rol.guard';
 
 export const routes: Routes = [
+  // Rutas públicas
   { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginPageComponent, title: 'Vetopia - Iniciar Sesión' },
-  { path: 'veterinario/mascotas', component: MascotasComponent, pathMatch: 'full' },
-  { path: 'veterinario/mascotas/tratamientos', component: TratamientosComponent, pathMatch: 'full' },
-  { path: 'admin/dashboard', component: DashboardComponent, pathMatch: 'full' },
-  { path: 'admin/veterinarios', component: ListarVeterinariosComponent, pathMatch: 'full' },
-  { path: 'admin/registrar-veterinario', component: RegistrarVeterinarioComponent, pathMatch: 'full' },
-  { path: 'admin/detalles-veterinario/:id', component: DetallesVeterinarioComponent },
-  { path: 'veterinario/mascotas/registrar-cliente', component: RegistrarClienteComponent },
-  { path: 'veterinario/mascotas/registrar-mascota/:duenoId', component: RegistrarMascotaComponent },
-  { path: 'veterinario/mascotas/ficha/:id', component: FichaClinicaComponent },
-  { path: 'veterinario/mascotas/editar/:id', component: EditarMascotaComponent },
-  { path: 'veterinario/mascotas/asignar-tratamiento/:id', component: AsignarTratamientoComponent },
-  { path: 'veterinario/mascotas/tratamiento-confirmacion/:mascotaId', component: TratamientoConfirmacionComponent },
-  { path: 'veterinario/clientes', component: ListarClienteComponent, pathMatch: 'full' },
-  { path: 'veterinario/clientes/detalle/:id', component: DetalleClienteComponent },
-  { path: 'veterinario/clientes/editar/:id', component: EditarClienteComponent },
-  { path: 'cliente/mascotas/detalle', component: DetalleMascotaComponent },
-  { path: 'cliente/mascotas', component: ListarMascotaComponent, pathMatch: 'full' },
   { path: 'error', component: ErrorPageComponent },
-  { path: '**', redirectTo: 'veterinario/mascotas' }
+
+  // Rutas del veterinario
+  {
+    path: 'veterinario/mascotas',
+    component: MascotasComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/mascotas/tratamientos',
+    component: TratamientosComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/citas',
+    component: CitasVeterinarioComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/mascotas/registrar-cliente',
+    component: RegistrarClienteComponent,
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/mascotas/registrar-mascota/:duenoId',
+    component: RegistrarMascotaComponent,
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/mascotas/ficha/:id',
+    component: FichaClinicaComponent,
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/mascotas/editar/:id',
+    component: EditarMascotaComponent,
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/mascotas/asignar-tratamiento/:id',
+    component: AsignarTratamientoComponent,
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/mascotas/tratamiento-confirmacion/:mascotaId',
+    component: TratamientoConfirmacionComponent,
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/clientes',
+    component: ListarClienteComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/clientes/detalle/:id',
+    component: DetalleClienteComponent,
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+  {
+    path: 'veterinario/clientes/editar/:id',
+    component: EditarClienteComponent,
+    canActivate: [authGuard, rolGuard(['VETERINARIO'])]
+  },
+
+  // Rutas del administrador
+  {
+    path: 'admin/dashboard',
+    component: DashboardComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['ADMINISTRADOR'])]
+  },
+  {
+    path: 'admin/citas',
+    component: CitasAdminComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['ADMINISTRADOR'])]
+  },
+  {
+    path: 'admin/veterinarios',
+    component: ListarVeterinariosComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['ADMINISTRADOR'])]
+  },
+  {
+    path: 'admin/registrar-veterinario',
+    component: RegistrarVeterinarioComponent,
+    canActivate: [authGuard, rolGuard(['ADMINISTRADOR'])]
+  },
+  {
+    path: 'admin/detalles-veterinario/:id',
+    component: DetallesVeterinarioComponent,
+    canActivate: [authGuard, rolGuard(['ADMINISTRADOR'])]
+  },
+
+  // Rutas del cliente
+  {
+    path: 'cliente/mascotas/detalle',
+    component: DetalleMascotaComponent,
+    canActivate: [authGuard, rolGuard(['CLIENTE'])]
+  },
+  {
+    path: 'cliente/mascotas',
+    component: ListarMascotaComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['CLIENTE'])]
+  },
+  {
+    path: 'cliente/citas',
+    component: CitasClienteComponent,
+    pathMatch: 'full',
+    canActivate: [authGuard, rolGuard(['CLIENTE'])]
+  },
+
+  { path: '**', redirectTo: 'error' }
 ];

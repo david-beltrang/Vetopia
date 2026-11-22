@@ -22,6 +22,11 @@ export class ErrorPageComponent {
   }
 
   regresar(): void {
-    window.history.back();
+    // Si no hay historial al que volver, al menos sale de la página de error.
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 }
