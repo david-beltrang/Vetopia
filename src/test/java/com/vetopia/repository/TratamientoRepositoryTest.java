@@ -40,9 +40,13 @@ public class TratamientoRepositoryTest {
     @BeforeEach
     void init() {
         // 1. Crear las entidades relacionadas necesarias para los tratamientos.
-        Dueno dueno = duenoRepository.save(new Dueno(
-                null, "4001", "Dueno Tratamientos", "tratamientos@vetopia.com", "clave123",
-                "3000000010", new ArrayList<>()));
+        Dueno dueno = duenoRepository.save(Dueno.builder()
+                .cedula("4001")
+                .nombre("Dueno Tratamientos")
+                .correo("tratamientos@vetopia.com")
+                .contrasena("clave123")
+                .celular("3000000010")
+                .build());
 
         Mascota mascota = mascotaRepository.save(new Mascota(
                 null, "Firulais", DominioEspecie.PERRO, "Mestizo", 2.0,
