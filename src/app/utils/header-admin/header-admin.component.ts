@@ -1,5 +1,6 @@
 import { Component, input, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../service/auth.service';
 
 export type SeccionAdmin = 'dashboard' | 'veterinarios' | 'citas';
 
@@ -11,6 +12,7 @@ export class HeaderAdminComponent {
   adminId = input<number>(0);
   seccionActiva = input<SeccionAdmin>('dashboard');
   router = inject(Router);
+  private auth = inject(AuthService);
 
   claseEnlace(seccion: SeccionAdmin): string {
     const base = 'font-body-md text-body-md transition-colors duration-200';
@@ -32,6 +34,7 @@ export class HeaderAdminComponent {
   }
 
   navigateToLogin(): void {
+    this.auth.logout();
     this.router.navigate(['/login']);
   }
 }
