@@ -5,6 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 
+import com.vetopia.dto.VeterinarioDTO;
+import com.vetopia.entities.UserEntity;
 import com.vetopia.entities.Veterinario;
+import com.vetopia.repository.UserRepository;
+import com.vetopia.security.CustomUserDetailService;
+import com.vetopia.security.JWTAuthenticationFilter;
+import com.vetopia.security.JWTGenerator;
 import com.vetopia.service.veterinario.VeterinarioService;
 
 // Controlador REST de veterinarios. Lo usa el frontend sobre todo para mostrar
@@ -29,6 +39,18 @@ public class VeterinarioRestController {
 
     @Autowired
     private VeterinarioService veterinarioService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CustomUserDetailService customUserDetailService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired 
+    JWTGenerator jwtGenerator; 
 
     //http://localhost:8090/veterinario/all
     // Se deja el CRUD completo por simetría, aunque el frontend solo usa listar y buscarPorId
@@ -54,15 +76,54 @@ public class VeterinarioRestController {
         return new ResponseEntity<>(veterinario, HttpStatus.OK);
     }
 
+    @GetMapping("/details")
+    public ResponseEntity<VeterinarioDTO> buscarVeterinario(){
+
+        Veterinario veterinario = veterinarioService.obtenerPorCorreo(
+            SecurityContextHolder.getContext().getAuthentication().getName()
+        );
+
+        if (veterinario == null) {
+            return new ResponseEntity<VeterinarioDTO>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<VeterinarioDTO>(VeterinarioDTO.from(veterinario), HttpStatus.OK);
+    }
+
+    //http://localhost:8090/veterinario/login
+    @PostMapping("/login")
+    public ResponseEntity loginVeterinario(@RequestBody Veterinario veterinario) {
+
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(veterinario.getCorreo(), veterinario.getContrasena())
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = jwtGenerator.generateToken(authentication);
+
+        return new ResponseEntity<String>(token, HttpStatus.OK);
+    }
+
     //http://localhost:8090/veterinario
-    // El service asigna el id, se devuelve el objeto para reutilizarlo en Angular.
-    // Se limpia el id entrante para que siempre sea un alta y no una actualización.
+    // Se crea el usuario de credenciales, el service asigna el id y se devuelve
+    // el DTO para reutilizarlo en Angular. Se limpia el id entrante para que
+    // siempre sea un alta y no una actualización.
     @Operation(summary = "Registra un nuevo veterinario")
     @PostMapping
-    public ResponseEntity<Veterinario> agregar(@RequestBody Veterinario veterinario) {
-        veterinario.setId(null);
-        veterinarioService.guardar(veterinario);
-        return new ResponseEntity<>(veterinario, HttpStatus.CREATED);
+    public ResponseEntity agregar(@RequestBody Veterinario veterinario) {
+
+        if (userRepository.existsByUsername(veterinario.getCorreo())) {
+            return new ResponseEntity<String>("Este veterinario ya existe", HttpStatus.BAD_REQUEST);
+        }
+
+        UserEntity userEntity = customUserDetailService.VeterinarioToUser(veterinario);
+        veterinario.setUser(userEntity);
+        Veterinario newVeterinario = veterinarioService.registrarVeterinario(veterinario);
+    
+        if(newVeterinario == null) {
+            return new ResponseEntity<Veterinario>(newVeterinario, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Veterinario>(newVeterinario, HttpStatus.CREATED);
     }
 
     //http://localhost:8090/veterinario/1

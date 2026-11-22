@@ -18,6 +18,10 @@ public interface VeterinarioService {
     // Guarda (registra) un veterinario nuevo. El id lo asigna la base de datos
     void guardar(Veterinario veterinario);
 
+    // Registra un veterinario nuevo y devuelve el objeto resultante para poder
+    // obtener su id tras el guardado
+    Veterinario registrarVeterinario(Veterinario veterinario);
+
     // Busca un veterinario por correo y contraseña (para login)
     Veterinario obtenerPorCorreoYContrasena(String correo, String contrasena);
 

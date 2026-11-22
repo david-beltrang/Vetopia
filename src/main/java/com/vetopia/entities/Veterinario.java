@@ -34,6 +34,7 @@ import com.vetopia.entities.mascota.dominio_attr.DominioEstado;
 public class Veterinario {
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore 
     private UserEntity user;
 
     @Id
