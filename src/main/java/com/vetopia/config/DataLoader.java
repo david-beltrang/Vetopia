@@ -21,6 +21,7 @@ import com.vetopia.entities.Cita;
 import com.vetopia.entities.CitaMascota;
 import com.vetopia.entities.Droga;
 import com.vetopia.entities.Dueno;
+import com.vetopia.entities.EstadoCita;
 import com.vetopia.entities.Role;
 import com.vetopia.entities.Tratamiento;
 import com.vetopia.entities.UserEntity;
@@ -79,6 +80,8 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired 
     UserRepository userRepository;
+
+    @Autowired
     private CitaRepository citaRepository;
 
     @Autowired
