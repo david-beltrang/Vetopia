@@ -30,22 +30,41 @@ public class DuenoRepositoryTest {
     @BeforeEach
     void init() {
         // 1. Crear y guardar 4 dueños (variables locales, sin campos globales)
-        // Constructor: id, cedula, nombre, correo, contrasena, celular, mascotas
-        Dueno dueno1 = duenoRepository.save(new Dueno(
-                null, "3001", "Dueno 3001", "dueno1@vetopia.com", "clave123",
-                "3000000001", new ArrayList<>()));
+        Dueno dueno1 = duenoRepository.save(Dueno.builder()
+                .cedula("3001")
+                .nombre("Dueno 3001")
+                .correo("dueno1@vetopia.com")
+                .contrasena("clave123")
+                .celular("3000000001")
+                .mascotas(new ArrayList<>())
+                .build());
 
-        Dueno dueno2 = duenoRepository.save(new Dueno(
-                null, "3002", "Dueno 3002", "dueno2@vetopia.com", "clave123",
-                "3000000002", new ArrayList<>()));
+        Dueno dueno2 = duenoRepository.save(Dueno.builder()
+                .cedula("3002")
+                .nombre("Dueno 3002")
+                .correo("dueno2@vetopia.com")
+                .contrasena("clave123")
+                .celular("3000000002")
+                .mascotas(new ArrayList<>())
+                .build());
 
-        duenoRepository.save(new Dueno(
-                null, "3003", "Dueno 3003", "dueno3@vetopia.com", "clave123",
-                "3000000003", new ArrayList<>()));
+        duenoRepository.save(Dueno.builder()
+                .cedula("3003")
+                .nombre("Dueno 3003")
+                .correo("dueno3@vetopia.com")
+                .contrasena("clave123")
+                .celular("3000000003")
+                .mascotas(new ArrayList<>())
+                .build());
 
-        duenoRepository.save(new Dueno(
-                null, "3004", "Dueno 3004", "dueno4@vetopia.com", "clave123",
-                "3000000004", new ArrayList<>()));
+        duenoRepository.save(Dueno.builder()
+                .cedula("3004")
+                .nombre("Dueno 3004")
+                .correo("dueno4@vetopia.com")
+                .contrasena("clave123")
+                .celular("3000000004")
+                .mascotas(new ArrayList<>())
+                .build());
 
         // 2. Se crean 3 mascotas y se les asigna el dueño con setDueno()
         //    (2 mascotas para el dueño 1 y 1 mascota para el dueño 2)
@@ -78,9 +97,13 @@ public class DuenoRepositoryTest {
     @Test
     public void StudentRepository_save_Dueno() {
         // Arrange
-        Dueno dueno = new Dueno(
-                null, "1920374", "Juan", "juan@example.com", "dueno123",
-                "1032674780", new ArrayList<>());
+        Dueno dueno = Dueno.builder()
+                .cedula("1920374")
+                .nombre("Juan")
+                .correo("juan@example.com")
+                .contrasena("dueno123")
+                .celular("1032674780")
+                .build();
 
         // Act
         Dueno savedDueno = duenoRepository.save(dueno);

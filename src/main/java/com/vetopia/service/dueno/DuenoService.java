@@ -25,4 +25,7 @@ public interface DuenoService {
 
     // Busca un dueño por correo y contraseña (para login)
     Dueno obtenerPorCorreoYContrasena(String correo, String contrasena);
+
+    // Busca un dueño por correo (usado en /details con el usuario autenticado)
+    Dueno obtenerPorCorreo(String correo);
 }
